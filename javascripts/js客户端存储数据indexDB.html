@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户端存储数据indexDB实践示例</title>
+    <style>
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+header, footer {
+  background-color: green;
+  color: white;
+  line-height: 100px;
+  padding: 0 20px;
+}
+
+.new-note, .note-display {
+  padding: 20px;
+}
+
+.new-note {
+  background: #ddd;
+}
+
+h1 {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+div {
+  margin-bottom: 10px;
+}
+    </style>
+</head>
+ <body>
+    <header>
+        <h1>IndexedDB notes demo</h1>
+    </header>
+  
+      <main>
+        <section class="note-display">
+          <h2>Notes</h2>
+          <ul>
+  
+          </ul>
+        </section>
+        <section class="new-note">
+          <h2>Enter a new note</h2>
+          <form>
+            <div>
+              <label for="title">Note title</label>
+              <input id="title" type="text" required>
+            </div>
+            <div>
+              <label for="body">Note text</label>
+              <input id="body" type="text" required>
+            </div>
+            <div>
+              <button>Create new note</button>
+            </div>
+          </form>
+        </section>
+      </main>
+  
+      <footer>
+        <p>Copyright nobody. Use the code as you like.</p>
+      </footer>
+    <script>
+// Create needed constants
+const list = document.querySelector('ul');
+const titleInput = document.querySelector('#title');
+const bodyInput = document.querySelector('#body');
+const form = document.querySelector('form');
+const submitBtn = document.querySelector('form button');
+
+let db;
+//我们将把所有的后续代码写在这个 window.onload 事件处理函数内，这个函数将在 window 的 load 事件被触发时调用，
+//为了确保我们没有在应用完整加载前试图使用 IndexedDB 功能（如果我们不这么做，它会失败）。
+window.onlaod = function(){
+// Open our database; it is created if it doesn't already exist(see onupgradeneeded below)
+ let request = window.indexedDB.open('notes',1);
+ /*
+ 此行创建一个 request 变量，目的是打开 notes数据库的 1版本。如果notes数据库不存在，则后续代码将为您创建。您将在 IndexedDB 中经常看到此请求模式。
+ 数据库操作需要时间。您不希望在等待结果时挂起浏览器，因此数据库操作是异步的，这意味着它们不会立即发生，而是在将来的某个时刻发生，并且在完成后会收到通知。
+  要在 IndexedDB 中处理此问题，您需要创建一个请求对象（可以随意命名 - 命名为request，可以表明它的用途）。然后，在请求完成或者失败时，
+  使用事件处理程序来运行代码，您将在下面看到这些代码。
+ */
+ //<备注： 版本号很重要。如果要升级数据库（例如：更改表结构），则必须使用增加的版本号或者onupgradeneeded处理程序内指定的不同模式（请参阅下文）等再次运行代码。
+ //在这个简单教程中，我们不讨论数据库升级。>
+// onerror handler signifies that the database didn't open successfully 
+request.onerror = function(){
+  console.log('Database failed to open');
+};
+// onsuccess handler signifies that the database opened successfully
+request.onsuccess = function(){
+  console.log('Dasebase opened successfully');
+
+// Store the opened database object in the db variable. This is used a lot below
+db = request.result;
+// Run the displayData() function to display the notes already in the IDB
+displayData();
+};
+
+/*
+如果系统返回：请求失败，request.onerror (en-US)将会运行。这将允许你对这个问题做出响应。在我们的简单示例中，只是将消息打印到 JavaScript 控制台。 
+如果系统返回：请求成功，表明成功打开数据库，request.onsuccess (en-US)将会运行。如果是这种情况，则表示已打开数据库的对象在request.result (en-US)
+属性中变为可用，从而允许我们操作数据库。我们将它存储在db我们之前创建的变量中供以后使用。我们还运行一个名为displayData()的自定义函数，
+它把数据库中的数据显示在<ul>。我们现在运行它，以便在页面加载时显示数据库中已有的注释。您将在稍后看到此定义。
+*/
+
+ // Setup the database tables if this has not already been done
+request.onupgradeneeded = function(e) {
+  // Grab a reference to the opened database
+  let db = e.target.result;
+
+  // Create an objectStore to store our notes in (basically like a single table)
+  // including a auto-incrementing key
+  let objectStore = db.createObjectStore('notes', { keyPath: 'id', autoIncrement:true });
+
+  // Define what data items the objectStore will contain
+  objectStore.createIndex('title', 'title', { unique: false });
+  objectStore.createIndex('body', 'body', { unique: false });
+
+  console.log('Database setup complete');
+  };
+}
+/*
+这是我们定义数据库的模式（结构）的地方; 也就是说，它包含的列（或字段）集。这里我们首先从e.target.result（事件目标的result属性）中获取对现有数据库的引用，
+该引用是request对象。这相当于处理程序db = request.result;内部的行 onsuccess，但我们需要在此单独执行此操作，因为onupgradeneeded处理程序（如果需要）
+将在onsuccess处理程序之前运行，这意味着db如果我们不这样做，该值将不可用。 然后IDBDatabase.createObjectStore()，
+我们使用在打开的数据库中创建一个新的对象库。这相当于传统数据库系统中的单个表。我们给它起了名称注释，并且还指定了一个autoIncrement名为的关键字段id- 
+在每个新记录中，这将自动赋予增量值 - 开发人员不需要明确地设置它。作为密钥，该id字段将用于唯一标识记录，例如删除或显示记录时。
+我们还使用以下IDBObjectStore.createIndex() (en-US)方法创建另外两个索引（字段）:( title每个音符将包含一个标题），以及body（包含音符的正文）
+*/
+
+
+//对于本节，我们可能会添加最重要的事件处理程序来设置数据库：request.onupgradeneeded (en-US)。如果尚未设置数据库，
+//或者使用比现有存储数据库更大的版本号打开数据库（执行升级时），则运行此处理程序。
+//因此，通过设置这个简单的数据库模式，当我们开始向数据库添加记录时，每个记录都会沿着这些行表示为一个对象：
+/* {
+    title:"Buy milk",
+    body:"Need both cows milk and soya",
+    id:8
+} */
+//  [添加数据到数据库]
+//在您之前的事件处理程序下面（但仍在window.onload处理程序中），添加以下行，该行设置一个onsubmit处理程序，该处理程序运行addData()在提交表单时调用的函数
+//<button>按下提交时导致成功提交表单）
+
+// Create an onsubmit handler so that when the form is submitted the addData() function is run
+form.onsubmit = addData;
+
+// Define the addData() function
+function addData(e) {
+  // prevent default - we don't want the form to submit in the conventional way
+  e.preventDefault();
+
+  // grab the values entered into the form fields and store them in an object ready for being inserted into the DB
+  let newItem = { title: titleInput.value, body: bodyInput.value };
+
+  // open a read/write db transaction, ready for adding the data
+  let transaction = db.transaction(['notes'], 'readwrite'); //老是报错不知道为什么，都复制粘贴教程里的代码了，不管了，以学习社区的参考答案为准吧 
+
+  // call an object store that's already been added to the database
+  let objectStore = transaction.objectStore('notes');
+
+  // Make a request to add our newItem object to the object store
+  var request = objectStore.add(newItem);
+  request.onsuccess = function() {
+    // Clear the form, ready for adding the next entry
+    titleInput.value = '';
+    bodyInput.value = '';
+  };
+
+  // Report on the success of the transaction completing, when everything is done
+  transaction.oncomplete = function() {
+    console.log('Transaction completed: database modification finished.');
+
+    // update the display of data to show the newly added item, by running displayData() again.
+    displayData();
+  };
+
+  transaction.onerror = function() {
+    console.log('Transaction not opened due to error');
+  };
+}
+/*
+1.Event.preventDefault()在事件对象上运行以停止以传统方式实际提交的表单（这将导致页面刷新并破坏体验）。
+2.创建一个表示要输入数据库的记录的对象，并使用表单输入中的值填充它。请注意，我们不必明确包含一个id值 - 正如我们提前详细说明的那样，这是自动填充的。
+3.使用该方法打开对象存储的readwrite事务。此事务对象允许我们访问对象存储，以便我们可以对其执行某些操作，例如添加新记录。
+notesIDBDatabase.transaction() (en-US)
+4.使用该IDBTransaction.objectStore() (en-US)方法访问对象库，将结果保存在 objectStore 变量中。
+5.使用添加新记录到数据库IDBObjectStore.add()。这创建了一个请求对象，与我们之前看到的方式相同。
+6.在生命周期的关键点添加一堆事件处理程序request以及transaction运行代码。请求成功后，我们会清除表单输入，以便输入下一个注释。交易完成后，
+我们displayData()再次运行该功能以更新页面上的注释显示。
+*/
+//[显示数据] 我们已经在代码中引用了两次displayData()，所以我们可能更好地定义它。
+function displayData(){
+// Here we empty the contents of the list element each time the display is updated
+// If you ddn't do this, you'd get duplicates listed each time a new note is added
+  while (list.firstChild){
+    list.removeChild(list.firstChild);
+  }
+ // Open our object store and then get a cursor - which iterates through all the different data items in the store
+  const objectStore = db.transaction('notes').objectStore('notes');
+  objectStore.openCursor().onsuccess = function(e){
+    // Get a reference to the cursor
+    const cursor = e.target.result;
+    // If there is still another data item to iterate through, keep running this code
+    if(cursor){
+// Create a list item, h3, and p to put each data item inside when displaying it  structure the HTML fragment, and append it inside the list  
+      const listItem = document.createElement('li');
+      const h3 = document.createElement('h3');
+      const para = document.createElement('p');
+     
+      listItem.appendChild(h3);
+      listItem.appendChild(para);
+      list.appendChild(listItem);
+  // Put the data from the cursor inside the h3 and para
+      h3.textContent = cursor.value.title;
+      para.textContent = cursor.value.body;
+  // Store the ID of the data item inside an attribute on the listItem, so we know
+  // which item it corresponds to. This will be useful later when we want to delete items
+      listItem.setAttribute('data-note-id',cursor.value.id);
+    // Create a button and place it inside each listItem  
+      let deleteBtn = document.createElement('button');
+      listItem.appendChild(deleteBtn);
+      deleteBtn.textContent = 'Delete';
+ // Set an event handler so that when the button is clicked, the deleteItem()  function is run
+      deleteBtn.onclick = deleteItem;
+ // Iterate to the next item in the cursor
+      cursor.continue();
+    }else{
+ // Again, if list item is empty, display a 'No notes stored' message
+      if(!list.firstChild){
+        let listItem = document.createElement('li');
+        listItem.textContent = 'No notes stored';
+        list.appendChild(listItem);
+      }
+  // if there are no more cursor items to iterate through, say so
+      console.log('Notes all displayed')
+    }
+  };
+}
+/*
+1.首先，我们清空 <ul> 元素的内容，然后填充更新的内容。如果您不这样做，那么每次更新时都会添加大量重复内容。
+2.接下来，我们notes使用IDBDatabase.transaction() (en-US)和IDBTransaction.objectStore() (en-US)我们一样得到对象存储的引用addData()，
+除了这里我们将它们链接在一行中。
+3.下一步是使用IDBObjectStore.openCursor()方法打开对游标的请求 - 这是一个可用于迭代对象存储中的记录的构造。我们将一个onsuccess处理程序链接到该行的末尾
+以使代码更简洁 - 当成功返回游标时，运行处理程序。
+4.我们IDBCursor使用 let 获取对游标本身（对象）的引用cursor = e.target.result。
+5.接下来，我们检查光标是否包含来自数据存储区（if(cursor){ ... }）的记录 - 如果是这样，我们创建一个 DOM 片段，用记录中的数据填充它，然后将其插入页面
+（<ul>元素内部）。我们还包括一个删除按钮，当单击该按钮时，将通过运行该deleteItem()功能删除该注释，我们将在下一节中查看。
+6.在if块结束时，我们使用该IDBCursor.continue() (en-US)方法将光标前进到数据存储区中的下一条记录，然后if再次运行块的内容。如果有另一个要迭代的记录，
+这会导致它被插入到页面中，然后continue()再次运行，依此类推。
+7.当没有更多记录要迭代时，cursor将返回undefined，因此else块将运行而不是if块。此块检查是否有任何注释被插入<ul>- 如果没有，它会插入一条消息，说没有存储注释。
+*/
+
+//[删除一条笔记] 如上所述，当按下笔记的删除按钮时，笔记将被删除。这是通过deleteItem()函数实现的，
+function deleteItem(e){
+// retrieve the name of the task we want to delete. We need to convert it to a number before trying it use it with IDB;
+// IDB key values are type-sensitive.
+ const noteId = Number(e.target.parentNode.getAttribute('data-note-id'));
+
+ // open a database transaction and delete the task, finding it using the id we retrieved above
+ const transaction = db.transaction(['notes'],'readwrite');
+ const objectStore = transaction.objectStore('notes');
+ const request = objectStore.delete(noteId);
+// report that the data item has been deleted
+ transaction.oncomplete = function(){
+// delete the parent of the button which is the list item, so it is no longer displayed
+  e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+  console.log('Note' + noteId + 'deleted');
+
+ // Again, if list item is empty, display a 'No notes stored' message
+  if(!list.firstChild){
+    const listItem = document.createElement('li');
+    listItem.textContent = 'No notes stored';
+    list.appendChild(listItem);    
+  }
+ };
+}
+/*
+1.第一部分可以使用一些解释 - 我们检索要删除Number(e.target.parentNode.getAttribute('data-note-id'))的记录的 ID - 回想一下记录的 ID 
+是在第一次显示时保存在data-note-id属性中的<li>。但是，我们需要通过全局内置的Number（）对象传递属性，因为它当前是一个字符串，否则将无法被数据库识别。
+2.然后，我们使用我们之前看到的相同模式获取对对象存储的引用，并使用该IDBObjectStore.delete() (en-US)方法从数据库中删除记录，并将 ID 传递给它。
+3.当数据库事务完成后，我们<li>从 DOM 中删除注释，然后再次检查以查看它是否<ul>为空，并根据需要插入注释。
+*/
+/* 学习社区版的参考答案
+// Create needed constants
+const list = document.querySelector('ul');
+const titleInput = document.querySelector('#title');
+const bodyInput = document.querySelector('#body');
+const form = document.querySelector('form');
+const submitBtn = document.querySelector('form button');
+
+// Create an instance of a db object for us to store the open database in
+let db;
+
+// Open our database; it is created if it doesn't already exist
+// (see the upgradeneeded handler below)
+const openRequest = window.indexedDB.open('notes_db', 1);
+
+// error handler signifies that the database didn't open successfully
+openRequest.addEventListener('error', () => console.error('Database failed to open'));
+
+// success handler signifies that the database opened successfully
+openRequest.addEventListener('success', () => {
+  console.log('Database opened succesfully');
+
+  // Store the opened database object in the db variable. This is used a lot below
+  db = openRequest.result;
+
+  // Run the displayData() function to display the notes already in the IDB
+  displayData();
+});
+
+// Set up the database tables if this has not already been done
+openRequest.addEventListener('upgradeneeded', e => {
+
+  // Grab a reference to the opened database
+  db = e.target.result;
+
+  // Create an objectStore to store our notes in (basically like a single table)
+  // including a auto-incrementing key
+  const objectStore = db.createObjectStore('notes_os', { keyPath: 'id', autoIncrement:true });
+
+  // Define what data items the objectStore will contain
+  objectStore.createIndex('title', 'title', { unique: false });
+  objectStore.createIndex('body', 'body', { unique: false });
+
+  console.log('Database setup complete');
+});
+
+// Create an submit handler so that when the form is submitted the addData() function is run
+form.addEventListener('submit', addData);
+
+// Define the addData() function
+function addData(e) {
+  // prevent default - we don't want the form to submit in the conventional way
+  e.preventDefault();
+
+  // grab the values entered into the form fields and store them in an object ready for being inserted into the DB
+  const newItem = { title: titleInput.value, body: bodyInput.value };
+
+  // open a read/write db transaction, ready for adding the data
+  const transaction = db.transaction(['notes_os'], 'readwrite');
+
+  // call an object store that's already been added to the database
+  const objectStore = transaction.objectStore('notes_os');
+
+  // Make a request to add our newItem object to the object store
+  const addRequest = objectStore.add(newItem);
+
+  addRequest.addEventListener('success', () => {
+    // Clear the form, ready for adding the next entry
+    titleInput.value = '';
+    bodyInput.value = '';
+  });
+
+  // Report on the success of the transaction completing, when everything is done
+  transaction.addEventListener('complete', () => {
+    console.log('Transaction completed: database modification finished.');
+
+    // update the display of data to show the newly added item, by running displayData() again.
+    displayData();
+  });
+
+  transaction.addEventListener('error', () => console.log('Transaction not opened due to error'));
+}
+
+// Define the displayData() function
+function displayData() {
+  // Here we empty the contents of the list element each time the display is updated
+  // If you ddn't do this, you'd get duplicates listed each time a new note is added
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
+  }
+
+  // Open our object store and then get a cursor - which iterates through all the
+  // different data items in the store
+  const objectStore = db.transaction('notes_os').objectStore('notes_os');
+  objectStore.openCursor().addEventListener('success', e => {
+    // Get a reference to the cursor
+    const cursor = e.target.result;
+
+    // If there is still another data item to iterate through, keep running this code
+    if(cursor) {
+      // Create a list item, h3, and p to put each data item inside when displaying it
+      // structure the HTML fragment, and append it inside the list
+      const listItem = document.createElement('li');
+      const h3 = document.createElement('h3');
+      const para = document.createElement('p');
+
+      listItem.appendChild(h3);
+      listItem.appendChild(para);
+      list.appendChild(listItem);
+
+      // Put the data from the cursor inside the h3 and para
+      h3.textContent = cursor.value.title;
+      para.textContent = cursor.value.body;
+
+      // Store the ID of the data item inside an attribute on the listItem, so we know
+      // which item it corresponds to. This will be useful later when we want to delete items
+      listItem.setAttribute('data-note-id', cursor.value.id);
+
+      // Create a button and place it inside each listItem
+      const deleteBtn = document.createElement('button');
+      listItem.appendChild(deleteBtn);
+      deleteBtn.textContent = 'Delete';
+
+      // Set an event handler so that when the button is clicked, the deleteItem()
+      // function is run
+      deleteBtn.addEventListener('click', deleteItem);
+
+      // Iterate to the next item in the cursor
+      cursor.continue();
+    } else {
+      // Again, if list item is empty, display a 'No notes stored' message
+      if(!list.firstChild) {
+        const listItem = document.createElement('li');
+        listItem.textContent = 'No notes stored.'
+        list.appendChild(listItem);
+      }
+      // if there are no more cursor items to iterate through, say so
+      console.log('Notes all displayed');
+    }
+  });
+}
+
+// Define the deleteItem() function
+function deleteItem(e) {
+  // retrieve the name of the task we want to delete. We need
+  // to convert it to a number before trying it use it with IDB; IDB key
+  // values are type-sensitive.
+  const noteId = Number(e.target.parentNode.getAttribute('data-note-id'));
+
+  // open a database transaction and delete the task, finding it using the id we retrieved above
+  const transaction = db.transaction(['notes_os'], 'readwrite');
+  const objectStore = transaction.objectStore('notes_os');
+  const deleteRequest = objectStore.delete(noteId);
+
+  // report that the data item has been deleted
+  transaction.addEventListener('complete', () => {
+    // delete the parent of the button
+    // which is the list item, so it is no longer displayed
+    e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+    console.log(`Note ${noteId} deleted.`);
+
+    // Again, if list item is empty, display a 'No notes stored' message
+    if(!list.firstChild) {
+      const listItem = document.createElement('li');
+      listItem.textContent = 'No notes stored.';
+      list.appendChild(listItem);
+    }
+  });
+}
+*/
+    </script>
+ </body>
+</html>

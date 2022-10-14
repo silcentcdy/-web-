@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Function library example</title>
+  <style>
+    input {
+      font-size: 2em;
+      margin: 10px 1px 0;
+    }
+    /*自己加的*/
+    p{
+        color:red;
+        border: 10px dashed blue;
+        padding:5px;
+        font-size:3em;
+    }
+  </style>
+</head>
+<body>
+
+  <input class="numberInput" type="text">
+  <p></p>
+
+  <script>
+    const input = document.querySelector('.numberInput');
+    const para = document.querySelector('p');
+//squared() 和 cubed() 功能是相当明显的 - 他们的平方或立方的数作为一个参数返回。factorial() 函数返回给定数字的阶乘。
+function squared(num){
+    return num*num;
+}
+function cubed(num){
+    return num*num*num;
+}
+function factorial(num){
+    var x = num;
+    while(x > 1){
+        num*= x-1;//阶乘的运算表达式代码，XX*是指XX+X1+X2....的意思
+        x--;
+    }
+    return num;
+}
+function cubedroot(num){
+    return Math.cbrt(num);
+}
+function squaredroot(num){
+    return Math.sqrt(num); 
+}
+function cos(num){
+  return Math.cos(num);
+}
+//接下来，我们将包括一种打印输入到文本输入中的数字的信息的方法。在现有函数下面输入以下事件处理程序：
+input.onchange = function(){
+    var num = input.value;
+    if( isNaN(num)){
+        para.textContent = 'You need to enter a number!';
+    }else{
+      para.textContent = num + ' squared is '+ squared(num)+ '. '+ //这里加号是指有多种公式调用，所以用加号不是结束分号
+                         num + ' cubed is ' + cubed(num) + '. ' +
+                         num + ' factorial is ' + factorial(num) + '. ' +
+                         //自己打的立方根和平方根的运算
+                         num + ' cubedroot is ' + cubedroot(num) + '. ' +
+                         num + ' squaredroot is ' + squaredroot(num) + '. ' +
+                         num + ' ceil is ' + cos(num) + ' ' ;
+    }
+}
+var person = {};
+/*
+这里我们创建一个onchange事件处理程序，当文本框上面的 change 事件被触发的之后，事件处理程序就会运行 - 就是说，
+一个新的值被输入到文本框并且被提交（就比如，输入一个值，然后按 Tab）。当这个匿名函数运行时，输入框中的值将被存储在num变量中。
+
+接下来，我们进行条件测试——如果输入的值不是数字，则在段落中打印错误消息。if 语句判断isNaN(num)表达式是否返回 true。
+我们用isNaN()函数测试num的值是否不是一个数字 - 如果不是数字，就返回true，否则返回false。
+
+如果测试返回 false，则数值是一个数字，所以我们在段落元素中打印出一个句子，说明数字的平方、立方体和阶乘是什么。
+这句话叫 squared()，cubed()，和 factorial() 函数来获得所需的值。
+
+这个练习提出了一些重要的观点，除了研究如何使用返回语句之外。此外，我们还有：
+
+查看另一个将错误处理写入函数的示例。它是否提供了任何必要的参数通常是一个好主意，另一方面对可选参数提供默认值。这样，你的程序就不太可能出错了。
+关于创建函数库思想的思考。随着你深入到你的编程生涯，你将开始一次又一次地做同样的事情。这是一个好主意，开始保持你自己的实用工具库，
+你经常使用 - 你可以把它们复制到你的新代码，甚至只是把它应用到任何你需要的 HTML 页面。
+*/
+  </script>
+</body>
+</html>

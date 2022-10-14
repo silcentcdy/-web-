@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Image gallery</title>
+
+<style>
+h1 {
+  font-family: helvetica, arial, sans-serif;
+  text-align: center;
+}
+
+body {
+  width: 640px;
+  margin: 0 auto;
+}
+
+.full-img {
+  position: relative;
+  display: block;
+  width: 640px;
+  height: 480px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 480px;
+  background-color: rgba(0,0,0,0);
+}
+/*：一个显示全尺寸图片的 <img>，一个空 <div>（覆盖于 <img> 之上，且与之大小相同，用来设置半透明背景色来使图片变暗），
+    和一个用来控制变暗效果的 <button>。   */
+button {
+  border: 0;
+  background: rgba(150,150,150,0.6);
+  text-shadow: 1px 1px 1px white;
+  border: 1px solid #999;
+  position: absolute;
+  cursor: pointer;
+  top: 2px;
+  left: 2px;
+}
+
+.thumb-bar img {
+  display: block;
+  width: 20%;
+  float: left;
+  cursor: pointer;
+}
+    </style>
+</head>
+
+ <body>
+    <h1>Image gallery example</h1>
+
+    <div class="full-img">
+      <img class="displayed-img" src="images/pic1.jpg"  alt="a human eye">
+      <div class="overlay"></div>
+      <button class="dark">Darken</button>
+    </div>
+
+    <div class="thumb-bar">
+
+
+    </div>
+  <script >
+/*本次评估总结：主体上基本没错，错误主要是大小写，少打或多打一个字母，重读等之类的原因，所以打代码是要细心，一点细微的错误都会使代码无法正常工作
+ 写的过程中真的很心累，比较痛苦*/
+
+  //js常见错误 =>initialization是指初始化错误的意思
+const displayedImage = document.querySelector('.displayed-img');
+const thumbBar = document.querySelector('.thumb-bar');
+
+const btn = document.querySelector('button');
+const overlay = document.querySelector('.overlay');
+
+/* Declaring the array of image filenames */
+const images = ['pic1.jpg' , `pic2.jpg` , `pic3.jpg` , `pic4.jpg` , `pic5.jpg`];
+//数组图片文件名，第一个正常引号(因为第一个图像html里已经引用了)，后面要用上标点号.
+
+//以常量存储图片不出来时的备选文本信息的标准代码，可加可不加，见到学习社区里一般都不加，MDN参考答案要加
+const alts = {
+  'pic1.jpg' : 'a human eye',
+  'pic2.jpg' : 'a greay&white color stone',
+  'pci3.jpg' : 'a flowry',
+  'pic4.jpg' : 'a wall picture',
+  'pic5.jpg' : 'a flying butterfrew(蝴蝶)'
+}
+
+//自己打的代码，不能正常工作，就是图像引用错误，无法正确引用(错误原因：最后调用图像哪里的备选信息的属性代码跟src重复了)
+// Looping through images，循环里面的代码结构是用来替换具体的图像文件路径的，平常的循环代码结构是用来干一般的事情(反正第一次见，暂时还不理解)，本评估最关键也是比较难的部分,答案不唯一，参考答案只是其中之一
+for (const image of images) {  //循环结构学习社区也有类似形式var i=0;i < 5;i++
+
+const newImage = document.createElement('img');
+//图像循环预览应用代码, `images/${image}`代码是指从images文件里访问各个图像文件
+newImage.setAttribute('src', `images/${image}`);
+newImage.setAttribute('alt',alts[image]);
+thumbBar.appendChild(newImage);
+//调用图像属性代码，事件对象型的函数代码模式(e.target)，箭头指向型的函数代码标准代码,代码部分实现的功能是指在点击图像时进行更换
+newImage.addEventListener('click',e => { 
+ displayedImage.src = e.target.src;
+ displayedImage.alt = e.target.alt;//当时有错误，alt写成src 属性代码写重复了，无语了，
+
+});
+}
+
+/*
+//这是参考答案，可以正常工作
+for (const image of images) {
+  const newImage = document.createElement('img');
+  newImage.setAttribute('src', `images/${image}`);
+  newImage.setAttribute('alt', alts[image]);
+  thumbBar.appendChild(newImage);
+  newImage.addEventListener('click', e => {
+    displayedImage.src = e.target.src;
+    displayedImage.alt = e.target.alt;
+  });
+}
+*/
+
+/*
+//学习社区里的另一种可用参考答案，可以正常工作，个人认为这比MDN的参考答案相对来讲比较容易理解以及具有一致性
+for(var i = 1; i <= 5; i++){
+  var newImage = document.createElement('img');
+  newImage.setAttribute('src', "images/pic" + i + ".jpg");
+  thumbBar.appendChild(newImage);
+};
+
+thumbBar.addEventListener('click', function(e){
+	var imgSrc = e.target.getAttribute('src');
+	displayedImage.setAttribute('src', imgSrc);
+});
+*/
+
+// Wiring up the Darken/Lighten button,/要么就是btn.onclick = function(){},要么就是参考答案的样子
+btn.addEventListener('click',() => {
+const btnClass = btn.getAttribute('class');
+//if里面的条件指向是具体的常量或变量名，该例子使用常量来存储对按钮属性的引用
+if (btnClass === 'dark'){
+
+btn.setAttribute('class','light');        
+btn.textContent = 'Lighten';
+overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+ }else{//该条件结构可不写，一般都不写，因为是在只有两种情况下的，判定绝对等于的右边代码部分要用引号圈引起来
+
+     btn.setAttribute('class','dark');
+     btn.textContent = 'Darken';//要用引号圈引起来
+     overlay.style.backgroundColor= 'rgba(0,0,0,0)';//都要用引号圈引起来,background是整体一个单词，后面color要大写
+ }
+});
+
+  </script>
+ </body>
+</html>

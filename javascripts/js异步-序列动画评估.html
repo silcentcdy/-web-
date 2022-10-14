@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+ <head>
+    <meta  charset="utf-8">
+    <meta  name="viewport"  content="width=device-width,initial-scale=1">
+    <title>爱丽丝动画评估(Sequencing animations)</title>
+    <style>
+body{
+    background: #6c373f;
+    display: flex;
+    justify-content: center;
+}
+/*关键CSS样式化以及布局代码*/
+#alice-container{
+    width:80%;
+    height:90vh;
+    display: grid;
+    place-items: center;
+    grid-template-areas: 
+    "a1 . . "
+    ". a2 ."
+    ". . a3";
+    border:2px dashed rgba(125, 182, 54, 0.2);
+    overflow: hidden; /*网页滚动条属性*/
+    background: rgba(153, 143, 145, 0.3);
+}
+
+#alice1{
+    grid-area: a1;
+}
+#alice2{
+    grid-area: a2;
+}
+#alice3{
+    grid-area: a3;
+}
+img{
+    border-radius: 2px;
+    background: #99c640;
+    width: 150px;
+    height: 150px;
+}
+    </style>
+ </head>
+
+ <body>
+
+  <div id="alice-container">
+    <img id="alice1" title="爱丽丝动画图像" src="images/alice(爱丽丝).svg" role="img" alt="silhouette of crouching long haired character in dress and short boots">
+    <img id="alice2" title="爱丽丝动画图像" src="images/alice(爱丽丝).svg" role="img" alt="silhouette of crouching long haired character in dress and short boots">
+    <img id="alice3" title="爱丽丝动画图像" src="images/alice(爱丽丝).svg" role="img" alt="silhouette of crouching long haired character in dress and short boots">
+  </div>
+
+<script>
+//这里是定义图像旋转一圈后消失的代码，以及旋转的时间间隔和次数
+const aliceTumbling = [
+  { transform: 'rotate(0) scale(1)' }, //scale是指图像存在的状态面积大小
+  { transform: 'rotate(-720deg) scale(0)' }
+];
+
+const aliceTiming = {
+  duration: 3000, //期间 间隔的意思,以毫秒为单位
+  iterations: 2, //迭代的意思,也就是图像循坏旋转多少次的意思
+  fill: 'forwards'
+}
+
+const alice1 = document.querySelector("#alice1");
+const alice2 = document.querySelector("#alice2");
+const alice3 = document.querySelector("#alice3");
+
+//alice1.animate(aliceTumbling,aliceTiming); 这个可以是只运行一个玩玩看就可以了
+
+/*
+//地狱回调版本,自己不会打，参考学习社区，版本1
+function alice_animation(alice,callback){  //这里定义两个参数，alice是指运行完成的指令，callback是指当前面的参数运行完成后所返回运行的另一个函数
+  const animation = alice.animate(aliceTumbling,aliceTiming);
+ animation.finished
+ .then(callback);
+ //也可 animation.onfinished = callback;
+}
+//地狱回调模式就是这样一个逻辑编写的，有两个参数，第一个是要运行的参数，第二个是当第一个参数所包含的指令运行完毕后所进行的另一个指令或者函数
+alice_animation(alice1,() =>{   //回调这里就是用到这两个参数才能正常运作的,应为函数的功能前面已经定义了，只需正确输入两个参数即可
+  alice_animation(alice2,() =>{
+   alice_animation(alice3,() =>{
+      console.log('Function alrealy success to programe finishedly!');
+   })
+  })
+})
+*/
+
+/*
+//async和await版本,参考学习社区的答案，版本3,该版本是最简洁并且易懂的，社区的开发者也看好这种版本
+async function alice_animation(){ 
+ try{
+     //其实只要分别打出三个动画完成状态的代码就可以了，没那么复杂和讲究逻辑
+   await alice1.animate(aliceTumbling,aliceTiming).finished;
+   await alice2.animate(aliceTumbling,aliceTiming).finished;
+   await alice3.animate(aliceTumbling,aliceTiming).finished;
+  }
+  catch(error){
+    console.log('爱丽丝旋转动画未能完成'); 
+  }
+  finally{
+     console.log('爱丽丝旋转动画已按预期完成'); //这就是完成时会把该句子呈现在开发软件的控制台界面
+ }
+}
+alice_animation();
+*/
+
+// promise链版本,参考学习社区,参考答案也是这个版本 版本2 <这个版本一样很简洁美观，代码也是很少的>
+// ( PS:不管是不是需要错误的存在的话，都应该要有完整的Promise链，包括.then .catch .try 以及其他版本)
+
+alice1.animate(aliceTumbling,aliceTiming).finished
+  .then(()=> alice2.animate(aliceTumbling,aliceTiming).finished)
+  .then(()=> alice3.animate(aliceTumbling,aliceTiming).finished)
+  .catch(error=> console.log("Animaion hasn't been finished showing!"))
+  //参考答案是这样的就是使用可变化代码 .catch(error=> console.error(`Error alice_animaiton${error}`))
+  .finally(()=> console.log("Anaimaiton\'s promise is settled!"));
+
+
+
+
+ /*  开始自己想的代码，菜成狗，啥也不是，某眼剃,失败作品
+function aliceanimation1(){
+    alice1.animate(aliceTumbling,aliceTiming);
+}
+function aliceanimation2(){
+    alice2.animate(aliceTumbling,aliceTiming);
+}
+function aliceanimation3(){
+    alice3.animate(aliceTumbling,aliceTiming);
+}
+aliceanimation1();
+*/
+</script>
+      
+ </body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-us">
+ <head>
+    <meta charset="utf-8">
+
+    <title>Our superheroes</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+<!-- 这个链接没有用的，只是留在这知道是来源于源文件就行了
+    <link rel="stylesheet" href="style.css">
+-->
+  <style>
+/* || general styles */
+html {
+  font-family: 'helvetica neue', helvetica, arial, sans-serif;
+}
+
+body {
+  width: 800px;
+  margin: 0 auto;
+}
+
+h1, h2 {
+  font-family: 'Faster One', cursive;
+}
+/* header styles */
+h1 {
+  font-size: 4rem;
+  text-align: center;
+}
+
+header p {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+}
+/* section styles */
+section article {
+  width: 33%;
+  float: left;
+}
+
+section p {
+  margin: 5px 0;
+}
+
+section ul {
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 2.5rem;
+  letter-spacing: -5px;
+  margin-bottom: 10px;
+}
+  </style>
+</head>
+  <body>
+ <header>
+
+ </header>
+
+ <section>
+
+ </section>
+
+
+  <script>
+    /* 这段是网页教程的代码，没有用，不知就是自己不会还是存在引用数据错误的问题
+//基本HTML文档标签引用
+var header = document.querySelector('header');
+var section = document.querySelector('section');
+//网页数据请求与服务器响应，数据传输信息控制代码.此段代码有错误，参考答案的代码完全不一样
+var requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+var request = new XMLHttpRequest();     //关键API访问服务器数据
+request.open('GET','requestURL');
+request.responseType = 'json';
+request.send();
+
+request.onload = function(){
+  var superHeroes = request.response;
+  populateHeader(superHeroes);
+  showHeroes(superHeroes);
+}
+*/
+//运用异步
+async function populate(){
+   const requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+   const request = new Request(requestURL);
+//await等待的意思 ，fetch获取的意思，大概就是服务器接收请求，然后相应请求，返回json对象数据
+   const response = await fetch(request);
+   const superHeroes = await response.json();
+
+   populateHeader(superHeroes);
+   populateHeroes(superHeroes);
+}
+//显示标题和备注信息
+function populateHeader(jsonObj){
+  var header =document.querySelector('header')//参考答案新增
+  var myH1 = document.createElement('h1');
+  myH1.textContent = jsonObj['squadName'];
+  header.appendChild(myH1);
+
+  var myPara =document.createElement('p');
+  myPara.textContent = 'Hometown:' + jsonObj['homeTown'] + ' // Formed:' + jsonObj['formed'];
+  header.appendChild(myPara);
+}
+//显示英雄卡片信息
+function populateHeroes(jsonObj){
+  var section = document.querySelector('section');//参考答案新增
+  var heroes = jsonObj['members'];
+  
+ for(let i=0; i < heroes.length; i++){
+   var myArticle = document.createElement('article');
+   var myH2 = document.createElement('h2');
+   var myPara1 = document.createElement('p');
+   var myPara2 = document.createElement('p');
+   var myPara3 = document.createElement('p');
+   var myList = document.createElement('ul');
+
+  myH2.textContent = heroes[i].name;
+  myPara1.textContent ='Secret identity: ' +  heroes[i].secretIdentity;
+  myPara2.textContent = 'Age: ' + heroes[i].age;
+  myPara3.textContent = 'Superpowers: ';
+
+  var superPowers = heroes[i].powers;
+  for(let j=0;j < superPowers.length;j++){
+     var listItem = document.createElement('li');
+     listItem.textContent = superPowers[j];
+     myList.appendChild(listItem);
+  }
+  //.appndChild方法不用加引号，其他方法要加引号
+myArticle.appendChild(myH2);
+myArticle.appendChild(myPara1);
+myArticle.appendChild(myPara2);
+myArticle.appendChild(myPara3);
+myArticle.appendChild(myList);
+//最终引用到HTML文档里section元素里 
+section.appendChild(myArticle);
+
+ } 
+}
+populate();
+
+/*
+async function populate() {
+
+const requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+const request = new Request(requestURL);
+
+const response = await fetch(request);
+const superHeroes = await response.json();
+
+populateHeader(superHeroes);
+populateHeroes(superHeroes);
+
+}
+
+function populateHeader(obj) {
+const header = document.querySelector('header');
+const myH1 = document.createElement('h1');
+myH1.textContent = obj.squadName;
+header.appendChild(myH1);
+
+const myPara = document.createElement('p');
+myPara.textContent = `Hometown: ${obj.homeTown} // Formed: ${obj.formed}`;
+header.appendChild(myPara);
+}
+
+function populateHeroes(obj) {
+const section = document.querySelector('section');
+const heroes = obj.members;
+
+for (const hero of heroes) {
+  const myArticle = document.createElement('article');
+  const myH2 = document.createElement('h2');
+  const myPara1 = document.createElement('p');
+  const myPara2 = document.createElement('p');
+  const myPara3 = document.createElement('p');
+  const myList = document.createElement('ul');
+
+  myH2.textContent = hero.name;
+  myPara1.textContent = `Secret identity: ${hero.secretIdentity}`;
+  myPara2.textContent = `Age: ${hero.age}`;
+  myPara3.textContent = 'Superpowers:';
+
+  const superPowers = hero.powers;
+  for (const power of superPowers) {
+    const listItem = document.createElement('li');
+    listItem.textContent = power;
+    myList.appendChild(listItem);
+  }
+
+  myArticle.appendChild(myH2);
+  myArticle.appendChild(myPara1);
+  myArticle.appendChild(myPara2);
+  myArticle.appendChild(myPara3);
+  myArticle.appendChild(myList);
+
+  section.appendChild(myArticle);
+}
+}
+
+populate();
+*/
+
+  </script>
+  </body>
+</html>

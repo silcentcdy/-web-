@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapquest example(地图API)</title>
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js" defer></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
+
+  <style>
+    #map {
+        width: 600px;
+        height: 600px;
+     }
+  </style>
+  </head>
+  <body>
+      <!-- PS:!!!!!!(该练习可能需要用到真实的服务器来运行文件，所以这里就只好打打代码，做好笔记就行了) -->
+    <h1>Simple Mapquest example(简单地图位置请求示例)</h1>
+
+    <div id="map"></div>
+    <script>
+//引用谷歌地图API的密钥
+ L.mapquest.key = 'AIzaSyBjwCEp4nnu2t3bJM7eHnZDKAhRKUW8Y94';
+
+ // 'map' refers to a <div> element with the ID map
+const map = L.mapquest.map('map', {
+  center: [53.480759, -2.242631],
+  layers: L.mapquest.tileLayer('map'),
+  zoom: 12
+});
+
+var marker =new google.maps.Marker({
+    position:latlng,
+    icon:iconBase + 'flag_maps.png',
+    map:map
+});
+
+//添加自定义地图图标,这定义了所有 Google Maps 官方图标存储的 URL
+// 这里我们用iconBase 加上图标的文件名，从而创建完整 URL 的方式阐明了 icon 属性。现在尝试重新加载你的例子，你会看到你的地图上显示了一个定制的标记！
+var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';//图标的位置应当在选项对象的icon 属性中说明
+
+//   [单击标记时显示弹出窗口 功能部分]
+//首先，您需要指定一个包含 HTML 的 JavaScript 字符串，该字符串将定义弹出窗口的内容。这将由 API 注入弹出窗口，并且可以包含您想要的任何内容。
+let contentString = '<div id="content" ><h2 id="firstHeading" class="firstHeading"> Custom info window</h2><p>This is a cool custom info window.</p></div>'
+//然后，你需要使用google.maps.InfoWindow() 构造器，创建一个新的 info window object。然后，你需要使用google.maps.InfoWindow() 构造器，创建一个新的 info window object。该构造器有其他属性
+let infowindow =  new google.maps.InfoWindow({
+   content: contentString
+});
+
+// 然后，你需要使用google.maps.InfoWindow() 构造器，创建一个新的 info window object。
+marker.addListener('click',function(){
+  infowindow.open(map,marker);
+});
+
+//[Controlling what map controls are displayed功能部分]
+
+//原始谷歌地图构造器，不知道对不对，没源文件参考
+google.maps.Marker({
+  disableDafaultUI:true,//将看到 disableDefaultUI: true 。这将禁用您通常在 Google 地图上获得的所有标准 UI 控件。
+/*通过使用指定单个 UI 功能的其他属性，可以更精细地显示或隐藏控件。尝试在 disableDefaultUI: true 的下面添加代码
+（请记住在 disableDefaultUI: true 之后输入逗号，否则将收到错误）：*/
+  zoomControl: true,
+  mapTypeControl: true,
+  scaleControl: true
+})
+
+/*
+在原始 google.maps.Map()构造函数中，
+将其值设置为 false （或完全删除此属性），重新加载示例，将看到地图缩放按钮、scale indicator 等等。
+*/
+
+//学习社区完成版参考
+L.mapquest.key = 'YOUR-API-KEY-HERE';
+
+// 'map' refers to a <div> element with the ID map
+const map1 = L.mapquest.map('map', {
+  center: [53.480759, -2.242631],
+  // 1. change 'map' to 'hybrid', try other type of map
+  layers: L.mapquest.tileLayer('hybrid'),
+  zoom: 12
+});
+
+// 2. Add control
+map1.addControl(L.mapquest.control());
+
+// 3. Add icon
+L.marker([53.480759, -2.242631], {
+  icon: L.mapquest.icons.marker({
+    primaryColor: '#22407F',
+    secondaryColor: '#3B5998',
+    shadow: true,
+    size: 'md',
+    symbol: 'A'
+  })
+})
+.bindPopup('This is Manchester!')
+.addTo(map1);
+
+
+    </script>
+  </body>
+</html>

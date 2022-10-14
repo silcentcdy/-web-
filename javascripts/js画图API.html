@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绘图API教程笔记</title>
+    <style>
+    /* 删除文档网页的滚动条 */
+    body {
+     margin: 0;
+     overflow: hidden;
+    }
+    
+    </style>
+</head>
+ <body>
+  <canvas class="myCanves">
+       <p>添加适当的反馈信息.</p>  
+  </canvas>
+
+
+  <script>
+//设置好画布的基础配置
+var canvas = document.querySelector('.myCanves');
+var width = canvas.width = window.innerWidth;//可视区域宽度
+var height = canvas.height = window.innerHeight;//可视区域高度
+     
+var ctx = canvas.getContext('2d');
+
+//为画布绘制颜色和定义矩形的初始值
+ctx.fillStyle = 'rgb(255,240,240)';
+ctx.fillRect(0,0,width,height);
+
+//绘制普通的矩形(rectanger),绘制矩形的方法后面的参数(前面两个是矩形起始坐标点，后面两个是矩形的大小值，也就是长和宽)
+ctx.fillStyle ='rgb(25,140,110)';
+ctx.fillRect(100,100,100,150);
+
+ctx.fillStyle = 'rgb(0,0,255)';
+ctx.fillRect(75,75,100,100)
+//定义透明度矩形
+ctx.fillStyle = 'rgba(0,255,0,.3)';
+ctx.fillRect(350,250,400,250);
+//绘制图形描边(stroke)
+ctx.strokeStyle = 'rgb(233,0,0)';
+ctx.lineWidth = 5;  //表示描边的宽度值大小，要放在中间才能生效
+ctx.strokeRect(10,20,100,120);
+//绘制路径,画布提供了许多函数用来绘制直线、圆、贝塞尔曲线，等等
+/*
+一些通用的方法和属性将贯穿以下全部内容：
+1.beginPath()：在钢笔当前所在位置开始绘制一条路径。在新的画布中，钢笔起始位置为 (0, 0)。
+2.moveTo()：将钢笔移动至另一个坐标点，不记录、不留痕迹，只将钢笔“跳”至新位置。
+3.fill()：通过为当前所绘制路径的区域填充颜色来绘制一个新的填充形状。
+4.stroke()：通过为当前绘制路径的区域描边，来绘制一个只有边框的形状。
+5.路径也可和矩形一样使用 lineWidth 和 fillStyle / strokeStyle 等功能。
+*/
+//典型的简单路径绘制选项
+ctx.fillStyle = 'rgb(0,255,0)';
+ctx.beginPath();
+ctx.moveTo(300,20);
+ctx.lineWidth = 10;
+ctx.fill();//绘制最终路径
+
+//画线,我们来在画布上绘制一个等边三角形。
+//首先写入单位转换数学公式，人类习惯角度，JS只会识别弧度,利用三角函数正切来求得等边三角形的高，以此来绘制路径
+function degToRad(degrees){
+    return degrees * Math.PI / 180 ;
+}
+ctx.fillStyle = 'yellow';
+ctx.beginPath();
+ctx.moveTo(50,50);
+ctx.lineTo(150,50);
+var triHeight = 50 * Math.tan(degToRad(60));//triheight应该是三角形高的意思,给定一个角度参数来进行三角函数运算
+ctx.lineTo(50,50+triHeight);
+ctx.lineTo(50,50);
+ctx.fill();
+/*
+我们来逐行解释： 首先绘制一条直线，终点坐标为 (150, 50)。此时路径沿 x 轴向右行走 100 像素。 然后利用三角函数来计算等边三角形的高。
+这里我们要绘制的三角形是朝下的。等边三角形每个角均为 60°，为计算高的值，我们可以将三角形从正中心分割为两个直角三角形，
+每个直角三角形的三个角分别为 90°、60°、30°。对于边：
+    1.最长的边称为 斜边。
+    2.紧挨 60° 角的边称为 临边，显然地，它的长度是刚才绘制的线的一半，即 50 像素。
+    3.60° 角对面的边称为 对边，即三角形的高，需要计算得到。
+<Math.tan() 接受数值的单位为弧度>
+有了三角形的高，我们来绘制另一条线，终点坐标为 (100, 50+triHeight)。X 坐标值很简单，应在刚才绘制的水平线两顶点正中间位置。Y 值应为 50 加上三角形的高，
+因为高即三角形底边到顶点的距离。
+下一条线的终点坐标为绘制整个三角形的起点坐标。
+*/
+
+//进行圆形的绘制,绘制圆的方法—— arc() ，通过连续的点来绘制整个圆或者弧（arc，即局部的圆）
+ctx.fillStyle = 'rgb(142,222,9)';
+ctx.beginPath();
+ctx.arc(500,600,90,degToRad(0),degToRad(360),false);
+//两个指定圆心的位置坐标，第三个是圆的半径，第四、五个是绘制弧的起、止角度（给定 0° 和 360° 便能绘制一个完整的圆），
+//第六个是绘制方向(false 是顺时针，true 是逆时针), <备注： 0° 设定为水平向右。>
+ctx.fill();
+ctx.fillStyle = 'rgb(0,0,233)';
+ctx.beginPath();
+ctx.arc(400,450,80,degToRad(-45),degToRad(45),true);
+ctx.lineTo(400,450);//绘制一条直线
+ctx.fill();
+/*
+1.将 arc() 的最后一个参数设置为 true，意味着弧将逆时针绘制，也就意味着即使起、止角度分别设置为 -45°、45°，我们还是得到了区域外的一条 270° 的弧。
+如果把 true 改为false 重新运行，将得到 90° 的弧。
+2.在调用 fill() 前，我们绘制了一条终点为圆心的直线。然后我们就渲染出一个惟妙惟肖的吃豆人模型。如果删除这条线（试试呗）再重新运行代码，
+你只能得到一个起止点间被砍掉一块的圆。这向我们展示了画布的另一个重要事项：如果要填充一个未完成（也就是没有首尾相接）的路径，
+浏览器将在起、止点件绘制一条直线，然后直接填充。
+*/
+
+//绘制文本,以下两个函数用于绘制文本：
+/*
+1.fillText() ：绘制有填充色的文本。 2.strokeText()：绘制文本外边框（描边）。
+这两个函数有三个基本的参数：需要绘制的文字、文本框（顾名思义，围绕着需要绘制文字的方框）左上顶点的 X、Y 坐标。
+还有一系列帮助控制文本渲染的属性：比如用于指定字体族、字号的 font，它的值和语法与 CSS 的 font 属性一致。
+*/
+//下面我们将绘制两行文字，一行描边文字一行填充颜色的文字
+ctx.strokeStyle = 'rgb(0,123,123)';
+ctx.lineWidth = 2;
+ctx.font = '20px arial';
+ctx.strokeText('Canves text',350,50);//第一个参数是文本内容，后面两个是位置参数
+
+ctx.fillStyle ='rgb(0,0,255)';
+ctx.font = '40px georgia';
+ctx.fillText('Canves text',350,100);
+
+
+/*
+[在画布上绘制图片]
+可在画布上渲染外部图片，简单图片文件、视频帧、其他画布内容都可以。这里我们只考虑简单图片文件的情况
+drawImage() 方法可将图片绘制在画布上。 最简单的版本需要三个参数：需要渲染的图片、图片左上角的 X、Y 坐标。
+*/
+//在画布上绘制简单的图片
+var images = new Image();//返回对象的类型与非空 <img> 元素的引用是一致的。然后将它的 src 属性设置为图片的路径。此时浏览器将开始载入这张图片。
+images.src = 'images/山中电塔.png';
+//我们尝试用 drawImage() 函数来嵌入图片，应确保图片先载入完毕，否则运行会出错。可以通过 onload 事件处理器来达成，该函数只在图片调用完毕后才会调用。
+images.onload =function(){
+    //ctx.drawImage(images,500,430);非裁切版
+    ctx.drawImage(images,20, 20, 405, 375, 1000, 10, 405, 375);
+//图片裁切版,前面四个数值参数是指参照原图片坐标点位置进行裁切的图片大小，后面四位数值是指裁切的图片在画布上锁绘制的位置
+}
+
+//[循环和动画部分]
+/*
+创建一个循环
+在画布中使用循环是件有趣的事，你可以在 for 循环中运行画布命令，和其他 JS 代码一样。
+*/
+//在 JS 代码末尾添加以下一行。这将创建一个新方法——translate()，可用于移动画布的原点，移动画布的中心点位置
+/*
+ctx.translate(width/2,height/2);
+
+function degToRad(degrees){
+    return degrees * Math.PI / 180;
+};
+
+function rand(min,max){
+    return Math.floor(Math.random() * (max - min+1)) + (min) 
+}
+
+var length = 250;
+var moveOffset = 20;
+
+for(var i=0;i < length;i++){
+    ctx.fillStyle = 'rgba(' + (255-length) + ', 0, ' + (255-length) + ', 0.9)';//颜色取值不定时的地代码打法,要在字符串颜色代码里面加两个'+'号
+    ctx.beginPath();
+    ctx.moveTo(moveOffset, moveOffset);
+    ctx.lineTo(moveOffset+length, moveOffset);
+ var triHeight = length/2 * Math.tan(degToRad(60));
+    ctx.lineTo(moveOffset+(length/2), moveOffset+triHeight);
+    ctx.lineTo(moveOffset, moveOffset);
+    //ctx.arc(100,80,50,degToRad(-60),degToRad(60),true); 圆形几何版
+    //ctx.fillRect(100,120,300,200);  矩形几何版
+    ctx.fill();
+
+    length--;
+    moveOffset += rand(.5,1.5);
+    ctx.rotate(degToRad(5));
+}
+*/
+/*
+<在每次循坏迭代中>
+1.设置 fillStyle 为略透明的紫色渐变色。渐变由每次迭代时 length 值的改变实现。随着循环的运行， length 值逐渐变小，从而使连续的三角形颜色逐渐变亮。
+2.开始路径。
+3.将钢笔移动至坐标 (moveOffset, moveOffset)；该变量定义了每次要绘制新三角形时需要移动的距离。
+4.画一条直线，终点坐标为 (moveOffset+length, moveOffset)。即一条长度为 length 与 X 轴平行的线。
+5.计算三角形的高，方法同上。
+6.向三角形底部顶点方向绘制一条直线，然后向三角形的起始点绘制一条直线。
+7.调用 fill() 为三角形填充颜色。
+8.更新次序变量，准备绘制下一个三角形。length 的值减一，使三角形每次迭代都变小一些；小幅增加 moveOffset 的值，使得下一个三角形略微错位；
+用一个新函数 rotate() 来旋转整块画布，在绘制下个三角形前画布旋转 5°。
+*/
+
+//[动画部分],参考前面对象教程里面的弹跳球,里面的弹跳球的绘制以及动画就涉及到这部分内容
+/*
+一般地，在画布上制作动画需要以下步骤：
+1.清除画布内容（可用 fillRect() 或 clearRect()）。
+2.（在需要时）用 save() 保存状态。（在进行下一步前保存所更新的设置，一般在复杂环境中用到）
+3.绘制动画图形。
+4.使用 restore() 恢复第 2 步中保存的状态。
+5.调用 requestAnimationFrame() 准备下一帧动画。
+<备注 save() 和 restore() 这里暂不展开，可以访问 变形 教程（及后续内容）来获取详细信息。在canves API教程里面>
+*/
+
+/*
+//[一个简单的人物j精灵循坏动画]
+ctx.translate(width/2,height/2);
+//创建一个新的 HTMLImageElement 对象，把它的 src 设置为所需图片，添加一个 onload 事件处理器，使 draw() 函数在图片载入后触发
+var image = new Image();
+image.src = 'images/walk-right.png';
+image.onload = draw;
+
+//添加一些变量，来追踪精灵图在屏幕上的位置，以及当前需要显示的精灵图的序号。
+var sprite = 0;//精灵的意思
+var posX = 0;
+//每个精灵的尺寸为 102 × 148 像素。为了整齐的显示一个精灵，可以通过 drawImage() 来从序列中裁切出单独的精灵并隐藏其他部分，
+//就像上文中操作 Firefox 图标的方法。切片的 X 坐标应为 102 的倍数，Y 坐标恒为 0。切片尺寸恒为 102 × 148 像素。
+
+//完善draw()函数
+function draw(){
+//首先，添加以下代码，清除画布，准备绘制新的帧。注意由于我们刚才将原点设置为 width/2, height/2，这里需要将矩形左上顶点的坐标设置为 -(width/2), -(height/2)。
+ctx.fillRect(-(width/2),-(height/2),width,height);
+ctx.drawImage(image,(sprite*102), 0, 102, 148, 0+posX, -74, 102, 148);
+
+如你所见：
+1.image 指定需要嵌入的图片。
+2.参数 2、3 指定切片左上顶点在原图的位置坐标，X 值为 sprite（精灵序列 0 - 5）乘 102，Y 值恒为 0。
+3.参数 4、5 指定切片尺寸：102 × 148 像素。
+4.参数 6、7 指定切片在画布绘制区域的坐上顶点坐标。X 坐标位置为 0 + posX，意味着我们可以通过修改 posX 的值来修改绘制的位置。
+5.参数 8、9 指定图片在画布中的尺寸。这里需要图片保持原始尺寸，因此我们指定宽、高值为 102、148。
+
+if (posX % 13 === 0) {
+    if (sprite === 5) {
+      sprite = 0;
+    } else {
+      sprite++;
+    }
+  }
+
+将整个功能块放置在 if (posX % 13 === 0) { ... } 内。用“模（%）运算符”（即 求余运算符）来检测 posX 是否可以被 13 整除。如果整除，
+则通过增加 sprite 的值转至下一个精灵（到 5 号精灵时归零）。这实际上意味着每隔 13 帧才更新一次精灵，每秒大约更新 5 帧（requestAnimationFrame()
+每秒最多调用 60 帧）。我们故意放慢了帧率，因为精灵图只有六个，且如果每秒显示 60 帧的话，这个角色就会快到起飞。
+外部程序块中用一个 if ... else 语句来检测 sprite 的值是否为 5（精灵序号在 0 - 5 间循环，因此 5 代表最后一个精灵）。 
+如果最后一个精灵已经显示，就把 sprite 重置为 0，否则加 1。
+
+if(posX > width/2) {
+    newStartPos = -((width/2) + 102);
+    posX = Math.ceil(newStartPos / 13) * 13;//取整的数学方法
+    console.log(posX);
+  } else {
+    posX += 2;
+  }
+  window.requestAnimationFrame(draw);
+};
+
+
+用另一个 if ... else 来检测 posX 的值是否超出了 width/2，那意味着角色走到了屏幕右侧边缘。如果这样就计算出一个让角色出现在屏幕左侧边缘的 X 坐标，
+然后将 posX 设置为最接近这个数的 13 的倍数。这里必须限定 13 的倍数这个条件，这是因为 posX 不可能是 13 的倍数，若不限定的话上一段代码就不会运行了。
+ 如果角色没有走到屏幕边缘，只需为 posX 加 2。这将让他在下次绘制时更靠右些。
+*/
+
+/*
+//[简单动画绘制应用]
+//完整示例代码在codepen网站上，由于需要新建一个文件就只好在网站上建了,以下是学习网站的完整JavaScript源代码
+const canvas = document.querySelector('.myCanvas');
+const width = canvas.width = window.innerWidth;
+const height = canvas.height = window.innerHeight-85;
+const ctx = canvas.getContext('2d');
+
+ctx.fillStyle = 'rgb(0,0,0)';
+ctx.fillRect(0,0,width,height);
+
+const colorPicker = document.querySelector('input[type="color"]');
+const sizePicker = document.querySelector('input[type="range"]');
+const output = document.querySelector('.output');
+const clearBtn = document.querySelector('button');
+
+// covert degrees to radians
+function degToRad(degrees) {
+  return degrees * Math.PI / 180;
+};
+
+// update sizepicker output value
+
+sizePicker.addEventListener('input', () => output.textContent = sizePicker.value);
+//教程主要讲的精华部分
+//下面我们就来看看代码的精华部分。首先，用 curX、curY 和 pressed 这三个变量来跟踪鼠标的 X、Y 坐标和点击状态。当鼠标移动时，触发一个函数作为 onmousemove 事件处理器，
+//其应捕获当前的 X 和 Y 值。再用 onmousedown 和 onmouseup 事件处理器来修改鼠标键按下时 pressed 的值（按下为 true，释放为 false）。
+// store mouse pointer coordinates, and whether the button is pressed
+let curX;
+let curY;
+let pressed = false;
+
+// update mouse pointer coordinates,目前看不明白这些代码，但作用就是捕获屏幕上的鼠标位置
+document.addEventListener('mousemove', e => {
+  curX = (window.Event) ? e.pageX : e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+  curY = (window.Event) ? e.pageY : e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+});
+
+canvas.addEventListener('mousedown', () => pressed = true);
+canvas.addEventListener('mouseup', () => pressed = false);
+// 教程版的鼠标按下事件处理函数代码
+canvas.onmousedown = function() {
+  pressed = true;
+};
+canvas.onmouseup = function() {
+  pressed = false;
+}
+
+//在按下“Clear canvas”（清除画布）按钮时，我们运行一个简单的函数来清除整个画布的内容至纯黑色，和刚才的方法一致：
+clearBtn.addEventListener('click', () => {
+  ctx.fillStyle = 'rgb(0,0,0)';
+  ctx.fillRect(0,0,width,height);
+});
+//这次的绘图循环非常简单，如果 pressed 为 true，则绘制一个圆，该圆以颜色选择器中设定的颜色为背景，以滑动选择器设定的数值为半径。
+function draw() {
+  if (pressed) {
+    ctx.fillStyle = colorPicker.value;
+    ctx.beginPath();
+    ctx.arc(curX, curY-85, sizePicker.value, degToRad(0), degToRad(360), false);
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+
+ </body>
+</html>

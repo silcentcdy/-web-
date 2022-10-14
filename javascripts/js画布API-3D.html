@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL-3D图形示例</title>
+    <script src="Three.js" defer></script>
+
+    <style type="text/stylesheet">
+    html,body {
+     margin: 0;
+    }
+    body {
+     overflow: hidden;
+    }
+    </style>
+</head>
+ <body>
+ <canvas>
+   
+ </canvas>
+   <script>
+     
+//Scene() 构造器创建一个新的场景，表示即将显示的整个 3D 世界。
+var scene = new THREE.Scene();
+
+//下一步，我们需要一部摄影机来看到整个场景。在 3D 绘图语境中，摄影机表示观察者在世界里的位置，
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+/*
+PerspectiveCamera() 构造器有四个参数：
+1.观察区域：镜头视角大小，用角度表示。
+2.屏幕宽高比：一般情况下，宽高比等于屏幕的宽比上屏幕的高。使用其他的值会使场景扭曲（也许正是你需要的，但一般都不是）。
+3.近裁切面：停止渲染前对象离摄影机的最近距离。设想一下，举起一个手指，逐渐移近双眼，某个点后就在也看不到这根手指了。
+4.远裁切面：停止渲染前离摄像机最远的对象的距离。
+将摄像机的位置设定为距 Z 轴 5 个距离单位的位置。与 CSS 类似，在屏幕之外你（观察者）的位置。
+*/
+//第三个重要参数是渲染器。我们用它来渲染给定的场景，可通过给定位值得摄影机观察。现在我们使用 WebGLRenderer() 构造器创建一个渲染器供稍后使用。
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+//第一行创建一个新的渲染器，第二行设定渲染器在当前摄影机视角下的尺寸，第三行将渲染好的 <canvas> 对象加入 HTML 的 <body> 中。
+//现在渲染器绘制的内容将在窗口中显示出来。
+
+//下一步，在画布中创建魔方
+var cube;
+var loader = new THREE.TextureLoader();
+
+loader.load('metal003.png',function(texture){
+ texture.warpS = THERR.RepeatWarpping; 
+ texture.warpT = THERR.RepeatWarpping;
+ texture.repeat.set(2,2);
+ 
+ var geometry = new THREE.BoxGeometry(2.4,2.4,2.4);
+ var material = new THREE.MeshLamberMaterial(
+   {  map:texture,
+      shading:THREE.FlatShading});
+ cube = new THREE.Mesh(geometry,material);
+ scene.add(cube);
+
+ draw();
+});
+/*
+内容很多，我们来剥丝抽茧：
+1.首先，创建一个全局变量 cube，这样就可以在代码任意位置访问我们的魔方。
+2.然后，创建一个 TextureLoader 对象，并调用 load()。这里 load() 包含两个参数（其它情况可以有更多参数）：需要调用的纹理图（PNG 文件）
+和纹理加载成功后调用的函数。
+3.函数内部，我们用 texture 对象的属性指明我们要在魔方的每个面渲染 2 × 2 的图片，然后创建一个 BoxGeometry 对象和一个 MeshLambertMaterial 对象，
+将两者作为 Mesh 的参数来创建我们的魔方。 Mesh 一般就需要两个参数：一个几何（形状）和一个素材（形状表面外观）。
+4.最后，将魔方添加进场景中，调用我们的 draw() 函数开始动画。
+*/
+
+//定义 draw() 函数前，我们需要先为场景打光，以照亮场景中的物体。
+var light =new THREE.AmbientLight('rgb(255,255,255)');
+scene.add(light);
+
+var spotlight = new THREE.SpotLight('rgb(255,255,255)');
+spotlight.position.set(100,1000,10000);
+spotlight.castShadow = true;
+scene.add(spotlight);
+//AmbientLight 对象是可以轻度照亮整个场景的柔光，就像户外的阳光。而 SpotLight 对象是直射的硬光，就像闪光灯和手电筒（或者它的英文字面意思——聚光灯）
+
+//添加我们的 draw() 函数,这段代码很直观，每一帧我们都沿X轴和Y轴将魔方轻微转动，然后按摄像机视角渲染场景，最后调用 requestAnimationFrame() 来准备下一帧
+function draw(){
+  cube.rotation.x += 0.01;
+  cube,rotation.y += 0.01;
+  renderer.render(scene,camera);
+
+  requestAnimationFrame(draw);
+}
+
+/*
+//学习社区答案
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+let cube;
+
+const loader = new THREE.TextureLoader();
+
+loader.load('metal003.png', texture => {
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set(2, 2);
+
+	const geometry = new THREE.BoxGeometry(2.4,2.4,2.4);
+	const material = new THREE.MeshLambertMaterial( { map: texture } );
+	cube = new THREE.Mesh(geometry, material);
+	scene.add(cube);
+
+	draw();
+});
+
+const light = new THREE.AmbientLight('rgb(255,255,255)'); // soft white light
+scene.add(light);
+
+const spotLight = new THREE.SpotLight('rgb(255,255,255)');
+spotLight.position.set( 100, 1000, 1000 );
+spotLight.castShadow = true;
+scene.add(spotLight);
+
+function draw() {
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  renderer.render(scene, camera);
+
+	requestAnimationFrame(draw);
+}
+
+*/
+   </script>
+ </body>
+</html>

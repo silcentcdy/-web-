@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta charset="utf-8">
+    <title>弹跳彩球</title>
+
+  <style>
+html, body {
+  margin: 0;
+}
+
+html {
+  font-family: sans-serif;
+  height: 100%;
+  background-color: black;
+}
+
+body {
+  overflow: hidden;
+  height: inherit;
+}
+
+h1 {
+  font-size: 2rem;
+  letter-spacing: -1px;
+  position: absolute;
+  margin: 0;
+  top: -4px;
+  right: 20px;
+
+  color: transparent;
+  text-shadow: 0 0 4px white;
+}
+  </style>
+ </head>
+
+  <body>
+    <h1>弹跳彩球</h1>
+    <canvas></canvas>
+    
+    <script>
+// 设置画布，基础设置
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+const width = canvas.width = window.innerWidth;
+const height = canvas.height = window.innerHeight;
+
+// 生成随机数的函数
+function random(min,max) {
+  const num = Math.floor(Math.random() * (max - min)) + min;//也可这样：return Math. .....形式
+  return num;
+}
+function randomColor() {
+  return 'rgb(' +
+         random(0, 255) + ', ' +
+         random(0, 255) + ', ' +
+         random(0, 255) + ')';
+}
+//定义小球函数,建立小球模型  
+function Ball(x,y,VelX,VelY,color,size){
+ this.x = x;
+ this.y = y;
+ this.VelX = VelX;
+ this.VelY = VelY;
+ this.color = color;
+ this.size = size;
+}
+//定义小球图形画作生成
+Ball.prototype.draw = function(){
+  ctx.beginPath();
+  ctx.fillStyle = this.color;
+  ctx.arc(this.x,this.y,this.size, 0, 2*Math.PI);//前面的参数是小球的中心坐标，后面的是小球的圆弧度，一PI代表180° 也就是一个π，是以弧度为单位的
+  ctx.fill();
+}
+//更新小球数据，使其有动态效果,检测小球是否碰到画布边缘，update函数/方法
+Ball.prototype.update = function(){
+  if ((this.x + this.size) >= width ){
+this.VelX = -(this.VelX);
+  }
+if((this.x - this.size) <= 0){
+  this.VelX = -(this.VelX);
+}
+if((this.y + this.size) >= height){
+  this.VelY = -(this.VelY);
+}
+if((this.y - this.size) <= 0){
+  this.VelY = -(this.VelY);
+}
+//小球反弹移动的固定距离
+this.x += this.VelX;
+this.y += this.VelY;
+}
+//添加小球碰撞实验检测
+Ball.prototype.collisionDetect = function(){
+ for(let j = 0; j < balls.length; j++){
+   if(this !==  balls[j]){
+     const dx = this.x - balls[j].x;
+     const dy = this.y - balls[j].y;
+     const distance = Math.sqrt(dx*dx + dy*dy);
+//这就是圆的两点距离公式计算的代码呈现，判定两个小球圆点距离是否达到相撞的距离值
+     if(distance < this.size + balls[j].size){
+       balls[j].color = this.color =randomColor();
+     }
+   }
+ }
+}
+//让小球动起来的函数以及动态动画循坏函数,while条件语句里定义具体的坐标速度等参数值
+let balls = [];
+
+while(balls.length < 50){
+  let size = random(10,20);
+  let ball = new Ball(
+//为避免绘制错误，球至少离画布边缘球本身一倍宽度的距离
+random(0 + size,width - size),
+random(0 + size,height - size),
+random(-7,7),
+random(-7,7),
+randomColor(),
+size
+);
+
+balls.push(ball)
+}
+function loop(){
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.fillRect(0,0,width,height);//画矩形，也就是让画布的面积等于这个矩形的面积,前面两个参数是矩形起点坐标，后面是大小，也就是跟随画布的大小
+  
+  for(let i = 0; i < balls.length; i++){
+    balls[i].draw();
+    balls[i].update();
+    balls[i].collisionDetect();
+  }     
+  requestAnimationFrame(loop);//运行完一次，再次运行，循坏往复的运行该函数
+}
+loop();
+    </script>
+  </body>
+</html>

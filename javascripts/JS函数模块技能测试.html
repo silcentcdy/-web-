@@ -1,0 +1,181 @@
+<!--测试您的技能：函数-->
+<!--测试一：函数 1
+对于第一个任务，您必须创建一个简单的函数 — 该函数将随机名称从提供的数组 （） 打印到提供的段落 （），然后运行一次。chooseName() name spara
+
+    下面的一些问题需要您编写一些DOM操作代码来完成它们 - 例如创建新的HTML元素，将其文本内容设置为等于特定的字符串值，
+    并将它们嵌套在页面上的现有元素中 - 所有这些都是通过JavaScript完成的。-->
+<!--
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Functions: Task 1</title>
+    <style>
+      p {
+        color: purple;
+        margin: 0.5em 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+   
+  </head>
+  <body>
+    <section class="preview">
+
+    </section>
+  </body>
+-->
+ <!--
+   <script>
+    const names = ['Chris', 'Li Kang', 'Anne', 'Francesca', 'Mustafa', 'Tina', 'Bert', 'Jada']
+    const para = document.createElement('p');
+
+    // Add your code here,关键是要取整数学计算方法和随机数取值数学方法乘上数组的长度才可以实现随机打印出数组的一个数到页面上
+ 
+ function chooseNames(){
+     para.textContent = names[Math.floor(Math.random()*names.length)]
+ }
+   chooseNames();
+
+  /*  函数3练习，是在函数一练习基础上进行改进和优化
+在此任务中，您将返回到任务 1 中提出的问题，目的是改进它。我们希望您进行以下三项改进：
+1.将生成随机数的代码重构为一个名为 的单独函数，该函数将随机数应位于两个泛型边界作为参数，并返回结果。random()
+2.更新函数，使其利用随机数函数，将可供选择的数组作为参数（使其更灵活），并返回结果。chooseName()
+3.将返回的结果打印到段落 （） 的 .paratextContent
+*/
+//min,max是泛型边界表达式，第一个函数定义随机数并带有最大最小值参数，第二个函数是对第一个函数的引用并赋予参数数值
+ /* function random(min,max){
+  return  Math.floor(Math.random() * (max - min)) + min;
+  }
+  function chooseName(){
+   para.textContent = names[random(0,names.length)];
+  }
+   chooseName();
+    // Don't edit the code below here!
+    const section = document.querySelector('section');
+    section.appendChild(para);
+*/
+  </script>
+</html>
+-->
+
+<!--函数 2
+对于我们的第二个与函数相关的任务，您需要创建一个函数，该函数根据提供的五个输入变量在提供的（参考变量，上下文可用）上绘制一个矩形：<canvas> canvas ctx
+
+x— 矩形的 x 坐标。
+y— 矩形的 y 坐标。
+width— 矩形的宽度。
+height— 矩形的高度。
+color— 矩形的颜色。
+您需要在绘制之前清除画布，以便在实时版本中更新代码时，不会在彼此之上绘制大量矩形。-->
+<!--
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Functions: Task 2</title>
+    <style>
+      p {
+        color: purple;
+        margin: 0.5em 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <section class="preview">
+
+    </section>
+
+    <canvas width="480" height="320">
+
+    </canvas>
+
+  </body>
+  <script>
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const x = 50;
+    const y = 60;
+    const width = 100;
+    const height = 75;
+    const color = 'yellow';
+
+    // Add your code here,矩形画布代码，三部分一部分选定开始，一部分颜色，一部分矩形方位坐标点,绘画矩形是函数名的意思
+function drawRect(){
+   ctx.clearRect(0,0,canvas.width,canvas.height);
+   ctx.beginPath(); 
+   ctx.fillStyle = color;
+   ctx.fillRect(x,y,width,height);
+}
+drawRect();
+    // Don't edit the code below here!
+
+    const section = document.querySelector('section');
+  </script>
+
+</html>
+-->
+
+<!--函数 4
+在此任务中，我们有一个名称数组，我们使用 Array.filter（） 获取一个仅包含少于 5 个字符的名称的数组。
+筛选器当前正在传递一个命名函数，该函数检查名称的长度，如果名称长度小于 5 个字符，则返回，否则返回。isShort() true false
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Functions: Task 4</title>
+    <style>
+      p {
+        color: purple;
+        margin: 0.5em 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="preview">
+
+    </section>
+  </body>
+  <script>
+    const names = ['Chris', 'Li Kang', 'Anne', 'Francesca', 'Mustafa', 'Tina', 'Bert', 'Jada'];
+    const para = document.createElement('p');
+
+   /* function isShort(name) {
+      return name.length < 5;
+    }
+    */
+   //箭头函数是这样的,filter应该是筛选器的意思，就是从数组中筛选出字符长度小于5(正常计数)的数组，箭头函数的标志类似于数学符号上的等价于
+    const shortNames = names.filter(name => name.length < 5);
+    para.textContent = shortNames;
+
+    // Don't edit the code below here!
+    const section = document.querySelector('section');
+    section.appendChild(para);
+  </script>
+</html>
+
+
+
+
+

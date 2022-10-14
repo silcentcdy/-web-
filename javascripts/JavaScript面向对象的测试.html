@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>OOJS: Task 1</title>
+    <style>
+      p {
+        color: purple;
+        margin: 0.5em 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  
+  </head>
+
+  <body>
+
+    <section class="preview">
+
+
+    </section>
+
+  </body>
+  <script>
+    /*
+//OOJS1 第一部分
+//相应的构造器属性和函数方法都要在这个类中，常量和变量的定义以及其他调用代码要在类外面进行定义
+  class Shape {
+    name;
+    sides;//边数
+    sideLength;//边长
+    //另一种构造器函数代码，参考学习社区的，( function  Shape (name,sides,sideLength){.....})
+    constructor(name,sides,sideLength){
+      this.name = name;
+      this.sides = sides;
+      this.sideLength = sideLength;
+    }
+  //学习社区的另一种参考代码,shape.prototype.calcPerimeter = function(){},该学习社区的代码不知道应该放在那里，自己打的老是有错误
+ calcPerimeter(){
+  console.log(this.sides * this.sideLength);
+  //用console.log()这样的形式可以显示在控制台上，使代码更直观具体，更易于查找错误;consoel.log{`${this.name}'s perimeter length is ${this.sides * this.sideLEngth}.`}
+ }  
+  }
+ //console.log(` ${this.name}'s perimeter length is ${this.sides * this.sideLength}.`);
+//主答案的方法处理代码示例，里面的(`${   }`这类形式，<${}>是代表可变化的参数或者具体的值，<``>是表示该符号所引用到的区域是一段文本，会以文本的形式打印到控制台,这类代码比较具体更实用)
+//square正方形/平方的意思  triangle三角形
+const square = new Shape('square',4,5);
+square.calcPerimeter();
+const triangle = new Shape('triangle',3,4)//三角形是已经知道是有三条边的了，所以中间的边数参数可写可不写,其他平面图形以此类推
+triangle.calcPerimeter();
+*/
+//OOJS 第二部分
+class Shape {
+  name;
+  sides;
+  sideLength;
+
+constructor(name,sides,sideLength){
+  this.name = name;
+  this.sides = sides;
+  this.sideLength = sideLength;
+ }
+}
+Shape.prototype.calcPerimeter = function(){
+  console.log(`${this.name}'s area is ${this.sides * this.sideLength}.`);//计算周长
+}
+class Square extends Shape {
+  //另外在Shape上建立新的类，并继承Shaep类的部分属性
+constructor(sideLength){
+  super('square', 4 , sideLength );
+}
+ calcArea(){
+   console.log(`${this.name}'s area is ${this.sideLength * this.sideLength}.`);//计算面积
+ }
+}
+const square = new Square(100);//里面的参数是边长的值，有这个参数才能进行计算，用来计算正方形面积，所以给一个参数就行了
+square.calcPerimeter();
+square.calcArea();
+  </script>
+</html>    

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal greeting</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        margin: 0 auto;
+        max-width: 1024px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      header, footer {
+        background: cyan;
+        padding: 20px;
+        border: 1px solid black;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      form {
+        font-size: 0.8rem;
+      }
+
+      .personal-greeting {
+        font-weight: bold;
+      }
+      input[type]:hover{
+        background: red ;
+      }
+    </style>
+   
+  </head>
+  <body>
+    <header>
+      <h1>Our website</h1>
+
+      <form>
+        <div class="remember">
+          <label for="entername">Enter your name:</label>
+          <input id="entername" type="text" required>
+          <input id="submitname" type="submit" value="Say hello">
+        </div>
+        <div class="forget">
+          <label for="forgetname">Want me to forget you?</label>
+          <input id="forgetname" type="reset" value="Forget">
+        </div>
+      </form>
+    </header>
+
+    <main>
+
+      <p class="personal-greeting">Welcome to our website.</p>
+
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam malesuada, metus ut mollis volutpat, felis est rhoncus turpis, in blandit est risus malesuada dui. Phasellus tempus elit at purus vestibulum suscipit. Donec quis est nec dui pretium venenatis sit amet eu nulla. Donec finibus, ipsum non semper dignissim, massa magna sagittis est, vitae vehicula nunc magna vitae diam. Integer ultrices mauris aliquet arcu tempor, at mattis justo sagittis. Nunc ut nulla et erat viverra tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer vitae bibendum justo. Vestibulum porta velit sit amet libero accumsan fermentum.</p>
+
+      <p>Ut id mauris urna. In sed porttitor lectus. Suspendisse dignissim dolor id lectus pellentesque, eu bibendum lectus malesuada. Phasellus volutpat sollicitudin suscipit. Donec id libero nisl. Praesent gravida purus vel euismod facilisis. Maecenas sit amet velit non lacus aliquam dictum vitae eu augue. Donec euismod enim elementum elit laoreet sodales. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+      <p>Integer vulputate, libero sed vulputate eleifend, magna libero malesuada ligula, sit amet tincidunt dui mi vitae mauris. Aliquam aliquam turpis mauris, in sagittis orci rutrum efficitur. Sed vel purus fringilla, pretium sapien sed, accumsan erat. Morbi scelerisque tempor purus in faucibus. Nunc fringilla nulla ut aliquam posuere. Vivamus id lectus eleifend, bibendum urna non, ornare nibh. Fusce bibendum vulputate mollis.</p>
+
+    </main>
+
+    <footer>
+      <p>Copyright nobody. Use the code as you like.</p>
+    </footer>
+    <script >
+//我们首先创建对所有需要在此示例中操作的 HTML 功能的引用 - 我们将它们全部创建为常量，因为这些引用在应用程序的生命周期中不需要更改。
+const rememberDiv = document.querySelector('.remember');
+const forgetDiv = document.querySelector('.forget');
+const form = document.querySelector('form');
+const nameInput = document.querySelector('#entername');
+const submitBtn = document.querySelector('#submitname');
+const forgetBtn = document.querySelector('#forgetname');
+
+const h1 = document.querySelector('h1');
+const personalGreeting = document.querySelector('.personal-greeting');
+
+//接下来，我们需要包含一个小小的事件监听器，以在按下提交按钮时阻止实际的提交表单动作自身，因为这不是我们想要的行为。
+// 当按钮按下时阻止表单提交
+form.addEventListener('click',function(e){
+  e.preventDefault();
+});
+/*
+现在我们需要添加一个事件监听器，当单击“Say hello”按钮时，它的处理函数将会运行。这些注释详细解释了每一处都做了什么，
+但实际上我们在这里获取用户输入到文本输入框中的名字并使用setItem()将它保存在网络存储中，然后运行一个名为nameDisplayCheck()的函数来处理实际的网站文本的更新。
+*/
+// run function when the 'Say hello' button is clicked
+submitBtn.addEventListener('click',function(e){
+  // run function when the 'Say hello' button is clicked
+   localStorage.setItem('name',nameInput.value);
+ // run nameDisplayCheck() to sort out displaying the personalized greetings and updating the form display
+   nameDisplayCheck();
+});
+/*
+此时，我们还需要一个事件处理程序，以便在单击“Forget”按钮时运行一个函数————且仅在单击“Say hello”按钮（两种表单状态来回切换）后才显示。
+在这个功能中，我们使用removeItem()从网络存储中删除项目name，然后再次运行nameDisplayCheck()以更新显示。将其添加到底部：
+*/
+forgetBtn.addEventListener('click',function(e){
+   // Remove the stored name from web storage
+   localStorage.removeItem('name')
+// run nameDisplayCheck() to sort out displaying the generic greeting again and updating the form display
+   nameDisplayCheck();
+});
+/*
+现在是时候定义nameDisplayCheck()函数本身了。在这里，我们通过使用localStorage.getItem('name')作为测试条件来检查 name 数据项是否已经存储在 
+Web Storage 中。如果它已被存储，则该调用的返回值为true; 如果没有，它会是false。如果是true，我们会显示个性化问候语，显示表格的“forget”部分，
+并隐藏表格的“Say hello”部分。如果是false，我们会显示一个通用问候语，并做相反的事。再次将下面的代码添到底部：
+*/
+function nameDisplayCheck(){
+// check whether the 'name' data item is stored in web Storag
+ if(localStorage.getItem('name')){
+   let name = localStorage.getItem('name');
+   h1.textContent = 'Wlecome' + ' ' + name;
+   personalGreeting.textContent = 'Welcome to our oursite,' + name + '! we hope you have fun while you are here.';
+// hide the 'remember' part of the form and show the 'forget' part
+   forgetDiv.style.display = 'block';
+   rememberDiv.style.display = 'none';
+ } else{
+ // if not, display generic greeting
+  h1.textContent = 'Welcome to our website';
+  personalGreeting.textContent = 'Welcome to our website.we hope you have fun while you are here';
+//// hide the 'forget' part of the form and show the 'remember' part
+  forgetDiv.style.display = 'none';
+  rememberDiv.style.display = 'block';
+ }
+}
+//最后但同样重要的是，我们需要在每次加载页面时运行nameDisplayCheck()函数。如果我们不这样做，那么个性化问候不会在页面重新加载后保持。将以下代码添加到代码的底部：
+document.body.onload = nameDisplayCheck;
+
+/*
+<备注： 在 Using the Web Storage API 中还有一个稍微复杂点儿的示例。>
+
+<备注： 在完成版本的源代码中， <script src="index.js" defer> <script> 一行里， defer 属性指明在页面加载完成之前，<script>元素的内容不会执行。>
+
+*/
+
+    </script>
+  </body>
+</html>

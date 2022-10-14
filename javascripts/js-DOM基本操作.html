@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档对象模型(DOM)主动学习</title>
+    <style>
+a:link{
+    text-decoration: none;
+    color:black;
+}
+a:hover,a:focus{
+    color:blue;
+    text-decoration:underline red 2px;
+}
+html{
+    background: rgba(12,12,11,.2) ;
+}
+/*配节JS调用的CSS代码*/
+.highlight{
+  color:black;
+  width: 200px;
+  text-align: center;
+  background-color: #ca32b4;
+  padding: 10px;
+
+}
+    </style>
+</head>
+<body>
+    <section>
+        <img src="images/dinosaur.png" alt="A red Tyrannosaurus Rex: A two legged dinosaur standing upright like a human, with small arms, and a large head with lots of sharp teeth.">
+        <p>Here we will add a link to the <a href="https://www.mozilla.org/" target="_blank">Mozilla homepage</a></p>
+    </section>
+
+ 
+    <script>
+const link = document.querySelector('a');
+link.textContent ='火狐开发者社区网络(Mozilla Developer Networks)';
+link.href = 'https://developer.mozilla.org';
+
+//创建并放置新的节点
+const sect = document.querySelector('section');
+const para = document.createElement('p');
+para.textContent = '我们欢迎你的到来';
+sect.appendChild(para); //appenChild属性后面不用单引号括起来
+//创建文本节点  
+const text = document.createTextNode('——有关网页开发的跟具体全面的知识.');
+const linkPara = document.querySelector('p');
+linkPara.appendChild(text);
+//移到具体元素的底部
+sect.appendChild(linkPara);
+
+//sect.removeChild(linkPara);
+//要删除一个仅基于自身引用的节点可能稍微有点复杂，这也是很常见的。没有方法会告诉节点删除自己，所以你必须像下面这样操作。
+linkPara.parentNode.removeChild(linkPara);
+
+
+/* JS内部添加样式的代码示例
+para.style.color = 'black';
+para.style.font ='80px';
+para.style.backgroundColor = '#d322c4'; //CSS带连接符号的属性，在JS用驼峰命名方法写
+para.style.padding = '20px';
+para.style.width = '250px';
+para.style.textAlign = 'center';
+*/
+
+//另一种在JS动态调用CSS样式的代码示例,Element.setAttribute()———— 这里有两个参数，你想在元素上设置的属性，你要为它设置的值.
+ 
+para.setAttribute('class','highlight');
+
+ </script>
+<!-- 
+ PS:这是购物清单的练习自己研究打的代码，参考了一下参考答案
+   <html lang="zh-cn">
+     <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>购物清单</title>
+        <style>
+       li{
+           margin-bottom: 10px;
+       }
+       li button{
+           font-size: 10px;
+           margin-left: 20px;
+           color:#666;
+       }
+       html{
+           background: rgba(115, 115, 110, 0.2);
+       }
+       li{
+           list-style:lower-roman inside;
+       }
+        </style>
+        </head>
+         <body>
+            <h1>我的购物清单</h1> 
+
+            <div>
+                <label for="item"></label>
+                <input type="text" name="item" id="item">
+                <button>添加项目</button>
+            </div>
+            <ul>
+
+
+            </ul>
+         <script>
+    //引用好html元素         
+        const list = document.querySelector('ul');
+        const input = document.querySelector('input');
+        const button = document.querySelector('button');
+    //设置好按钮处理函数
+       function buttonClick(){
+        var buttonValue = input.value;
+        input.value = '';
+        input.focus();
+    //新增列表、段内语句、按钮元素
+        const listItem =document.createElement('li');
+        const listText = document.createElement('span');
+        const listBtn = document.createElement('button');
+         
+      listItem.appendChild(listText);
+      listText.textContent = buttonValue; 
+//必须的再同一个函数区域，不然会出现访问错误，也就是全局访问，如果该值位于另一个函数内，另一个函数是闭环的，外部是不能够访问的，具体的不太记得了
+      listItem.appendChild(listBtn);
+      listBtn.textContent = '删除';
+      list.appendChild(listItem);
+    //设置购物列表里的项目删除按钮
+     listBtn.addEventListener('click',()=>{
+         list.removeChild(listItem);
+     });
+    }
+    //最后设置函数调用的处理事件
+     button.addEventListener('click', buttonClick);
+      
+/*
+//参考答案,直接箭头函数版本,我的是函数加事件监听器版本
+      const list = document.querySelector('ul');
+      const input = document.querySelector('input');
+      const button = document.querySelector('button');
+
+      button.addEventListener('click', () => {
+        const myItem = input.value;
+        input.value = '';
+
+        const listItem = document.createElement('li');
+        const listText = document.createElement('span');
+        const listBtn = document.createElement('button');
+
+        listItem.appendChild(listText);
+        listText.textContent = myItem;
+        listItem.appendChild(listBtn);
+        listBtn.textContent = 'Delete';
+        list.appendChild(listItem);
+
+        listBtn.addEventListener('click', () => {
+          list.removeChild(listItem);
+        });
+
+        input.focus();
+      });
+*/
+         </script>
+      </body>
+    </html>   
+  -->   
+   </body>
+</html>
+

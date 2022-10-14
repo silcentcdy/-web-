@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>猜数字游戏</title>
+    <!--<meta  name="viewport" content="width=device-width,initial-scale=1"> -->
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>猜数字游戏</h1>
+
+    <p>我刚才随机选定了一个100以内的自然数。看你能否在 10 次以内猜中它。每次我都会告诉你所猜的结果是高了还是低了。</p>
+
+    <div class="form">
+      <label for="guessField">请猜数: </label>
+      <input type="text" id="guessField" class="guessField">
+      <input type="submit" value="确定" class="guessSubmit"><!--表单标准代码示例-->
+    </div>
+<!--隐藏可设置UI显示-->
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+      // 开始编写 JavaScript 代码
+let randomNumber = Math.floor(Math.random() * 100) + 1;
+const guesses = document.querySelector('.guesses');
+const lastResult = document.querySelector('.lastResult');
+const lowOrHi = document.querySelector('.lowOrHi');
+
+const guessSubmit = document.querySelector('.guessSubmit');
+const guessField = document.querySelector('.guessField');
+
+let guessCount = 1;
+let resetButton;
+//条件语句代码部分
+function checkGuess() {
+  let userGuess = Number(guessField.value);
+  if (guessCount === 1) {
+    guesses.textContent = '上次猜的数：';
+  }
+  guesses.textContent += userGuess + ' ';
+
+  if (userGuess === randomNumber) {
+    lastResult.textContent = '恭喜你！猜对了';
+    lastResult.style.backgroundColor = 'green';
+    lowOrHi.textContent = '';
+    setGameOver();
+  } else if (guessCount === 10) {
+    lastResult.textContent = '!!!GAME OVER!!!';
+    setGameOver();
+  } else {
+    lastResult.textContent = '你猜错了！';
+    lastResult.style.backgroundColor = 'red';
+    if(userGuess < randomNumber) {
+      lowOrHi.textContent = '你猜低了！';
+    } else if(userGuess > randomNumber) {
+      lowOrHi.textContent = '你猜高了';
+    }
+  }
+
+  guessCount++;
+  guessField.value = '';
+  guessField.focus();
+}
+/*第一行（行标 2）声明了一个名为 userGuess 的变量，并将其设置为在文本字段中输入的值。我们还对这个值应用了内置的 Number() 方法，
+只是为了确保该值是一个数字。
+接下来，我们遇到我们的第一个条件代码块（3 - 5 行）。条件代码块让你能够根据某个条件的真假来选择性地运行代码。虽然看起来有点像一个函数，
+但它不是。条件块的最简单形式是从关键字 if 开始，然后是一些括号，然后是一些花括号。括号内包含一个比较。如果比较结果为 true，就会执行花括号内的代码。反之，花括号中的代码就会被跳过，从而执行下面的代码。本文的示例中，比较测试的是 guessCount 变量是否等于 1，即玩家是不是第一次猜数字：
+guessCount === 1
+如果是，我们让 guesses 段落的文本内容等于“上次猜的数：”。如果不是就不用了。
+
+第 6 行将当前 userGuess 值附加到 guesses 段落的末尾，并加上一个空格，以使每两个猜测值之间有一个空格。
+下一个代码块中（8 - 24 行）做了几个检查：
+第一个 if(){ } 检查用户的猜测是否等于在代码顶端设置的 randomNumber 值。如果是，则玩家猜对了，游戏胜利，我们将向玩家显示一个漂亮的绿色的祝贺信息，
+并清除“高了 / 低了”信息框的内容，调用 setGameOver() 方法。
+紧接着是一个 else if(){ } 结构。它会检查这个回合是否是玩家的最后一个回合。如果是，程序将做与前一个程序块相同的事情，只是这次它显示的是
+ Game Over 而不是祝贺消息。
+最后的一个块是 else { }，前两个比较都不返回 true 时（也就是玩家尚未猜对，但是还有机会）才会执行这里的代码。在这个情况下，我们会告诉玩家他们猜错了，
+并执行另一个条件测试，判断并告诉玩家猜测的数字是高了还是低了。
+函数最后三行（26 - 28 行）是为下次猜测值提交做准备的。我们把 guessCount 变量的值加 1，以使玩家消耗一次机会（++ 是自增操作符，为自身加 1），
+然后我们把表单中文本域的值清空，重新聚焦于此，准备下一轮游戏。*/
+
+//事件监听器和处理器代码示例
+guessSubmit.addEventListener('click', checkGuess);
+
+//补全游戏功能
+function setGameOver() {
+  guessField.disabled = true;
+  guessSubmit.disabled = true;
+  resetButton = document.createElement('button');
+  resetButton.textContent = '开始新游戏';
+  document.body.appendChild(resetButton);
+  resetButton.addEventListener('click', resetGame);
+}
+//定义resetGame函数
+function resetGame() {
+  guessCount = 1;
+
+  const resetParas = document.querySelectorAll('.resultParas p');
+  for (let i = 0 ; i < resetParas.length; i++) {
+    resetParas[i].textContent = '';
+  }
+
+  resetButton.parentNode.removeChild(resetButton);
+
+  guessField.disabled = false;
+  guessSubmit.disabled = false;
+  guessField.value = '';
+  guessField.focus();
+
+  lastResult.style.backgroundColor = 'white';
+
+  randomNumber = Math.floor(Math.random() * 100) + 1;
+}
+    </script>
+  </body>
+</html>   

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang = en-US>
+ <head>
+    <meta charset="utf-8">
+    <title>弹跳彩球</title>
+  <style>
+html, body {
+  margin: 0;
+}
+
+html {
+  font-family: sans-serif;
+  height: 100%;
+  background-color: black;
+}
+
+body {
+  overflow: hidden;
+  height: inherit;
+}
+
+h1 {
+  font-size: 2rem;
+  letter-spacing: -1px;
+  position: absolute;
+  margin: 0;
+  top: -4px;
+  right: 20px;
+
+  color: transparent;
+  text-shadow: 0 0 4px white;
+}
+p {
+position: absolute;
+margin: 0;
+top:35px;
+right:5px;
+color:#3ac4d5;
+}
+  </style>
+ </head>
+
+  <body>
+    <h1>弹跳彩球</h1>
+    <p>还剩多少球</p>
+    <canvas></canvas>
+ </body>
+ <script > 
+ //自己打的运行不了，明明一样的(速度大小写不一致，现在是恶魔球动几下就没了)，就是不行，只好参考实例运行网页端的代码了，github的参考答案在另一个js文件里上的参考答案打了，
+// 设置画布
+
+//变量存储段落的引用，实时更新显示小球的数量,自己打出来了但不全对，以及放错位置；额
+const para = document.querySelector('p');
+let count = 0;
+
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+
+const width = canvas.width = window.innerWidth;
+const height = canvas.height = window.innerHeight;
+
+// 生成随机数的函数
+function random(min,max) {
+  const num = Math.floor(Math.random() * (max - min)) + min;
+  return num;
+}
+
+// 生成随机颜色值的函数
+function randomColor() {
+  const color = 'rgb(' +
+                random(0, 255) + ',' +
+                random(0, 255) + ',' +
+                random(0, 255) + ')';
+  return color;
+}
+
+// 定义 Shape 构造器
+function Shape(x, y, velX, velY, exists) {
+  this.x = x;
+  this.y = y;
+  this.velX = velX;
+  this.velY = velY;
+  this.exists =exists;
+}
+// 定义 Ball 构造器，构造器就是这种类型代码，继承自Shape的属性，目前看不懂call是啥意思，应该是继承术语
+//(PS:参考答案直接用class类来进行构造器属性和方法定义),其实我自己打的这种也行，只要对就行，有多种类(class,对象表达方式)，实现的作用多一样，只不过代码多少以及形式不一样而已
+function Ball(x, y, velX, velY, exists,color, size) {
+  Shape.call(this, x, y, velX, velY,exists);
+
+  this.color = color;
+  this.size = size;
+};
+//*设置好Ball构造器的相关属性值,目前这里看不懂，参考答案也不用这种，只是评估成品网页的源代码用这个，反正参考答案那个好理解一点
+Ball.prototype = Object.create(Shape.prototype);
+Ball.prototype.constructor = Ball;
+
+//定义小球图形画作生成
+Ball.prototype.draw = function(){
+  ctx.beginPath();
+  ctx.fillStyle = this.color;
+  ctx.arc(this.x,this.y,this.size, 0, 2 * Math.PI);//前面的参数是小球的中心坐标，后面的是小球的圆弧度，一PI代表180° 也就是一个π，是以弧度为单位的
+  ctx.fill();
+};
+//更新小球数据，使其有动态效果,检测小球是否碰到画布边缘，update函数/方法
+Ball.prototype.update = function(){
+  if ((this.x + this.size) >= width ){
+  this.velX = -(this.velX);
+  }
+if((this.x - this.size) <= 0){
+  this.velX = -(this.velX);
+}
+if((this.y + this.size) >= height){
+  this.velY = -(this.velY);
+}
+if((this.y - this.size) <= 0){
+  this.velY = -(this.velY);
+}
+//小球反弹移动的固定距离
+this.x += this.velX;
+this.y += this.velY;
+};
+
+//添加小球碰撞实验检测
+Ball.prototype.collisionDetect = function(){
+ for(var j = 0; j < balls.length; j++){
+   if(this !==  balls[j]){
+     const dx = this.x - balls[j].x;
+     const dy = this.y - balls[j].y;
+     const distance = Math.sqrt(dx * dx + dy  *dy);
+//这就是圆的两点距离公式计算的代码呈现，判定两个小球圆点距离是否达到相撞的距离值
+     if(distance < this.size + balls[j].size && balls[j].exists){
+       balls[j].color = this.color =randomColor();
+     }
+   }
+ }
+};
+
+//定义恶魔圈构造器(EvilCircle),定义坐标和存在属性，其他属性继承Shape的部分属性
+function EvilCircle(x,y, exists){
+  Shape.call(this,x ,y, 20, 20, exists);
+
+  this.color = 'yellow';
+  this.size = 15;
+};
+//完善恶魔球构造器(EvilCircle)的相关属性设置(PS:参考答案没有，这是评估成品网页端的源代码哪里复制过来的，还是用参考答案吧)
+EvilCircle.prototype = Object.create(Shape.prototype);
+EvilCircle.prototype.constructor = EvilCircle;
+
+// 定义彩球绘制函数,定义EvilCircle()的方法，四方法中的其一 <draw()进行恶魔球的图形画作> ,在此基础上进行更改,也就是把恶魔球改成空心的，非实心的
+//fill是实心，stroke是空心的
+EvilCircle.prototype.draw = function() {
+  ctx.beginPath(); 
+  ctx.strokeStyle = this.color;
+  ctx.lineWidth = 5;//设置恶魔球的边线粗细
+  ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+  ctx.stroke();
+};
+
+// 定义彩球更新函数,定义EvilCircle()的方法，四方法中的其二 <checkBounds()检查恶魔球是否超出画布的边缘，并且不给恶魔球超出画布边界,弹回恶魔球>
+EvilCircle.prototype.checkBounds = function() {
+  if((this.x + this.size) >= width) {
+   this.x -= this.size ;
+  }
+
+  if((this.x - this.size) <= 0) {
+    this.x += this.size;
+  }
+
+  if((this.y + this.size) >= height) {
+   this.y -= this.size;
+  }
+
+  if((this.y - this.size) <= 0) {
+    this.y += this.szie;
+  }
+
+ // this.x += this.velX;  this.y += this.velY; (恶魔球不需要这两行，因为我们不想让恶魔球随机滚动而是受我们的键位控制)
+};
+
+//定义EvilCircle()的方法，四方法中的其三 <setControls()控制恶魔球的位置移动,当我们按下键盘的方位键时，恶魔球也会跟着移动>
+EvilCircle.prototype.setControls = function(){
+//使用switch条件语句,设定多种按键(键盘的ASDW按键以及小键盘的方向键)对恶魔球进行移动，新增的条件语句部分，原弹跳球实践部分没有
+  window.onkeydown = e => {
+switch(e.key){//括号里选取所作用的对象s
+  case 'a':
+  case 'A':
+  case'ArrowLeft':
+    this.x -= this.velx;
+    break;
+  case 'd':
+  case'D':
+  case'ArrowRight':
+    this.x += this.velX;
+    break;
+  case 'w':
+  case 'W':
+  case 'ArrowUp':
+    this.y -= this.velY;
+    break;
+  case 's':
+  case 'S':
+  case 'ArrowDown':
+    this.y += this.velY;
+    break;
+   }
+  };
+};
+/*[警告： 英文页面中使用了事件对象的 keyCode 属性，不推荐在新代码中使用该属性，应使用标准 key 属性代替。（详见介绍页面）]
+
+备注： 这里的 window.onkeydown 用一个 箭头函数 代替了英文页面中的匿名函数，从而无需 var _this = this。(不太懂啥意思)
+*/
+// 定义碰撞检测函数,定义EvilCircle()的方法，四方法中的其四 <collsionDetect 使恶魔球可以吞噬掉随机移动的小球> ,在此基础上进行更改
+EvilCircle.prototype.collisionDetect = function() {
+  for(let j = 0; j < balls.length; j++) {
+    if(balls[j].exists) { //修改判定条件，识别小球是否存在
+      const dx = this.x - balls[j].x; 
+      const dy = this.y - balls[j].y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < this.size + balls[j].size) {
+       balls[j].exists = false;
+  // 减少球数并在每次恶魔吃球时显示更新的球数（因为被吃掉的球不存在了）,自己没打出来当时
+       count--;
+       para.textContent = '还剩多少球: ' + count; //也可para.innerHTMl
+        }
+      }
+    }
+  };
+
+// 定义一个数组，生成并保存所有的球
+const balls = [];
+
+while(balls.length < 25) {
+  const size = random(10,20);
+  let ball = new Ball(
+// 为避免绘制错误，球至少离画布边缘球本身一倍宽度的距离
+    random(0 + size, width - size),
+    random(0 + size, height - size),
+    random(-7, 7),
+    random(-7, 7),
+    true,
+    randomColor(),
+    size //这里要按构造器的属性定义顺序来进行排序
+  );
+  balls.push(ball);
+  //增加球数并在每次将球添加到屏幕里时显示更新的球数量,自己没打出来当时
+ count++;
+ para.textContent = '还剩多少球：' + count;
+
+}
+
+//创建一个新的恶魔圈的对象实例 （调用必需的参数），自己没打出来当时
+let  evilball = new EvilCircle(random(0,width), random(0,height), true);
+evilball.setControls();
+
+// 定义一个循环来不停地使小球循坏弹跳 
+function loop() {
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.fillRect(0,0,width,height);
+
+  for(let i = 0; i < balls.length; i++) {
+  //新加条件语句判定小球的存在与否
+    if(balls[i].exists) {
+    balls[i].draw();
+    balls[i].update();
+    balls[i].collisionDetect();
+  }
+}
+ //调用恶魔圈实例的方法
+    evilball.draw();
+    evilball.checkBounds();
+    evilball.collisionDetect();
+
+  requestAnimationFrame(loop);//每个动画网页都会用到的一个代码
+}
+
+loop();   
+
+</script>
+</html>

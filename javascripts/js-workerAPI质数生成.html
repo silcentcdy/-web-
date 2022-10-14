@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+ <meta charset="UTF-8">
+ <script type="text/javascript" src="generate质数worker.js" defer></script>
+    
+<style>
+ textarea{
+     display: block;
+     margin: 1rem 0;
+ }
+ html{
+     background: rgba(0,11,11,.4);
+ }
+</style>
+  </head>
+
+  <body>
+
+    <label for="quota">Number of primes:</label>
+    <input type="text" id="quota" name="quota" value="1000000">
+
+    <button id="generate">Generate primes</button>
+    <button id="reload">Reload</button>
+
+    <textarea id="user-input" rows="5" cols="62">Try typing in here immediately after pressing "Generate primes"</textarea>
+
+    <div id="output"></div>
+
+  </body>
+<script>
+//main.js示例文件部分的代码,主要负责按钮的动态交互，要运行此worker示例，要搭建一个本地的web服务器才行
+// 在 "generate.js" 中创建一个新的 worker,关键开始前提
+const worker = new Worker('./generate.js');
+
+// 当用户点击 "Generate primes" 时，给 worker 发送一条消息。
+// 消息中的 command 属性是 "generate", 还包含另外一个属性 "quota"，即要生成的质数数量。
+document.querySelector('#generate').addEventListener('click', () => {
+  const quota = document.querySelector('#quota').value;
+  worker.postMessage({
+    command: 'generate',
+    quota: quota
+  });
+});
+
+// 当 worker 给主线程回发一条消息时，为用户更新 output 框，包含生成的质数（从 message 中获取）。
+worker.addEventListener('message', message => {
+  document.querySelector('#output').textContent = `Finished generating ${message.data} primes!`;
+});
+
+document.querySelector('#reload').addEventListener('click', () => {
+  document.querySelector('#user-input').value = 'Try typing in here immediately after pressing "Generate primes"';
+  document.location.reload();
+});
+/*
+1.首先，我们使用 Worker() 构造函数创建 worker。我们传递一个指向 worker 脚本的 URL。只要 worker 被创建了，woker 脚本就会执行。
+2.其次，与同步版本一样，我们向 "Generate primes" 按钮添加一个 click 事件处理器。但是现在，我们不再调用 generatePrimes() 函数，
+而是使用 worker.postMessage() 像 worker 发送一条消息。这条消息可以携带一个参数，在本示例中我们传递一个包含两个属性的 JSON 对象：
+  (1)command：一个用于标识我们希望 worker 所做事情的字符串（以防我们的 worker 可以做多个事情）。
+  (2)quota：要生成的质数的数量。
+3.然后，我们向 worker 添加一个 message 消息处理器。这样 worker 就能告诉我们它是什么时候完成的，并且传递给我们任何结果数据。
+我们的处理器从消息的 data 属性获取数据，然后将其写入 output 元素（数据与 quota 是完全相同的，这虽然没有意义，但是这展示了其中原理）。
+4.最后，我们为 "Reload" 按钮实现了 click 事件处理器。这与同步版本完全相同。
+*/
+</script>
+</html>

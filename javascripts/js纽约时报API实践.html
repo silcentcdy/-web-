@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NY Times API example</title>
+  <script src="script.js" defer></script>
+   <style>
+body {
+  font-family: sans-serif;
+}
+.wrapper {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+}
+.controls, .results {
+  flex: 1;
+  padding: 10px;
+}
+form p:nth-of-type(1) {
+  margin-top: 0;
+}
+h1 {
+  text-align: center;
+}
+h2 {
+  font-size: 20px;
+}
+article p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+article p.keywords {
+  line-height: 2;
+}
+nav {
+  margin-bottom: 50px;
+}
+.prev {
+  float: left;
+}
+.next {
+  float: right;
+}
+article {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #ddd;
+  border: 1px solid #ccc;
+}
+img {
+  float: right;
+  margin-left: 20px;
+  max-width: 200px;
+}
+span {
+  background-color: #ccc;
+  padding: 5px;
+  margin: 5px;
+}
+   </style>
+  </head>
+<body>
+  <h1>NY Times article search</h1>
+
+  <div class="wrapper">
+
+    <div class="controls">
+      <form>
+        <p>
+          <label for="search">Enter a SINGLE search term (required): </label>
+          <input type="text" id="search" class="search" required>
+        </p>
+        <p>
+          <label for="start-date">Enter a start date (format YYYYMMDD): </label>
+          <input type="date" id="start-date" class="start-date" pattern="[0-9]{8}">
+        </p>
+        <p>
+          <label for="end-date">Enter an end date (format YYYYMMDD): </label>
+          <input type="date" id="end-date" class="end-date" pattern="[0-9]{8}">
+        </p>
+        <p>
+          <button class="submit">Submit search</button>
+        </p>
+      </form>
+    </div>
+
+    <div class="results">
+      <nav>
+        <button class="prev">Previous 10</button>
+        <button class="next">Next 10</button>
+      </nav>
+
+      <section>
+      </section>
+    </div>
+
+  </div>
+
+    <script>
+/* 
+- New York Times API。此 API 允许您检索纽约时报的新闻故事信息并将其显示在您的网站上。这种类型的 API 称为 RESTful API - 
+我们不像使用 Google 地图那样使用 JavaScript 库的功能获取数据，而是通过向特定网址发出 HTTP 请求来获取数据，
+其中包含搜索术语和其他属性编码的数据 URL（通常作为 URL 参数）
+*/
+// Defining a baseURL and key to as part of the request URL
+
+const baseURL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json';
+const key = 'INSERT-YOUR-API-KEY-HERE';//添加自己的API密钥，这里由于需要翻墙注册类就不搞了的
+
+// Grab references to all the DOM elements you'll need to manipulate
+const searchTerm = document.querySelector('.search');
+const startDate = document.querySelector('.start-date');
+const endDate = document.querySelector('.end-date');
+const searchForm = document.querySelector('form');
+const nextBtn = document.querySelector('.next');
+const previousBtn = document.querySelector('.prev');
+const section = document.querySelector('section');
+const nav = document.querySelector('nav');
+
+// Hide the "Previous"/"Next" navigation to begin with, as we don't need it immediately
+nav.style.display = 'none';
+
+// define the initial page number and status of the navigation being displayed
+let pageNumber = 0;
+
+// Event listeners to control the functionality,当表单提交时 (按钮按下时) 运行这个函数 submitSearch() .
+searchForm.addEventListener('submit',submitSearch);
+
+//添加 submitSearch() 和 fetchResults() 函数
+function submitSearch(e){
+    pageNumber = 0;
+    fetchResult(e);
+}
+
+function fetchResults(e) {
+  // Use preventDefault() to stop the form submitting
+  e.preventDefault();
+
+  // Assemble the full URL
+  url = baseURL + '?api-key=' + key + '&page=' + pageNumber + '&q=' + searchTerm.value + '&fq=document_type:("article")';
+/*
+其中，先调用事件对象的 preventDefault() 函数，阻止实际的表单提交事件 (会破坏应用，至于为什么可以自己试一试)。然后，处理字符串，
+构建完整的请求 URL。以下是几个必要的步骤：
+
+1.基本的 URL ( baseURL 变量).
+2.API key，需要放到 api-key URL 参数里面去 ( key 变量).
+3.页码，需要放到 page URL 参数里面去 ( pageNumber 变量).
+4.搜索项，需要放到 q URL 参数里面去 ( searchTerm 输入框的文字 <input>).
+
+最后，完整的 URL 如下所示：
+https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=4f3c267e125943d79b0a3e679f608a78&page=0&q=cats&begin_date=20170301&end_date=20170312
+*/
+  if(startDate.value !== '') {
+    url += '&begin_date=' + startDate.value;
+  };
+
+  if(endDate.value !== '') {
+    url += '&end_date=' + endDate.value;
+  };
+/*
+其中，先调用事件对象的 preventDefault() 函数，阻止实际的表单提交事件 (会破坏应用，至于为什么可以自己试一试)。然后，处理字符串，构建完整的请求 URL。
+  1.基本的 URL ( baseURL 变量).
+  2.API key，需要放到 api-key URL 参数里面去 ( key 变量).
+  3.页码，需要放到 page URL 参数里面去 ( pageNumber 变量).
+  4.搜索项，需要放到 q URL 参数里面去 ( searchTerm 输入框的文字 <input>).
+然后，用几个 if() 代码块检测 startDate 和 endDate <input> 输入框里面是否有文字内容。如果有，
+再把输入框里的内容分别填写到 begin_date 和 end_date URL 参数里面去
+*/
+
+
+// Use fetch() to make the request to the API,从 api 请求数据
+//这段代码用于发起请求，把变量 url 作为 fetch() 函数的参数，用 json() (en-US) 函数把响应的结果转换为 JSON 格式，
+//然后把 JSON 数据传递给 displayResults() 函数，数据就可以在 UI 中显示出来了
+fetch(url).then(function(result) {
+  return result.json();
+}).then(function(json) {
+  displayResults(json);
+});
+
+//displayResults(json)函数的具体定义,显示数据
+function displayResults(json) {
+  while (section.firstChild) {
+      section.removeChild(section.firstChild);
+  }
+
+  var articles = json.response.docs;
+
+  if(articles.length === 10) {
+    nav.style.display = 'block';
+  } else {
+    nav.style.display = 'none';
+  }
+
+  if(articles.length === 0) {
+    var para = document.createElement('p');
+    para.textContent = 'No results returned.'
+    section.appendChild(para);
+  } else {
+    for(var i = 0; i < articles.length; i++) {
+      var article = document.createElement('article');
+      var heading = document.createElement('h2');
+      var link = document.createElement('a');
+      var img = document.createElement('img');
+      var para1 = document.createElement('p');
+      var para2 = document.createElement('p');
+      var clearfix = document.createElement('div');
+
+      var current = articles[i];
+      console.log(current);
+
+      link.href = current.web_url;
+      link.textContent = current.headline.main;
+      para1.textContent = current.lead_paragraph;
+      para2.textContent = 'Keywords: ';
+      for(var j = 0; j < current.keywords.length; j++) {
+        var span = document.createElement('span');
+        span.textContent += current.keywords[j].value + ' ';
+        para2.appendChild(span);
+      }
+
+      if(current.multimedia.length > 0) { //检测是否有多媒体照片的意思
+        img.src = 'http://www.nytimes.com/' + current.multimedia[0].url;
+        img.alt = current.headline.main;
+      }
+
+      clearfix.setAttribute('class','clearfix');
+
+      article.appendChild(heading);
+      heading.appendChild(link);
+      article.appendChild(img);
+      article.appendChild(para1);
+      article.appendChild(para2);
+      article.appendChild(clearfix);
+      section.appendChild(article);
+    }
+  }
+};
+/*
+这一段有好多代码；下面一一解释：
+
+1.第一个 while 循环是通用的操作，用于删除 DOM 结点里面的所有内容，在本例中是 <section> 元素。不断查询 <section> 结点是否有子节点，如果有，就删除。
+当 <section> 没有子节点时退出循环。
+2.然后，把 articles 变量赋值为 json.response.docs — 它来自查询结果，是所有文章对象构成的数组。单独写出这一行来，下面的代码会清晰一些。
+3.第一个 if() 检测查询到的文章数量是否是 10 (该 API 一次最多返回 10 篇文章) 如果是，就把 <nav> 显示出来，里面包含有前 10/后 10(Previous 10/Next 10) 翻页按钮。
+如果返回的文章数量不足 10，就直接显示在 1 页里，不需要显示翻页按钮。在下一节中将展示翻页功能的实现。
+4.下一个 if() 检测是否没有文章返回。如果是，就什么都不显示 — 创建一个 <p> 结点，填写提示 "无结果。" 然后把该结点插入到 <section> 结点中。
+5.如果有一些文章返回，第一步，创建所有用于展示新闻信息的结点，依次填写对应的文章内容，再把这些结点插入到合适的 DOM 结点下。至于文章对象里面的哪个属性包含需要展示的信息，
+查询 Article Search API reference. 大部分操作都很简单，但是个别需要提示一下：
+  (1)使用 for loop (for(var j = 0; j < current.keywords.length; j++) { ... } ) 遍历每篇文章关联的关键字，再把它们插入到各自的 <span> 标签，在 <p> 标签里面，这样做可以方便样式表的编辑。
+  (2)使用 if() 代码块 (if(current.multimedia.length > 0) { ... }) 检测每篇文章是否有对应的图片 (有些没有) 。只有当检测到有时，显示首张图片 (否则抛出异常)。
+  (3)把 <div> 结点设置一个 class 属性 "clearfix"，这样清理操作 (apply clearing to it) 就很容易了。
+*/
+
+//添加分页按钮
+    nextBtn.addEventListener('click', nextPage);
+    previousBtn.addEventListener('click', previousPage);
+
+    function nextPage(e) {
+        pageNumber++;
+        fetchResults(e);
+};
+    function previousPage(e) {
+        if(pageNumber > 0) {
+          pageNumber--;
+    } else {
+         return;
+     }
+        fetchResults(e);
+  };
+} //连接到顶部的函数(fetchResults(e))
+
+/*
+第一个函数很简单 — 增加 pageNumber 变量，然后再次运行 fetchResults() 函数 展示下一页的结果。 第二个函数基本上执行相反的操作，
+不过有个额外的步骤是检测 pageNumber 在 -1 之前是否已经是 0 — 如果 fetch 请求的 page URL 参数是负数，会导致错误。如果 pageNumber 已经是 0，
+则直接执行 return 退出函数，避免多余的计算。 (如果当前页面已经是首页，就不需要重新加载)。
+*/
+
+/*YouTube 示例
+用了下面 2 个 API：
+1.YouTube Data API ，搜索 YouTube 视频并返回结果。
+2.YouTube IFrame Player API ，把返回的视频查询结果展示到 IFrame 视频播放器里，然后就可以播放了。
+*/
+    </script>
+</body>
+</html>
