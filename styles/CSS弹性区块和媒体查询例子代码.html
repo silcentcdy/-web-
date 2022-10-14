@@ -1,0 +1,389 @@
+<!--
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Flexbox 0 — starting code</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      header {
+        background: purple;
+        height: 100px;
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        line-height: 100px;
+        margin: 0;
+      }
+
+      article {
+        padding: 10px;
+        margin: 10px;
+        background: aqua;
+      }
+
+      /* Add your flexbox CSS below here */
+      section{
+        display:flex ;
+      }
+     /*我们的多列布局具有大小相等的列，并且列的高度都是一样。这是因为这样的 flex 项（flex 容器的子项）的默认值是可以解决这些的常见问题的。*/
+     article{
+       flex:1 200px;
+     /*或者flex:1;*/
+     }    
+     article:nth-of-type(3){
+       flex:2 200px;
+       /*或者flex:2 200px*/
+     }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Sample flexbox example</h1>
+    </header>
+
+    <section>
+      <article>
+        <h2>First article</h2>
+
+        <p>Tacos actually microdosing, pour-over semiotics banjo chicharrones retro fanny pack portland everyday carry vinyl typewriter. Tacos PBR&B pork belly, everyday carry ennui pickled sriracha normcore hashtag polaroid single-origin coffee cold-pressed. PBR&B tattooed trust fund twee, leggings salvia iPhone photo booth health goth gastropub hammock.</p>
+      </article>
+
+      <article>
+        <h2>Second article</h2>
+
+        <p>Tacos actually microdosing, pour-over semiotics banjo chicharrones retro fanny pack portland everyday carry vinyl typewriter. Tacos PBR&B pork belly, everyday carry ennui pickled sriracha normcore hashtag polaroid single-origin coffee cold-pressed. PBR&B tattooed trust fund twee, leggings salvia iPhone photo booth health goth gastropub hammock.</p>
+      </article>
+
+      <article>
+        <h2>Third article</h2>
+
+        <p>Tacos actually microdosing, pour-over semiotics banjo chicharrones retro fanny pack portland everyday carry vinyl typewriter. Tacos PBR&B pork belly, everyday carry ennui pickled sriracha normcore hashtag polaroid single-origin coffee cold-pressed. PBR&B tattooed trust fund twee, leggings salvia iPhone photo booth health goth gastropub hammock.</p>
+
+        <p>Cray food truck brunch, XOXO +1 keffiyeh pickled chambray waistcoat ennui. Organic small batch paleo 8-bit. Intelligentsia umami wayfarers pickled, asymmetrical kombucha letterpress kitsch leggings cold-pressed squid chartreuse put a bird on it. Listicle pickled man bun cornhole heirloom art party.</p>
+      </article>
+    </section>
+  -->
+
+<!--水平和垂直的练习代码部分
+    <div>
+      <style>
+        div {
+  display: flex;
+  align-items: center;
+  justify-content:space-around;
+}
+
+      </style>
+      <button>Smile</button>
+      <button>Laugh</button>
+      <button>Wink</button>
+      <button>Shrug</button>
+      <button>Blush</button>
+    </div>
+  </body>
+</html>
+
+  【弹性盒子的嵌套示例html和css代码】
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Complex flexbox example</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      header {
+        background: purple;
+        height: 100px;
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        line-height: 100px;
+        margin: 0;
+      }
+
+      article {
+        padding: 10px;
+        margin: 10px;
+        background: aqua;
+      }
+
+      /* Add your flexbox CSS below here */
+
+      section {
+        display: flex;
+      }
+
+      article {
+        flex: 1 200px;
+      }
+
+      article:nth-of-type(3) {
+        flex: 3 200px;
+        display: flex;
+        flex-flow: column;
+      }(特别注意这里的第二条 CSS 规则—我们设置第三个 <article> 元素的子节点的布局同样为 flex，但是属性值为列布局。)
+
+      article:nth-of-type(3) div:first-child {
+        flex: 1 100px;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: space-around;
+      }
+      (首先使用 flex: 1 100px; 简单的给它一个最小的高度 100px，然后设置它的子节点（<button> 元素）为 flex 项。
+        在这里我们将它们放在一个包装行 (wrap row) 中，使它们居中对齐，)
+
+      button {
+        flex: 1 auto;(数字指每个排列块的均匀排列占比,后面数值是表示排列块的宽度大小)
+        margin: 5px;
+        font-size: 18px;
+        line-height: 1.5;
+      }(有意思的是我们给它一个值为 1 的 flex 属性。)
+    
+    </style>
+  
+  </head>
+  <body>
+    <header>
+      <h1>Complex flexbox example</h1>
+    </header>
+
+    <section>
+      <article>
+        <h2>First article</h2>
+
+        <p>Tacos actually microdosing, pour-over semiotics banjo chicharrones retro fanny pack portland everyday carry vinyl typewriter. Tacos PBR&B pork belly, everyday carry ennui pickled sriracha normcore hashtag polaroid single-origin coffee cold-pressed. PBR&B tattooed trust fund twee, leggings salvia iPhone photo booth health goth gastropub hammock.</p>
+      </article>
+
+      <article>
+        <h2>Second article</h2>
+
+        <p>Tacos actually microdosing, pour-over semiotics banjo chicharrones retro fanny pack portland everyday carry vinyl typewriter. Tacos PBR&B pork belly, everyday carry ennui pickled sriracha normcore hashtag polaroid single-origin coffee cold-pressed. PBR&B tattooed trust fund twee, leggings salvia iPhone photo booth health goth gastropub hammock.</p>
+      </article>
+
+      <article>
+        <div>
+          <button>Smile</button>
+          <button>Laugh</button>
+          <button>Wink</button>
+          <button>Shrug</button>
+          <button>Blush</button>
+        </div>
+        <div>
+          <p>Tacos actually microdosing, pour-over semiotics banjo chicharrones retro fanny pack portland everyday carry vinyl typewriter. Tacos PBR&B pork belly, everyday carry ennui pickled sriracha normcore hashtag polaroid single-origin coffee cold-pressed. PBR&B tattooed trust fund twee, leggings salvia iPhone photo booth health goth gastropub hammock.</p>
+        </div>
+        <div>
+          <p>Cray food truck brunch, XOXO +1 keffiyeh pickled chambray waistcoat ennui. Organic small batch paleo 8-bit. Intelligentsia umami wayfarers pickled, asymmetrical kombucha letterpress kitsch leggings cold-pressed squid chartreuse put a bird on it. Listicle pickled man bun cornhole heirloom art party.</p>
+        </div>
+      </article>
+    </section>
+  </body>
+</html>
+-->
+
+【媒体查询移动优先的响应式布局例子代码】
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Media Queries: a simple mobile first design, step 1</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 90%;
+        margin: 2em auto;
+        font: 1em/1.3 Arial, Helvetica, sans-serif;
+      }
+
+      a:link,
+      a:visited {
+        color: #333;
+      }
+
+      nav ul,
+      aside ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      nav a:link,
+      nav a:visited {
+        background-color: rgba(207, 232, 220, 0.2);
+        border: 2px solid rgb(79, 185, 227);
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        color: #333;
+        font-weight: bold;
+      }
+
+      nav a:hover {
+        background-color: rgba(207, 232, 220, 0.7);
+      }
+
+      .related {
+        background-color: rgba(79, 185, 227, 0.3);
+        border: 1px solid rgb(79, 185, 227);
+        padding: 10px;
+      }
+
+      .sidebar {
+        background-color: rgba(207, 232, 220, 0.5);
+        padding: 10px;
+      }
+
+      article {
+        margin-bottom: 1em;
+      }
+      /*第二步*/
+      @media screen and (min-width: 40em) {
+    article {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        column-gap: 20px;
+    }
+
+    nav ul {
+        display: flex;
+    }
+
+    nav li {
+        flex: 1;
+    }
+}
+  /*第三步*/
+@media screen and (min-width: 70em) {
+    main {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        column-gap: 20px;
+    }
+
+    article {
+        margin-bottom: 0;
+    }
+
+    footer {
+        border-top: 1px solid #ccc;
+        margin-top: 2em;
+    }
+}
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <header>
+        <nav>
+          <ul>
+            <li><a href="">About</a></li>
+            <li><a href="">Contact</a></li>
+            <li><a href="">Meet the team</a></li>
+            <li><a href="">Blog</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <article>
+          <div class="content">
+            <h1>Veggies!</h1>
+            <p>
+              Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi
+              welsh onion daikon amaranth tatsoi tomatillo melon azuki bean
+              garlic.
+            </p>
+
+            <p>
+              Gumbo beet greens corn soko endive gumbo gourd. Parsley shallot
+              courgette tatsoi pea sprouts fava bean collard greens dandelion
+              okra wakame tomato. Dandelion cucumber earthnut pea peanut soko
+              zucchini.
+            </p>
+
+            <p>
+              Turnip greens yarrow ricebean rutabaga endive cauliflower sea
+              lettuce kohlrabi amaranth water spinach avocado daikon napa
+              cabbage asparagus winter purslane kale. Celery potato scallion
+              desert raisin horseradish spinach carrot soko. Lotus root water
+              spinach fennel kombu maize bamboo shoot green bean swiss chard
+              seakale pumpkin onion chickpea gram corn pea. Brussels sprout
+              coriander water chestnut gourd swiss chard wakame kohlrabi
+              beetroot carrot watercress. Corn amaranth salsify bunya nuts nori
+              azuki bean chickweed potato bell pepper artichoke.
+            </p>
+
+            <p>
+              Nori grape silver beet broccoli kombu beet greens fava bean potato
+              quandong celery. Bunya nuts black-eyed pea prairie turnip leek
+              lentil turnip greens parsnip. Sea lettuce lettuce water chestnut
+              eggplant winter purslane fennel azuki bean earthnut pea sierra
+              leone bologi leek soko chicory celtuce parsley jícama salsify.
+            </p>
+          </div>
+          <aside class="related">
+            <p>
+              All these veggies are brought to you by the
+              <a href="https://veggieipsum.com/">Veggie Ipsum generator</a>.
+            </p>
+          </aside>
+        </article>
+
+        <aside class="sidebar">
+          <h2>External vegetable-based links</h2>
+          <ul>
+            <li>
+              <a
+                href="https://www.thekitchn.com/how-to-cook-broccoli-5-ways-167323"
+                >How to cook broccoli</a
+              >
+            </li>
+            <li>
+              <a href="https://www.bbcgoodfood.com/glossary/swiss-chard"
+                >Swiss Chard</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.bbcgoodfood.com/recipes/collection/christmas-parsnip"
+                >Christmas Parsnip Recipes</a
+              >
+            </li>
+          </ul>
+        </aside>
+      </main>
+
+      <footer><p>&copy;2019</p></footer>
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+  

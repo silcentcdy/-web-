@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>开始学习CSS</title>
+<style>
+html{
+        background-image: url("images/山中电塔.png");
+        background-color: red;
+background-position: 10px 10px;
+background-repeat: repeat-x;
+background-attachment: fixed;
+/* 附件（attachment) 重复(repeat) 位置(position)*/
+    }
+h1 {
+    color: red;
+}
+p, li{
+    color: green;
+}
+li{
+    list-style-type: none;
+}
+.special{
+    color: orange;
+    font-size: bold ;
+    font-weight: 300px;
+    line-height: 3;
+}
+/*标签实时转态样式示例代码*/
+a:link{
+    color:rebeccapurple;
+}
+a:visited{
+    color:rgb(47, 222, 202)
+}
+a:hover{
+    color:red;
+    text-decoration: none;
+}
+body h1 + p .special {
+  color: yellow;
+  background-color: black;
+  padding: 5px;
+}
+/* 选择器具有专一性和级联性（即在标签选择器出现冲突情况时，浏览器该识别和执行那个标签
+p {
+    color:blue;
+}
+.special{
+    color:brown;
+}
+
+<p class="special">我是谁</p>
+
+  以上便是例子在<p>标签里加入类元素和先后<p>元素的CSS样式表的识别 */
+.outer{
+    border: 5px solid rgb(164, 227, 27);
+}
+
+.box{
+    margin: 40px;
+    width:100px;
+    height:100px;
+    background-color: rebeccapurple;
+    transform: rotate(05turn);
+    
+}
+body {
+  background-color: pink;
+}
+
+@media (min-width: 50em) {
+  body {
+    background-color: rgb(229, 249, 157);
+  }
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color: #e9b02c;
+    font-size: 3em;
+    border-bottom: 15px  dotted #ab1dcb ;
+    font-family: Georgia, 'Times New Roman', Times, serif;  
+}
+
+h2 {
+    font-size: 1.5em;
+    font-style: italic;
+}
+
+.job-title {
+    color: #999999;
+    font-weight: bold;
+}
+.special a{
+    text-decoration: none;
+}
+a:link, a:visited {
+    color: #fb6542;
+    text-decoration-line: none;
+}
+a:hover {
+    text-decoration: none;
+    color:red;
+}
+.link-border{
+    border:10px solid brown;
+    padding: 1em;
+}    
+ </style>
+</head>
+
+<body>
+
+    <h1>我是一级标题</h1>
+
+    <p>这是一个段落文本. 在文本中有一个 <span class="special">span element</span>
+并且还有一个 <a href="http://example.com">链接</a>.</p>
+
+    <p>这是第二段. 包含了一个 <em>强调</em> 元素.</p>
+
+   <!-- <ul>
+        <li>项目1</li>
+        <li class="special">项目2</li>
+        <li>项目 <em>三</em></li>
+    </ul> -->
+<!--    <div class="outer"><div class="box">The inner box is 90%-30px</div></div>
+.box{
+    padding: 10px;
+    background-color: rebeccapurple;
+    width:calc(90% - 30px);
+    color:white;
+}   (方框CSS代码) -->
+    <div class="box" ></div>
+
+    <!-- 个人传记CSS-->
+    <h1>Jane Doe</h1>
+<div class="job-title">Web Developer</div>
+<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+
+<p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. </p>
+
+<h2>Contact information</h2>
+<ul class="link-border">
+    <li class="special">Email: <a  href="mailto:jane@example.com">jane@example.com</a></li>
+    <li>Web: <a href="http://example.com">http://example.com</a></li>
+    <li>Tel: 123 45678</li>
+</ul>
+
+
+
+</body>
+
+</html>

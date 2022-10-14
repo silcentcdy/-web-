@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta charset="utf-8">
+    <title>CSS二阶段评估测试网页</title>
+    <link href="CSS自我卡片评估.css"  rel="stylesheeet"  type="text/css" >  
+    <div  name="title"   content="CSS二阶段评估测试|练习 评估"></div>
+
+    <!--原CSS文档链接不了，只好用第二种方法来进行CSS样式化-->   
+    <style>
+  body {
+    margin: 0;
+  }
+  html {
+    font-family: 'Helvetica neue', Arial, 'sans serif';
+    font-size: 10px;
+    background-color: #ccc;
+  }
+  .card 
+  {
+    width: 35em;
+    height: 22em;
+    margin: 5em auto;
+    background-color:  red;
+    border: 0.2em solid black;
+    border-radius: 1.5em; 
+  }
+  .card header
+  {
+    background-image: linear-gradient(360deg,rgba(175, 233, 69, 0)90%, rgba(0,0,0,0.2) 10%);/* (渐变色暂时搞不明白--后面回来看明白了) */
+    border-radius: 1.5em .5em 0 0;
+  }
+  .card footer
+  {
+    background-image: linear-gradient(to-bottom,rgba(203, 10, 224, 0) 90%, rgba(0,0,0,0.1) 20%);
+    border-radius:0 0 1.5em 1.5em;
+  }
+/*以下代码才是自己评估实践时写的，上面的代码是已经给好的基础框架布局代码 */
+.card article img
+{
+   float:right;
+    width:10em;
+    height:12em;
+    max-height: 100%;
+}
+.card header,.card footer{
+      box-sizing: block;
+      height: 5em;
+      padding: 0.2em;
+}
+.card h2 ,.card p{
+      margin: 0;
+}
+.card article{
+  height: 12em;
+  font-weight:10em;
+  background-color: rgba(22, 34, 38, 0.5);
+  color:yellow;
+ 
+}
+.card h2{
+    font-size: 2em;
+    margin-top: 0.5em; 
+}
+.card footer p{
+    font-size: 1.5em;
+    margin-top:1em ;
+}
+.card article p{
+    padding:1em 0 1em 0;
+    height: 10px;
+    line-height: 1.5em;
+}
+    </style>
+</head> 
+  <body>
+
+    <section class="card">
+        <header>
+          <h2>Chris Mills</h2>
+        </header>
+        <article>
+          <img src="images/chris.jpg" alt="A picture of Chris - a man with glasses, a beard, and a silly wooly hat">
+          <p>50 My Street<br>
+             The Town<br>
+             Gray Peach<br>
+             UK<br>
+             ZO50 1MU<br>
+            <strong>Tel</strong>: 01234 567 890<br>
+            <strong>Mail</strong>: chris@nothere.com</p>
+        </article>
+        <footer>
+          <p>Editing, writing, and web development services</p>
+        </footer>
+      </section>
+
+  </body> 
+</html>

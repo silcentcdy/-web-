@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <meta charset="utf-8" >
+       <title> 信纸CSS实践练习</title>
+       <link href="信纸.css" rel="stylesheet" type="text/css">
+   </head>
+   <style>
+       * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-family: sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    background: #ccc;
+  }
+  
+  article {
+    width: 210mm;
+    height: 297mm;  
+    margin: 20px auto;
+    position: relative;
+  }
+  
+  address {
+    position: absolute;
+    bottom: 8mm;
+    right: 20mm;
+  }
+  
+  h1 {
+    position: absolute;
+    top: 12mm;
+    left: 20mm;
+    width: 128px;
+    height: 128px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 44px 0;
+    color: rgb(188, 146, 54);
+    text-shadow: 1px 1px 1px black;
+    /* 自己写的部分 */
+    background-image: url(images/logo.png);
+    filter: drop-shadow(0px 0px 5px black); /* filter 是过滤器 滤波器的意思 */
+  }
+  /* Your CSS below here */
+ article{
+     /*控制信纸的背景渐变色差的代码*/
+  background-image: url(images/top-image.png),url(images/bottom-image.png),
+  linear-gradient(to top right, rgba(0,0,0,0), rgba(0,0,0,0.1)), linear-gradient(to bottom right, rgba(0,0,0,0), rgba(0,0,0,0.1));
+  background-position:top,bottom;
+  background-repeat:no-repeat,no-repeat;
+  background-color: white;
+  border-top: 1mm solid red;
+  border-bottom: 1mm solid red;
+}
+
+   </style>
+<body>
+    <article>
+        <h1>Awesome<br>Company</h1>
+  
+        <address>
+          <p>The Awesome Company</p>
+          <p>102-112 Frail Bend Bridge<br>
+          The Dwindlings<br>
+          Little Hornet<br>
+          HX3 9ZQ<br>
+          UK</p>
+        </address>
+    </article>
+
+</body>
+
+</html>

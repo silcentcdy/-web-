@@ -1,0 +1,141 @@
+ /*
+ html{
+   
+    font-size:1px;
+    background-color: rgb(240, 203, 155);
+    
+}
+em{
+    text-align: center auto;
+}
+h1{
+    margin: 0 ;
+    padding:20px 0;
+    font-size:50px;
+    text-shadow: 3px 3px 2px rgb(109, 74, 30);  
+}
+h2{
+    font-size: 30px;
+    font-style: normal;
+    text-shadow: rgb(192, 125, 125);
+}
+body{
+    border:5px solid darkgoldenrod;
+    width:1300px;
+    padding:0 30px 30px 30px;
+    margin: 0 auto;
+    background-color:yellow;
+    
+(border表示边框界限的大小；padding指的是内容与周边的间距，整体视觉样貌；)
+}
+p{
+    font-size:20px;
+    line-height:2;
+}
+ul li ol{
+    line-height:2.5;
+    font-size: 20px;
+}
+
+img{
+    display: block;
+    margin: 3,3(水平居中); 
+}
+*/
+
+/* CSS实操第二阶段表格练习样式代码 */
+
+/* 表格空间间隔    (一个border-collapse属性的collapse值对于任何表样式的工作来说都是一个标准的最佳实践。
+默认情况下，当您在表元素上设置边框时，它们之间将会有间隔，使用 border-collapse: collapsek可以合成一条)
+斑马条纹（zebra stripes）——通过改变不同数据行的颜色，使表中交替行不同的数据行可以更容易地进行解析和读取。
+我们在代码中使用了odd和even的关键字(即单双行)*/
+
+/* spacing   */
+table{
+    table-layout: fixed;
+    border-collapse: collapse;
+    width:100%;
+    border:4px solid purple;
+}
+thead th:nth-child(1){
+    width:30%;
+}
+thead th:nth-child(2){
+    width:20%;
+}
+thead th:nth-child(3){
+    width:15%;
+}
+thead th:nth-child(4){
+    width:40%;
+}
+th,td{
+    padding:10pt;
+}
+
+/* typography */
+
+html {
+    font-family: 'helvetica neue', helvetica, arial, sans-serif;
+}
+  
+thead th, tfoot th {
+    font-family: 'Rock Salt', cursive;
+  }
+th,td{
+    letter-spacing: 3px;
+}
+tbody td{
+    text-align:center ;
+}
+tfoot th{
+    text-align: right;
+}
+thead, tfoot {
+    background: url(images/firefox-icon.png);
+    color: white;
+    text-shadow: 1px 1px 1px rgb(156, 183, 65);
+}
+thead th,tbody th,tbody td{
+    background: linear-gradient(to-bottom,rgba(0,0,0,0.1),rgba(0,0,0,0.5));
+    border:3px solid pink
+}  
+tbody tr:nth-child(odd){
+    background-color: #ff66a5;
+}
+tbody tr:nth-child(even){
+    background-color:#b4339a;
+}
+
+/*table{
+    background-color: #31b890;
+}
+   (浏览器不支持高级类元素时的备用表格背景颜色)*/
+caption{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: left;
+    padding:20px;
+    font-style:italic;
+    color:red;
+    caption-side:bottom;
+    letter-spacing: 3px;
+    width:fit-content;
+    font-size: large;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

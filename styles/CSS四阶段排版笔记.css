@@ -1,0 +1,1043 @@
+/*
+【第一部分】
+display 属性 — 标准的 value，比如block, inline 或者 inline-block 元素在正常布局流中的表现形式 (见 Types of CSS boxes).
+ 接着是全新的布局方式，通过设置display的值，比如 CSS Grid 和 Flexbox.
+
+浮动——应用 float 值，诸如 left 能够让块级元素互相并排成一行，而不是一个堆叠在另一个上面。
+
+position 属性 — 允许你精准设置盒子中的盒子的位置，正常布局流中，默认为 static ，使用其它值会引起元素不同的布局方式，
+例如将元素固定到浏览器视口的左上角。
+
+表格布局— 表格的布局方式可以用在非表格内容上，可以使用display: table和相关属性在非表元素上使用。
+
+多列布局— 这个 Multi-column layout 属性 可以让块按列布局，比如报纸的内容就是一列一列排布的。
+
+Flexbox 是 CSS 弹性盒子布局模块（Flexible Box Layout Module）的缩写，它被专门设计出来用于创建横向或是纵向的一维页面布局。
+要使用 flexbox，你只需要在想要进行 flex 布局的父元素上应用display: flex ，所有直接子元素都将会按照 flex 进行布局。
+是因为父元素上flex-direction的初值是row。它们全都被拉伸至和最高的元素高度相同，是因为父元素上align-items属性的初值是stretch。
+我们可以在我们的所有子元素上添加flex 属性，并赋值为1，这会使得所有的子元素都伸展并填充容器，而不是在尾部留下空白
+(代码示例)
+*/
+.wrapper {
+    display: flex;
+}
+
+.wrapper > div {
+    flex: 1;
+}
+/*
+<div class="wrapper">
+    <div class="box1">One</div>
+    <div class="box2">Two</div>
+    <div class="box3">Three</div>
+</div>
+
+Flexbox 用于设计横向或纵向的布局，而 [Grid] 布局则被设计用于同时在两个维度上把元素按行和列排列整齐。
+指定 display 的值来转到 grid 布局：display: grid。下面的例子使用了与 flex 例子类似的 HTML 标记，描述了一个容器和若干子元素。
+除了使用display:grid，我们还分别使用 grid-template-rows 和 grid-template-columns 两个属性定义了一些行和列的轨道。
+定义了三个1fr的列，还有两个100px的行之后，
+[代码示例]
+*/
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100px 100px;
+    grid-gap: 10px;
+}
+/*
+<div class="wrapper">
+    <div class="box1">One</div>
+    <div class="box2">Two</div>
+    <div class="box3">Three</div>
+    <div class="box4">Four</div>
+    <div class="box5">Five</div>
+    <div class="box6">Six</div>
+</div>
+第二个例子里，我们定义了一个和上面一样的 grid，但是这一次我们只有三个子元素。
+我们利用 grid-column 和 grid-row 两个属性来指定每一个子元素应该从哪一行/列开始，并在哪一行/列结束。这就能够让子元素在多个行/列上展开。
+[代码示例]
+*/
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100px 100px;
+    grid-gap: 10px;
+}
+
+.box1 {
+    grid-column: 2 / 4;
+    grid-row: 1;
+}
+
+.box2 {
+    grid-column: 1;
+    grid-row: 1 / 3;
+}
+
+.box3 {
+    grid-row: 2;
+    grid-column: 3;
+}
+/*
+<div class="wrapper">
+    <div class="box1">One</div>
+    <div class="box2">Two</div>
+    <div class="box3">Three</div>
+</div>
+(主要grid布局知识，想要深入了解去看MDN文章)
+把一个元素“浮动”(float) 起来，会改变该元素本身和在正常布局流（normal flow）中跟随它的其他元素的行为。
+这一元素会浮动到左侧或右侧，并且从正常布局流 (normal flow) 中移除，这时候其他的周围内容就会在这个被设置浮动 (float) 的元素周围环绕。
+
+float 属性有四个可能的值：
+left — 将元素浮动到左侧。
+right — 将元素浮动到右侧。
+none — 默认值，不浮动。
+inherit — 继承父元素的浮动属性。
+
+【定位 (positioning) 能够让我们把一个元素从它原本在正常布局流 (normal flow) 中应该在的位置移动到另一个位置。】
+定位 (positioning) 并不是一种用来给你做主要页面布局的方式，它更像是让你去管理和微调页面中的一个特殊项的位置。
+有五种主要的定位类型需要我们了解：
+
+静态定位 (Static positioning)是每个元素默认的属性——它表示“将元素放在文档布局流的默认位置——没有什么特殊的地方”。
+
+相对定位 (Relative positioning)允许我们相对于元素在正常的文档流中的位置移动它——包括将两个元素叠放在页面上。
+这对于微调和精准设计 (design pinpointing) 非常有用。
+
+绝对定位 (Absolute positioning)将元素完全从页面的正常布局流 (normal layout flow) 中移出，类似将它单独放在一个图层中。
+我们可以将元素相对于页面的 <html> 元素边缘固定，或者相对于该元素的最近被定位祖先元素 (nearest positioned ancestor element)。
+绝对定位在创建复杂布局效果时非常有用，例如通过标签显示和隐藏的内容面板或者通过按钮控制滑动到屏幕中的信息面板。
+
+固定定位 (Fixed positioning)与绝对定位非常类似，但是它是将一个元素相对浏览器视口固定，而不是相对另外一个元素。
+这在创建类似在整个页面滚动过程中总是处于屏幕的某个位置的导航菜单时非常有用。
+
+粘性定位 (Sticky positioning)是一种新的定位方式，它会让元素先保持和position: static一样的定位，
+当它的相对视口位置 (offset from the viewport) 达到某一个预设值时，他就会像position: fixed一样定位。
+
+相对定位
+.positioned {                          
+  position: relative;
+  top: 30px;
+  left: 30px;
+}
+回到我们最初的非定位示例，我们可以添加以下的 CSS 规则来实现绝对定位：
+
+.positioned {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  top和left属性对绝对位置元素的影响不同于相对位置元素。在这一案例当中，他们没有指定元素相对于原始位置的移动程度。
+  相反，在这一案例当中，它们指定元素应该从页面边界的顶部和左边的距离 (确切地说，是 <html>元素的距离)。
+}
+
+固定定位 (fixed positioning) 同绝对定位 (absolute positioning) 一样，将元素从文档流 (document flow) 当中移出了。
+但是，定位的坐标不会应用于"容器"边框来计算元素的位置，而是会应用于视口 (viewport) 边框。
+利用这一特性，我们可以轻松搞出一个固定位置的菜单，而不受底下的页面滚动的影响。
+.positioned {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
+粘性定位 (sticky positioning) 是最后一种我们能够使用的定位方式。它将默认的静态定位 (static positioning) 和固定定位 (fixed positioning) 相混合。
+当一个元素被指定了position: sticky时，它会在正常布局流中滚动，
+直到它出现在了我们给它设定的相对于容器的位置，这时候它就会停止随滚动移动，就像它被应用了position: fixed一样。
+
+一个<table>标签之所以能够像表格那样展示，是由于 css 默认给<table>标签设置了一组 table 布局属性。
+当这些属性被应用于排列非<table>元素时，这种用法被称为“使用 CSS 表格”。
+现在，我们例子中的 CSS。除了使用 display 属性外，大多数 CSS 都是相当普通的。
+ <form>, <div>,  <label>和<input>被告知要分别显示表、表行和表单元——基本上，它们会像 HTML 表格标记一样，导致标签和输入在默认情况下排列整齐。
+我们所要做的就是添加一些大小、边缘等等，让一切看起来都好一点，我们就完成了。
+[CSS应用表格示例]
+<form>
+  <p>First of all, tell us your name and age.</p>
+  <div>
+    <label for="fname">First name:</label>
+    <input type="text" id="fname">
+  </div>
+  <div>
+    <label for="lname">Last name:</label>
+    <input type="text" id="lname">
+  </div>
+  <div>
+    <label for="age">Age:</label>
+    <input type="text" id="age">
+  </div>
+</form>
+*/
+html {
+  font-family: sans-serif;
+}
+
+form {
+  display: table;
+  margin: 0 auto;
+}
+
+form div {
+  display: table-row;
+}
+
+form label, form input {
+  display: table-cell;
+  margin-bottom: 10px;
+}
+
+form label {
+  width: 200px;
+  padding-right: 5%;
+  text-align: right;
+}
+
+form input {
+  width: 300px;
+}
+
+form p {
+  display: table-caption;
+  caption-side: bottom;
+  width: 300px;
+  color: #999;
+  font-style: italic;
+}
+/*
+要把一个块转变成多列容器 (multicol container)，我们可以使用 column-count属性来告诉浏览器我们需要多少列，
+也可以使用column-width (en-US)来告诉浏览器以至少某个宽度的尽可能多的列来填充容器。
+【第二部分 正常布局流】
+如果两个垂直相邻的元素都设置了边距，并且它们的边距接触，则两个边距中较大的一个保留，较小的边距消失。这称为边距折叠。(叠边距仅与垂直方向相关。)
+内联元素的大小只是其内容的大小。您无法在内联元素上设置宽度或高度 - 它们仅位于块级元素的内容中。display: block;display: inline-block;
+
+【第三部分 弹性区块】
+#{
+display:flex;
+}
+假如你想设置行内元素为 flexible box，也可以置 display 属性的值为 inline-flex。
+
+当元素表现为 flex 框时，它们沿着两个轴来布局：
+主轴（main axis）是沿着 flex 元素放置的方向延伸的轴（比如页面上的横向的行、纵向的列）。该轴的开始和结束被称为 main start 和 main end。
+交叉轴（cross axis）是垂直于 flex 元素放置方向的轴。该轴的开始和结束被称为 cross start 和 cross end。
+设置了 display: flex 的父元素（在本例中是 <section>）被称之为 flex 容器（flex container）。
+[左右(即水平方向)是主轴，上下（即垂直方向）是交叉轴]
+在 flex 容器中表现为柔性的盒子的元素被称之为 flex 项（flex item）（本例中是 <article> 元素。)
+弹性盒子提供了 flex-direction 这样一个属性，它可以指定主轴的方向（弹性盒子子类放置的地方）— 它默认值是 row，
+这使得它们在按你浏览器的默认语言方向排成一排（在英语/中文浏览器中是从左到右）。
+注意：你还可以使用 row-reverse 和 column-reverse 值反向排列 flex 项目。用这些值试试看吧！
+
+当你在布局中使用定宽或者定高的时候，可能会出现问题即处于容器中的 弹性盒子子元素会溢出，破坏了布局。
+解决此问题的一种方法是将以下声明添加到 section css 规则中：
+flex-wrap: wrap
+应当注意到存在着 flex-direction 和 flex-wrap — 的缩写 flex-flow。
+[flex-direction: row;
+flex-wrap: wrap;(控制容器溢出的--包装的意思)]
+flex-flow: row wrap;
+
+article {
+  flex: 1;
+}
+这是一个无单位的比例值，表示每个 flex 项沿主轴的可用空间大小。
+
+您还可以指定 flex 的最小值。尝试修改现有的 article 规则：
+article {
+  flex: 1 200px;
+}
+article:nth-of-type(3) {
+  flex: 2 200px;
+}
+这表示“每个 flex 项将首先给出 200px 的可用空间，然后，剩余的可用空间将根据分配的比例共享“。
+
+flex 是一个可以指定最多三个不同值的缩写属性：[尽量用缩写的代码]
+第一个就是上面所讨论过的无单位比例。可以单独指定全写 flex-grow 属性的值。(即数字)
+第二个无单位比例 — flex-shrink — 一般用于溢出容器的 flex 项。这指定了从每个 flex 项中取出多少溢出量，以阻止它们溢出它们的容器。
+这是一个相当高级的弹性盒子功能，我们不会在本文中进一步说明。
+第三个是上面讨论的最小值。可以单独指定全写 flex-basis 属性的值。（即平常绝对单位值）
+
+(水平和垂直部分)
+ <div>
+      <button>Smile</button>
+      <button>Laugh</button>
+      <button>Wink</button>
+      <button>Shrug</button>
+      <button>Blush</button>
+ </div>
+div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+align-items 控制 flex 项在交叉轴上的位置。
+
+默认的值是 stretch，其会使所有 flex 项沿着交叉轴的方向拉伸以填充父容器。如果父容器在交叉轴方向上没有固定宽度（即高度）
+，则所有 flex 项将变得与最长的 flex 项一样长（即高度保持一致）。
+在上面规则中我们使用的 center 值会使这些项保持其原有的高度，但是会在交叉轴居中。这就是那些按钮垂直居中的原因。
+你也可以设置诸如 flex-start 或 flex-end 这样使 flex 项在交叉轴的开始或结束处对齐所有的值。
+
+你可以用 align-self 属性覆盖 align-items 的行为。
+button:first-child {
+  align-self: flex-end;（了解即可）
+}
+
+justify-content 控制 flex 项在主轴上的位置。
+
+默认值是 flex-start，这会使所有 flex 项都位于主轴的开始处。
+你也可以用 flex-end 来让 flex 项到结尾处。
+center 在 justify-content 里也是可用的，可以让 flex 项在主轴居中。
+而我们上面用到的值 space-around 是很有用的——它会使所有 flex 项沿着主轴均匀地分布，在任意一端都会留有一点空间。
+还有一个值是 space-between，它和 space-around 非常相似，只是它不会在两端留下任何空间。
+
+所有 flex 项默认的 order 值是 0。
+order 值大的 flex 项比 order 值小的在显示顺序中更靠后。
+相同 order 值的 flex 项按源顺序显示。所以假如你有四个元素，其 order 值分别是 2，1，1 和 0，那么它们的显示顺序就分别是第四，第二，第三，和第一。
+第三个元素显示在第二个后面是因为它们的 order 值一样，且第三个元素在源顺序中排在第二个后面。
+你也可以给 order 设置负值使它们比值为 0 的元素排得更前面。(即正整数是靠后，负整数是靠前)
+button:first-child {
+  order: 1;(位置靠后)
+  order:-1;(位置靠前)
+}
+嵌套笔记在HTML练习文件里
+
+Add your flexbox CSS below here 
+section {
+  display: flex;
+}
+
+article {
+  flex: 1 200px;
+}
+
+article:nth-of-type(3) {
+  flex: 3 200px;
+  display: flex;
+  flex-flow: column;
+}
+(特别注意这里的第二条 CSS 规则—我们设置第三个 <article> 元素的子节点的布局同样为 flex，但是属性值为列布局。)
+article:nth-of-type(3) div:first-child {
+  flex: 1 100px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+(首先使用 flex: 1 100px; 简单的给它一个最小的高度 100px，然后设置它的子节点（<button> 元素）为 flex 项。
+  在这里我们将它们放在一个包装行 (wrap row) 中，使它们居中对齐，)
+button {
+  flex: 1 auto;(数字指每个排列块的均匀排列占比,后面数值是表示排列块的宽度大小)
+  margin: 5px;
+  font-size: 18px;
+  line-height: 1.5;
+}(有意思的是我们给它一个值为 1 的 flex 属性。)
+
+.container {
+display:grid;
+grid-template-columns:1fr 1fr 1fr; 
+grid-gap:10px;
+}
+
+.tags   {
+display:flex;
+flex-wrap:wrap;
+justify-content: center;
+}
+(grid和flex布局综合代码，以上是以图片加关键说明词的综合布局代码，有重要参考价值)
+
+【网格部分】
+(网格部分示例代码)
+.container {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;(应该是有几个单位值就相应有几个网格布局)
+}
+ <style>
+        body {
+            width: 90%;
+            max-width: 900px;
+            margin: 2em auto;
+            font: .9em/1.2 Arial, Helvetica, sans-serif;
+        }
+
+        .container > div {
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgb(207,232,220);
+            border: 2px solid rgb(79,185,227);
+        }
+    </style>
+除了长度和百分比，我们也可以用fr这个单位来灵活地定义网格的行与列的大小。
+fr单位分配的是可用空间而非所有空间，所以如果某一格包含的内容变多了，那么整个可用空间就会减少，可用空间是不包括那些已经确定被占用的空间的。
+
+网格间隙
+使用 grid-column-gap (en-US) 属性来定义列间隙；使用 grid-row-gap (en-US) 来定义行间隙；
+
+.container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-gap: 20px;
+}
+(网格间距和单位值代码示例)
+*gap属性曾经有一个grid-前缀，不过后来的标准进行了修改，目的是让他们能够在不同的布局方法中都能起作用。
+尽管现在这个前缀不会影响语义，但为了代码的健壮性，你可以把两个属性都写上。
+
+你可以使用repeat来重复构建具有某些宽度配置的某些列。
+第一个传入 repeat 函数的值（3）表明了后续列宽的配置要重复多少次，而第二个值（1fr）表示需要重复的构建配置，这个配置可以具有多个长度设定。
+[会用到repeat函数中的一个关键字auto-fill(即自动填充)来替代确定的重复次数。]
+显式网格是我们用grid-template-columns 或 grid-template-rows 属性创建的。而隐式网格则是当有内容被放到网格外时才会生成的。
+当然，你也可以使用grid-auto-rows和grid-auto-columns属性手动设定隐式网格的大小。下面的例子将grid-auto-rows设为了100px，
+然后你可以看到那些隐式网格中的行（因 为这个例子里没有设定grid-template-rows，因此，所有行都位于隐式网格内）现在都是 100 像素高了。
+
+(简单来说，隐式网格就是为了放显式网格放不下的元素，浏览器根据已经定义的显式网格自动生成的网格部分。)
+
+minmax 函数为一个行/列的尺寸设置了取值范围。比如设定为 minmax(100px, auto)，那么尺寸就至少为 100 像素，
+并且如果内容尺寸大于 100 像素则会根据内容自动调整。代码示例：[ grid-auto-rows: minmax(100px, auto);]
+(综合自动填充与布局大小代码示例)
+.container {    
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: minmax(100px, auto);
+  grid-gap: 20px;
+}   
+ 基于线的元素放置
+我们根据这些分隔线来放置元素，通过以下属性来指定从那条线开始到哪条线结束。
+grid-column-start (en-US)
+grid-column-end (en-US)
+grid-row-start (en-US)
+grid-row-end (en-US)
+
+这些属性的值均为分隔线序号，你也可以用以下缩写形式来同时指定开始与结束的线。
+grid-column
+grid-row(缩写形式)
+注意开始与结束的线的序号要使用/符号分开。
+[综合网格线布局及开始结束综合布局示例代码]
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>CSS Grid - line-based placement starting point</title>
+    <style>
+    */
+        body {
+            width: 90%;
+            max-width: 900px;
+            margin: 2em auto;
+            font: .9em/1.2 Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 3fr; 
+            grid-gap: 20px;
+        }
+
+        header,
+        footer {
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgb(207,232,220);
+            border: 2px solid rgb(79,185,227);
+        }
+   /*(网格线区分代码示例)
+        aside {
+            border-right: 1px solid #999;
+        }
+        header {
+         grid-column: 1 / 3;
+         grid-row: 1;
+        }
+
+        article {
+        grid-column: 2;
+        grid-row: 2;
+        }
+
+        aside {
+        grid-column: 1;
+        grid-row: 2;
+        }
+
+        footer {
+        grid-column: 1 / 3;
+          grid-row: 3;
+       }
+  ---------------------------------------------------
+      </style>
+      
+ </head>
+</html>
+*/
+
+/*
+另一种往网格放元素的方式是用grid-template-areas属性
+.container {
+  display: grid;
+  grid-template-areas:
+      "header header"
+      "sidebar content"
+      "footer footer";
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 20px;
+}
+
+header {
+  grid-area: header;
+}
+
+article {
+  grid-area: content;
+}
+
+aside {
+  grid-area: sidebar;
+}
+
+footer {
+  grid-area: footer;
+}
+
+grid-template-areas属性的使用规则如下：
+你需要填满网格的每个格子
+[对于某个横跨多个格子的元素，重复写上那个元素grid-area属性定义的区域名字
+所有名字只能出现在一个连续的区域，不能在不同的位置出现
+一个连续的区域必须是一个矩形
+使用.符号，让一个格子留空]
+header {
+  grid-column: 1 / 13;  
+  grid-row: 1;
+}
+
+article {
+  grid-column: 4 / 13;
+  grid-row: 2;
+}
+
+aside {
+  grid-column: 1 / 4;
+  grid-row: 2;
+}
+
+footer {
+  grid-column: 1 / 13;
+  grid-row: 3;
+}
+[网格布局的线是从边界开始数起的，也就是网格数就是边界数，也就是说有三行，但有四行边界线，列数以此类推，行和列之间是有间隙和边界隔离的]
+
+【浮动部分(传统布局)】
+img {
+  float: left;
+  margin-right: 30px;
+}
+(简单图片你和文本浮动布局代码)
+p::first-line {
+  text-transform: uppercase;
+}
+
+p::first-letter {
+  font-size: 3em;
+  border: 1px solid black;
+  background: red;
+  float: left;
+  padding: 2px;
+  margin-right: 4px;
+}
+(首字母下沉代码)
+
+在这里我们设置了他们的父亲的宽度的 48％ —— 这总计 96％，留下我们 4％自由作为两列之间的沟槽，给内容一些空间呼吸。(多列浮动布局代码示例)
+div:nth-of-type(1) {
+  width: 48%;
+  float: left;
+}
+
+div:nth-of-type(2) {
+  width: 48%;
+  float: right;
+}(多列以此类推，继续添加同样的代码模板，改变具体数值就好)
+[我们所有列使用宽度百分比——这是一个很好的策略，因为它创建一个流式布局（liquid layout），一种调整为不同的屏幕尺寸，
+并在较小的屏幕尺寸下保持相同的列宽度比例。]
+另一种选择是将宽度设置为一个固定的单位如 rem 或像素 这就是固定宽度布局（fixed-width layout）——如果您现在调整浏览器大小，
+您将看到布局不再调整以适应视图宽度，在尺寸更小时您将需要滚动来查看它的全部。
+
+ [我们设置了列的宽度以便它们都能匹配——36% + 30% + 4% + 26% = 96%，在第二和第三列之间有 4% 的空间。 
+ （这个空间总是出现在向左浮动的第二列和向右浮动的第三列之间。 ）
+这里需要注意的一点是，您必须仔细考虑将列放在什么位置，以及如何浮动它们，以获得所需的结果。 你的内容应该是有意义的，
+当你阅读它的源代码和它的视觉布局的时候；但是，使用浮动可以使可视化布局与源顺序不同]
+
+清除浮动
+ clear 属性。当你把这个应用到一个元素上时，
+ 它主要意味着"此处停止浮动"——这个元素和源码中后面的元素将不浮动，除非您稍后将一个新的float声明应用到此后的另一个元素。
+clear 可以取三个值：
+left：停止任何活动的左浮动
+right：停止任何活动的右浮动
+both：停止任何活动的左右浮动
+
+到目前为止，我们的例子是没有应用样式的浮动框——这很容易。当你开始给这些框加上样式时，比如添加背景、外边距、内边距等等，问题就来了。
+
+有两个方法可以解决问题，最好的方法是给你的 html 加上下面的 css。
+* {
+  box-sizing: border-box;
+}
+我们有另一个问题——页脚正压在最长列上，在这一点并不理想——我们来试着清除页脚浮动的同时给出一些顶部外边距（ margin-top ）来解决这个问题：
+(不起作用的外边框代码示例)
+footer {
+  clear: both;
+  margin-top: 4%;
+} 
+
+  然而，这不起作用 ——浮动的元素存在于正常的文档布局流之外，在某些方面的行为相当奇怪：
+首先，他们在父元素中所占的面积的有效高度为 0 ——尝试在浏览器中加载 1_three-column-layout.html 并用开发工具查看 <body> 的高度，
+你将会看到我们的意思是什么——所报告的正文高度只有 <h1> (en-US) 的高度。这个可以通过很多方式解决，但是我们所依赖的是在父容器的底部清除浮动，
+如我们在我们的当前示例所做的那样。如果检查当前示例中正文的高度，您应该看它的高度是行为本身。
+
+其次，非浮动元素的外边距不能用于它们和浮动元素之间来创建空间——这是我们在这里眼前的问题，我们将在下面实施修复。
+
+还有一些关于浮动的奇怪的事情——Chris Coyier 优秀的关于 Floats文章概述了其他一些以及修复这些。
+所以，让我们解决这个,在 HTML 的代码里添加新的<div> 元素，(位于在<footer>标签的上方)：
+接下来我们要做的是，移除页脚样式规则中的 clear: both; 声明，取而代之将其放在 clearfix div 中：
+
+[清除浮动效果HTML代码部分]
+<div class="clearfix"></div>
+(修复浮动效果错乱CSS代码)
+.clearfix {
+  clear: both;
+}
+但也有另一个问题——clearfix div 背景、内边距和边界与我们的列和页脚相同！让我们先给每个列块一个类（ class ）column：
+<div class="column">
+  ...
+</div>
+ 现在让我们改变应用盒子样式的规则到这些块和页脚，这样只有列块被样式化：
+.column, footer {
+  padding: 1%;
+  border: 2px solid black;
+  background-color: red;
+}
+至此，修复问题大概就那样。
+
+但另一个问题是列高度是不同的—— 如果列都是相同的高度，它看起来会更好。
+
+我们可以通过给所有的列固定height 来解决这个问题 
+.column {
+  height: 550px;
+}
+
+然而在许多情况下这并不理想——它使设计呆板。如果你能保证列中总是有相同数量的内容，
+这是可以的，但这并不总是如此——在很多类型的网站上，内容也会定期更改。
+[这正是像 flexbox 这样的新布局技术所解决的问题。Flexbox 可以自动地延长列，这样他们就会像最长的一列一样。]
+
+(高度、背景解决建议)
+将这些列的背景颜色设置为父元素的背景颜色，这样您就不会看到高度是不同的。这是目前最好的选择。
+将它们设置为固定的高度，并使内容滚动overflow 
+[display: block;]块元素盒子的示例代码
+
+【定位部分】
+  教程示例整体源代码
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Static positioning</title>
+
+    <style>
+      body {
+        width: 500px;
+        margin: 0 auto;
+      }
+
+      p {
+        background: aqua;
+        border: 3px solid blue;
+        padding: 10px;
+        margin: 10px;
+      }
+
+      span {
+        background: red;
+        border: 1px solid black;
+      }
+
+      .positioned {
+        position: static;
+        background: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Static positioning</h1>
+
+    <p>I am a basic block level element. My adjacent block level elements sit on new lines below me.</p>
+
+    <p class="positioned">By default we span 100% of the width of our parent element, 
+    and our are as tall as our child content. Our total width and height is our content + padding + border width/height.</p>
+
+    <p>We are separated by our margins. Because of margin collapsing, we are separated by the width of one of our margins, not both.</p>
+
+    <p>inline elements <span>like this one</span> and <span>this one</span> sit on the same line as one another, 
+    and adjacent text nodes, if there is space on the same line. 
+    Overflowing inline elements <span>wrap onto a new line if possible — like this one containing text</span>, 
+    or just go on to a new line if not, much like this image will do: <img src="long.jpg"></p>
+
+  </body>
+</html>
+ position: static;(静态定位，无明显变化，也就是默认形式  )
+position: relative;(相对定位，一般也无明显变化)
+position: absolute;(绝对定位)
+[定位中的left right top bottom属性的属性值是指偏移量，也就是远离该位置的程度值]
+
+绝对定位的元素不再存在于正常文档布局流中。相反，它坐在它自己的层独立于一切。
+这是非常有用的：这意味着我们可以创建不干扰页面上其他元素的位置的隔离的 UI 功能。
+例如，弹出信息框和控制菜单；翻转面板；可以在页面上的任何地方拖放的 UI 功能……
+第二，注意元素的位置已经改变——这是因为top，bottom，left和right以不同的方式在绝对定位。
+它们指定元素应距离每个包含元素的边的距离，而不是指定元素应该移入的方向。
+所以在这种情况下，我们说的绝对定位元素应该位于从“包含元素”的顶部 30px，从左边 30px。
+
+如果所有的父元素都没有显式地定义 position 属性,那么所有的父元素默认情况下 position 属性都是 static。结果，绝对定位元素会被包含在初始块容器中。
+这个初始块容器有着和浏览器视口一样的尺寸，并且<html>元素也被包含在这个容器里面
+(上下文定位)
+绝对定位元素在 HTML 源代码中，是被放在<body>中的，但是在最终的布局里面，它离页面 (而不是<body>) 的左边界、上边界有 30px 的距离。
+我们可以改变定位上下文 —— 绝对定位的元素的相对位置元素。放在 body 规则中
+ 
+您可以使用z-index属性。 “z-index”是对 z 轴的参考。你可以从源代码中的上一点回想一下，我们使用水平（x 轴）和垂直（y 轴）坐标来讨论网页，
+以确定像背景图像和阴影偏移之类的东西的位置。（0,0）位于页面（或元素）的左上角，x 和 y 轴跨页面向右和向下（适合从左到右的语言，无论如何）
+网页也有一个 z 轴：一条从屏幕表面到你的脸（或者在屏幕前面你喜欢的任何其他东西）的虚线。z-index 值影响定位元素位于该轴上的位置；
+正值将它们移动到堆栈上方，负值将它们向下移动到堆栈中。默认情况下，定位的元素都具有 z-index 为 auto，实际上为 0。
+
+z-index: 1;(定位顺序先后代码示例)  z-index 只接受无单位索引值；
+
+position:fixed;固定定位
+现在我们要给<h1> (en-US)元素 position: fixed;并让它坐在视口的顶部中心。
+h1 {
+  position: fixed;
+  top: 0;
+  width: 500px;
+  margin: 0 auto;
+  background: white;
+  padding: 10px;
+}
+
+粘性定位 position: sticky 
+还有一个可用的位置值称为 position: sticky，比起其他位置值要新一些。它基本上是相对位置和固定位置的混合体，
+它允许被定位的元素表现得像相对定位一样，直到它滚动到某个阈值点（例如，从视口顶部起 1​​0 像素）为止，此后它就变得固定了。
+position: sticky 的另一种有趣且常用的用法，是创建一个滚动索引页面。在此页面上，不同的标题会停留在页面顶部。
+
+【多栏式布局部分】
+多列布局，通常也简写为 multicol
+过这两个属性开启 multicol column-count 或者 column-width (en-US)。  column-count 将创建指定数量的列，
+浏览器将按照你指定的宽度尽可能多的创建列；任何剩余的空间之后会被现有的列平分。 这意味着你可能无法期望得到你指定宽度，
+除非容器的宽度刚好可以被你指定的宽度除尽。
+.container {
+  column-width: 200px;
+}
+Multicol 创建的列无法单独的设定样式。不存在让单独某一列比其他列更大的方法，同样无法为某一特定的列设置独特的背景色、文本颜色。
+使用 column-gap 改变列间间隙。
+用 column-rule 在列间加入一条分割线。
+ column-rule 是 column-rule-color 和 column-rule-style的缩写，接受同 border 一样的单位。
+值得一提的是这条分割线本身并不占用宽度。它置于用 column-gap 创建的间隙内。
+
+.container {
+  column-width: 250px;
+  column-gap: 20px;
+}
+列与内容折断,多列布局的内容被拆成碎块。
+  CSS Fragmentation 中声明的属性控制这一特性,这份规范提供了一些属性来控制 multicol 和多页媒体中的内容拆分、折断。比如，在规则 
+ .card 上添加属性break-inside，并设值 avoid 。.card 是标题和文本的容器，我们不想拆开这个盒子。
+现阶段，增加旧属性 page-break-inside: avoid 能够获得更好的浏览器支持。(为了支持旧的浏览器的代码)
+
+【响应式设计部分】
+响应式网页设计的概念（responsive web design，RWD）
+(响应式设计三大技术的混合)
+第一个是液态网格，
+第二个是液态图像的理念。通过使用相当简单的将设置max-width属性设置为100%的技术，图像可以在包含它们的列变得比图像原始尺寸窄的时候，缩放得更小，
+但总不会变得更大。这使得图像可以被缩放，以被放到一个灵活尺寸的列，而不是溢出出去，同时也不会在列宽于图像的时候，使图像变得太大以至于画质变得粗糙。
+第三个关键的组件是媒体查询。可以只使用 CSS 实现。和所有尺寸的屏幕都使用一种布局不同的是，布局是可以改变的：
+侧栏可以在小屏幕上重新布局，而替代用的导航栏也可以显示出来。
+
+[媒介查询]
+下面的媒体查询进行测试，以知晓当前的 Web 页面是否被展示为屏幕媒体（也就是说不是印刷文档），
+且视口至少有 800 像素宽。用于.container选择器的 CSS 将只会在这两件前提存在的情况下应用
+
+@media screen and (min-width: 800px) {
+  .container {
+    margin: 1em 2em;
+  }
+} (媒介查询代码示例)
+媒体查询，以及样式改变时的点，被叫做断点（breakpoints）
+使用媒体查询时的一种通用方式是，为窄屏设备（例如移动设备）创建一个简单的单栏布局，然后检查是否是大些的屏幕，
+在你知道你有足够容纳的屏幕宽度的时候，开始采用一种多栏的布局。这经常被描述为移动优先设计。
+
+[灵活网格]
+灵活浮动布局是这样实现的，让每个元素都有一个作为宽度的百分数，而且确保整个布局的和不会超过 100%。通过使用像素并把布局转化为百分数的方式设计。
+target / context = result(网格除以内容的宽度得出百分数响应式比例) 
+例如如果我们的预期栏尺寸为 60 像素，而且它所在的上下文（或者容器）为 960 像素，
+我们在将零点二的空间移动到右边以后，用 960 去除 60，得到我们能够使用在我们的 CSS 上的值。
+.col {
+  width: 6.25%; (60 / 960 = 0.0625) 
+} (代码示例)
+在窄屏幕上，布局将盒子堆叠在另一个的上面,在宽些的屏幕上，它们变成了两列.
+
+现代布局方式，例如多栏布局、伸缩盒和网格默认是响应式的。
+[多个列]
+如果你却去指定column-width的话，你是在指定一个最小宽度。浏览器会尽可能多数量地创建这一宽度的列，只要它们可以恰当地放进容器里面，
+然后将所有列之间的剩余空间共享出去。因而列的数量会随着空间的多少而改变。
+[伸缩盒]
+在伸缩盒中，初始的行为是，弹性的物件将参照容器里面的空间的大小，缩小和分布物件之间的空间。通过更改(flex-grow和 flex-shrink)的值，
+你可以指示在物件遇到周围有更多或者更少的空间的情况下，你所期望的物件表现。
+
+使用了flex: 1的简写，可伸缩物件每个将会占据一份可伸缩容器中相等大小的空间。
+.container {
+  display: flex;
+}
+.item {
+  flex: 1;
+} (代码示例)
+[CSS 网格]
+在 CSS 网格布局中，fr单位许可了跨网格轨道可用空间的分布。
+这会创建三个列轨道，每个占据了容器中可用空间的一部分。
+
+[响应式图像]
+响应式图像，使用了<picture>元素和<img> srcset和sizes 特性，解决了这两个问题。
+你可以提供附带着“提示”（描述图像最适合的屏幕尺寸和分辨率的元数据）的多种尺寸，
+浏览器将会选择对设备最合适的图像，以确保用户下载尺寸适合他们使用的设备的图像。
+
+[响应式排版]
+在早期的工作没有考虑的一个响应式设计的元素是响应式排版的理念。本质上讲，这描述了根据屏幕真实使用范围的多少，在媒体查询的同时改变字体大小。
+html {
+  font-size: 1em;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+@media (min-width: 1200px) {
+  h1 {
+    font-size: 4rem;
+  }
+} 
+(响应式排版代码示例)
+
+[使用视口单位实现响应式排版]
+一个有趣的方式是使用视口单位vw来实现响应式排版。1vw等同于视口宽度的百分之一，即如果你用vw来设定字体大小的话，字体的大小将总是随视口的大小进行改变
+问题在于，当做上面的事情的时候，因为文本总是随着视口的大小改变大小，用户失去了放缩任何使用vw单位的文本的能力。
+所以你永远都不要只用 viewport 单位设定文本。
+
+这里有一个解决方法，它使用了calc()，如果你将vw单位加到了使用固定大小（例如em或者rem）的值组，那么文本仍然是可放缩的。
+基本来说，是vw加在了放缩后的值上。
+h1 {
+  font-size: calc(1.5rem + 3vw);(前面是固定的字体大小，后面是随视口大小变动而变动)
+}
+这就是说，我们只需要指定标题的字体大小一次，而不是为移动端设定它，然后再在媒介查询中重新定义它。字体会在你增加视口大小的时候逐渐增大。
+
+[视口元标签](HTML文档开头必带代码，为了确切的起到网页布局随屏幕代销变动而变动的作用)
+如果你看看一张响应式页面的 HTML 源代码，你通常将会在文档的<head>看到下面的<meta>标签。
+<------------
+       <meta name="viewport" content="width=device-width,initial-scale=1">
+--------------->
+这个元标签告诉移动端浏览器，它们应该将视口宽度设定为设备的宽度，将文档放大到其预期大小的 100%，在移动端以你所希望的为移动优化的大小展示文档。
+烦的是，你的带断点和媒介查询的响应式设计不会在移动端浏览器上像预期那样工作。如果你有个窄屏布局，
+在 480 像素及以下的视口宽度下生效，但是视口是按 960 像素设定的，你将不会在移动端看到你的窄屏布局。
+通过设定width=device-width，你用设备的实际宽度覆写了默认的大小，然后你的媒介查询就会像预期那样生效。
+
+和视口元标签一起，你可以使用另外几个设定，但大体说来，上面那行就是你想要使用的。
+initial-scale：设定了页面的初始缩放，我们设定为 1。
+height：特别为视口设定一个高度。
+minimum-scale：设定最小缩放级别。
+maximum-scale：设定最大缩放级别。
+user-scalable：如果设为no的话阻止缩放。
+你应该避免使用minimum-scale、maximum-scale，尤其是将user-scalable设为no。用户应该有权力尽可能大或小地进行缩放，阻止这种做法会引起访问性问题。
+
+【媒体查询部分】
+@media media-type and (media-feature-rule) {
+  (CSS rules go here) 
+}
+它由以下部分组成：
+一个媒体类型，告诉浏览器这段代码是用在什么类型的媒体上的（例如印刷品或者屏幕）；
+一个媒体表达式，是一个被包含的 CSS 生效所需的规则或者测试；
+一组 CSS 规则，会在测试通过且媒体类型正确的时候应用。
+你可以指定的媒体类型为：
+all
+print
+screen
+speech
+下面的媒体查询将会在页面被打印的时候把 body 设定为只有 12pt 大小。当页面在浏览器中载入的时候，它将不会生效。
+@media print {
+    body {
+        font-size: 12pt;
+    }
+}
+(打印媒体代码示例)
+在指定了类型以后，你可以用一条规则指向一种媒体特征。
+为了建立响应式设计（已经广受浏览器支持），我们一般最常探测的特征是视口宽度，而且我们可以使用min-width、max-width和width媒体特征，
+在视口宽度大于或者小于某个大小——或者是恰好处于某个大小——的时候，应用 CSS。
+
+@media screen and (width: 600px) {
+    body {
+        color: red;
+    }
+}(很少使用固定值)
+
+@media screen and (max-width: 400px) {
+    body {
+        color: blue;
+    }
+}(max表示小于这个数值，min表示大于这个数值)
+
+[朝向]
+一个受到良好支持的媒体特征是[orientation]，我们可以用它测得竖放（portrait mode）和横放（landscape mode）模式。
+要在设备处于横向的时候改变 body 文本颜色的话，可使用下面的媒体查询。
+@media (orientation: landscape) {
+    body {
+        color: rebeccapurple;
+    }
+}(代码示例)
+[使用指点设备]
+hover媒体特征被引入了进来。这种特征意味着你可以测试用户是否能在一个元素上悬浮，
+这也基本就是说他们正在使用某种指点设备，因为触摸屏和键盘导航是没法实现悬浮的。
+@media (hover: hover) {
+    body {
+        color: rebeccapurple;
+    }
+}
+出现了[pointer]媒体特征。它可取三个值：none、fine和coarse。fine指针是类似于鼠标或者触控板的东西，它让用户可以精确指向一片小区域。
+coarse指针是你在触摸屏上的手指。none值意味着，用户没有指点设备，也许是他们正只使用键盘导航，或者是语音命令。
+[综合、复杂媒体查询]
+媒体查询中的“与”逻辑
+为了混合媒体特征，你可以以与在上面使用and很相同的方式，用and来混合媒体类型和特征。
+@media screen and (min-width: 400px) and (orientation: landscape) {
+    body {
+        color: blue;
+    }
+}
+媒体查询中的“或”逻辑
+如果你有一组查询，且要其中的任何一个都可以匹配的话，那么你可以使用逗号分开这些查询。
+@media screen and (min-width: 400px), screen and (orientation: landscape) {
+    body {
+        color: blue;
+    }
+}
+媒体查询中的“非”逻辑
+你可以用not操作符让整个媒体查询失效。这就直接反转了整个媒体查询的含义。
+@media not all and (orientation: landscape) {
+    body {
+        color: blue;
+    }
+}
+引入媒体查询的点就叫做断点。
+弹性盒、网格和多栏布局都给了你建立可伸缩的甚至是响应式组件的方式，而不需要媒体查询。
+
+【传统的布局方法部分(老旧的布局方法(以float和flexbox为主)，主要以了解即可)】
+(网格列和行展示代码，包括顺序与列属性)
+<div class="wrapper">
+  <div class="row">
+    <div class="col">1</div>
+    <div class="col">2</div>
+    <div class="col">3</div>
+    <div class="col">4</div>
+    <div class="col">5</div>
+    <div class="col">6</div>
+    <div class="col">7</div>
+    <div class="col">8</div>
+    <div class="col">9</div>
+    <div class="col">10</div>
+    <div class="col">11</div>
+    <div class="col">12</div>
+  </div>
+  <div class="row">
+    <div class="col span1">13</div>
+    <div class="col span6">14</div>
+    <div class="col span3">15</div>
+    <div class="col span2">16</div>
+  </div>
+</div>
+[CSS]
+.col {
+  float: left;
+  margin-left: 20px;
+  width: 60px;
+  background: rgb(255, 150, 150);
+}
+.row {
+  clear: both;
+}
+.col {
+  float: left;
+  margin-left: 20px;
+  width: 60px;
+  background: rgb(255, 150, 150);
+}
+(Two column widths (120px) plus one gutter width (20px)) 
+.col.span2 { width: 140px; }
+(Three column widths (180px) plus two gutter widths (40px))
+.col.span3 { width: 220px; }
+ (And so on...) 
+.col.span4 { width: 300px; }
+.col.span5 { width: 380px; }
+.col.span6 { width: 460px; }
+.col.span7 { width: 540px; }
+.col.span8 { width: 620px; }
+.col.span9 { width: 700px; }
+.col.span10 { width: 780px; }
+.col.span11 { width: 860px; }
+.col.span12 { width: 940px; }
+
+创建液态网格
+这个网格表现的不错，但是它长度固定。 我们实际却想要一个弹性（流体）的网格，它可以随着浏览器的viewport大小的变化自动伸缩。
+为了达成这个目标，我们需要把相应的像素的长度变为百分比长度。
+
+把固定宽度转为伸缩的基于百分比宽度的算式在下面：
+计算列数宽度百分比的公式:target / context = result
+言归正传，来讲我们的网格！我们网格里跨越超过一列的列，它的总长是 6.45% 乘跨越的列数加 2.08333333%，乘间隔数（间隔数总等于行数减一）。
+calc() 函数允许我们就在宽度值里面这么计算，所以对跨越 4 列的列我们可以这么算：
+.col.span4 {
+  width: calc((6.25%*4) + (2.08333333%*3));
+}
+语义 vs.“无语义”网格系统
+在标记中添加类以定义布局，意味着您的内容和标记与您的可视化表示相关联。你将会偶尔听到，
+这种使用 CSS 类的方式，被描绘成“无语义”：描述了内容的外观，而不是描述内容的语义性的类的使用。这是我们的span2、span3等类所面临的情况。
+
+[在我们的网格里启用偏移容器]
+我们创造的网格很有效。只要我们想把所有容器都从网格的左手边对齐。
+如果我们想在第一个容器前来个空列，或者容器之间来个空列，我们需要新建一个偏移类，为站点加上左外边距，来可见地推动网格
+
+我们在 CSS 上搞一个类，它会给一个容器元素来个一列宽度的偏移。将下面的内容加到你的 CSS 的底部：
+.offset-by-one {
+  margin-left: calc(6.25% + (2.08333333%*2));
+}
+想要给一个容器的左边加个有一列宽的空白的话，你可以在容器上添加这个类。
+<div class="col span5 offset-by-one">14</div>
+弹性盒网格
+  flex: 1 1 auto;
+在.col上。我们设定flex属性的第一个值（flex-grow）为 1，这样我们的物件可以变大；第二个值（flex-shrink）为 1，这样我们的物件可以缩小；
+第三个值（flex-basis）为auto。因为我们的元素的width被设定了， auto将会使用和flex-basis 值一样的宽度。
+
+第三方网格系统(比较少用，应为现在大多都是自己编写的，使用CSS自带的网格布局)
+既然我们理解了我们的网格计算背后的数学了，我们现在该看看一些常用的第三方网格系统了。如果你在互联网上搜索“CSS 网格框架”的话，
+你会发现一个包含了可选项的庞大列表。流行的框架，例如Bootstrap和Foundation，就包含了网格系统。
+此外还有独立的网格系统，不是用 CSS 开发的就是用预处理器开发的。
+让我们看下这些独立系统其中的一个，它阐释了利用网格框架工作的常见技术。我们将要使用的网格是 Skeleton 的一部分，它是一种简单的 CSS 框架。
+访问Skeleton 网站以开始，选择“Download”下载 ZIP 文件。解压文件，把 skeleton.css 和 normalize.css 复制到一个新路径下。
+
+【支持旧的浏览器】
+另一个流行的查明一个特性有多受到支持的方式是[Can I Use]网站。这个网站列出了主流的 Web 平台特性，附有它们的浏览器支持信息。
+[在 CSS 中构建回滚]
+CSS 规范包含了在一个物件上同时应用两种布局的时候，解释浏览器如何反应的信息。
+例如，规范定义如果一个浮动元素同时又是用 CSS 网格布局实现的网格元素（Grid Item）的时候会发生什么。
+结合浏览器会忽略掉它不会理解的 CSS 的特点组合起来，
+你就得到了使用我们已经提到的传统技术构建简单布局的方法，在可以理解你的网格布局的现代浏览器中，传统布局方法会被网格布局覆写掉。
+[回滚方式]
+浮动和清除
+如上所示，如果浮动和清除的物件变成了弹性或网格物件，浮动和清除属性不再影响布局。
+display: inline-block
+这种方式能被用来建立列布局，如果一个物件被设为display: inline-block，但是之后变成了弹性或者网格物件，inline-block 行为将会被忽略。
+display: table
+这种在这几节课的介绍中描述的建立 CSS 表格的方式可以被用作回滚。被设为 CSS 表格布局的物件将会在它们变为弹性或者网格物件的时候不再表现出这种行为。
+重要的是，被建立起来用于修复表格结构的匿名盒子没有被建立起来。
+Multiple-column Layout
+对于某些布局，你能用multi-col作为回滚。如果你的容器有任何一个column-*属性被定义，之后变成了网格容器，那么多列行为不会实现。
+
+特性查询
+特性查询允许你测试一个浏览器是否支持任何特定的一个 CSS 特性。
+这就是说，你可以写一些面向不支持某项特性的浏览器的 CSS，然后检查以了解浏览器是否支持，如果支持的话就可以加进你的复杂布局了。
+(特性查询代码)
+@supports (display: grid) {
+  .item {
+      width: auto;
+  }
+}
+IE10 和 IE11 的实现是以-ms-为前缀的，也就是说你可以给这两个浏览器用，而在非微软浏览器上，这种属性会被忽略。
+不过 Edge 仍然能理解旧语法，所以小心点，让每个东西都安全地在你的现代网格 CSS 中覆写。
+网格布局渐进增强指导能帮你理解 IE 版的网格，我们在这节课的末尾加入了一些额外的有用的链接。
+不过，除非你有很多使用旧版 IE 的访客，你可能发现专注于建立一个由所有不支持的浏览器共用的回滚版本是一个更好的选择。
+*/

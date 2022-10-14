@@ -1,0 +1,484 @@
+/* 
+ (inhreit) 设置该属性会使子元素属性和父元素相同。实际上，就是 "开启继承".
+ (initial)   设置属性值和浏览器默认样式相同。如果浏览器默认样式中未设置且该属性是自然继承的，那么会设置为 inherit    
+ unset  将属性重置为自然值，也就是如果属性是自然继承那么就是 inherit，否则和 initial一样    
+  widths =, margins, padding, 和 borders 等属性不会被继承 
+  all 重置所有的CSS 属性和值
+  有一个特殊的 CSS 可以用来覆盖所有上面所有优先级计算，不过需要很小心的使用 — !important(优先级最好-重要性） 一般情况不轻易使用*/
+  h1{
+      all:unset;
+  }
+  /* 通用选择器 (*)，组合符 (+, >, ~, ' ')，和否定伪类 (:not) 不会影响优先级
+  千位： 如果声明在 style 的属性（内联样式）则该位得一分。这样的声明没有选择器，所以它得分总是1000。
+  百位： 选择器中包含ID选择器则该位得一分。
+  十位： 选择器中包含类选择器、属性选择器或者伪类则该位得一分。
+  个位：选择器中包含元素、伪元素选择器则该位得一分。
+    specificity (优先权重值）*/ 
+    h1{
+      color:rgb(128, 128, 128);
+      border-style:solid;
+    }
+    /*
+    （选择器大类)
+       标签、类和ID选择器
+       属性选择器
+       伪类和伪元素
+       关系选择器
+       
+    标签属性选择器
+    a[title] { }
+    a[href="https://example.com"] { } 
+     伪类选择器  p::first-line { }*
+     <选择器一般表>
+     类型选择器	  h1 {  }	
+     通配选择器	  * {  }	
+     类选择器	   .box {  }	
+     ID选择器   	#unique { }	
+     标签属性选择器	  a[title] {  }	
+     伪类选择器	      p:first-child { }	
+     伪元素选择器	    p::first-line { }	
+     后代选择器	      article p	
+     子代选择器      	article > p	
+     相邻兄弟选择器	  h1 + p	
+     通用兄弟选择器	  h1 ~ p	
+     全局选择器         *
+     多个类被应用的时候指向一个元素 .().()形式
+      [选择器]         [示例]                                   [说明]
+     [attr]	         a[title]	                              匹配带有一个名为attr的属性的元素——方括号里的值。
+     [attr=value]	   a[href="https://example.com"]	        匹配带有一个名为attr的属性的元素，其值正为value——引号中的字符串。
+     [attr~=value]	 p[class~="special"]	                  匹配带有一个名为attr的属性的元素，其值正为value，或者匹配带有一个attr属性的元素，其值有一个或者更多，至少有一个和value匹配。
+     [attr|=value]	 div[lang|="zh"]	                      匹配带有一个名为attr的属性的元素，其值可正为value，或者开始为value，后面紧随着一个连字符。
+      注意，在一列中的好几个值，是用空格隔开的。
+
+      li[class^="a"]匹配了任何值开头为a的属性，于是匹配了前两项。
+      li[class$="a"]匹配了任何值结尾为a的属性，于是匹配了第一和第三项。
+      li[class*="a"]匹配了任何值的字符串中出现了a的属性，于是匹配了所有项。
+
+     伪元素 （::first-line）伪元素选择器会值得信赖地做到这件事——即使单词/字符的数目改变，它也只会选中第一行。
+     伪类是针对某个元素里的第几个子元素
+     伪元素是针对某个元素里的第几个子元素的第几行、列之类的具体区域
+     伪类与伪元素就像一个集合里子集与真子集关系类似
+      :active	在用户激活（例如点击）元素的时候匹配。
+------------------------------------------------------------------------------------------------------------------------------
+      伪类一般对照查表
+:any-link	                     匹配一个链接的:link和:visited状态。
+:blank	                       匹配空输入值的<input>元素。
+:checked     	                 匹配处于选中状态的单选或者复选框。
+:current (en-US)	             匹配正在展示的元素，或者其上级元素。
+:default	                     匹配一组相似的元素中默认的一个或者更多的UI元素。
+:dir	                         基于其方向性（HTMLdir属性或者CSSdirection属性的值）匹配一个元素。
+:disabled	                     匹配处于关闭状态的用户界面元素
+:empty	                       匹配除了可能存在的空格外，没有子元素的元素。
+:enabled	                     匹配处于开启状态的用户界面元素。
+:first	                       匹配分页媒体的第一页。
+:first-child	                 匹配兄弟元素中的第一个元素。
+:first-of-type	               匹配兄弟元素中第一个某种类型的元素。
+:focus	                       当一个元素有焦点的时候匹配。
+:focus-visible	               当元素有焦点，且焦点对用户可见的时候匹配。
+:focus-within	                 匹配有焦点的元素，以及子代元素有焦点的元素。
+:future (en-US)	               匹配当前元素之后的元素。
+:hover	                       当用户悬浮到一个元素之上的时候匹配。
+:indeterminate	               匹配未定态值的UI元素，通常为复选框。
+:in-range	                     用一个区间匹配元素，当值处于区间之内时匹配。
+:invalid	                     匹配诸如<input>的位于不可用状态的元素。
+:lang	                         基于语言（HTMLlang属性的值）匹配元素。
+:last-child	                   匹配兄弟元素中最末的那个元素。
+:last-of-type	                 匹配兄弟元素中最后一个某种类型的元素。
+:left	                         在分页媒体 (en-US)中，匹配左手边的页。
+:link	                         匹配未曾访问的链接。
+:local-link (en-US)	           匹配指向和当前文档同一网站页面的链接。
+:is()	                         匹配传入的选择器列表中的任何选择器。
+:not	                         匹配作为值传入自身的选择器未匹配的物件。
+:nth-child	                   匹配一列兄弟元素中的元素——兄弟元素按照an+b形式的式子进行匹配（比如2n+1匹配元素1、3、5、7等。即所有的奇数个）。
+:nth-of-type	                 匹配某种类型的一列兄弟元素（比如，<p>元素）——兄弟元素按照an+b形式的式子进行匹配（比如2n+1匹配元素1、3、5、7等。即所有的奇数个）。
+:nth-last-child	               匹配一列兄弟元素，从后往前倒数。兄弟元素按照an+b形式的式子进行匹配（比如2n+1匹配按照顺序来的最后一个元素，然后往前两个，再往前两个，诸如此类。从后往前数的所有奇数个）。
+:nth-last-of-type	             匹配某种类型的一列兄弟元素（比如，<p>元素），从后往前倒数。兄弟元素按照an+b形式的式子进行匹配（比如2n+1匹配按照顺序来的最后一个元素，然后往前两个，再往前两个，诸如此类。从后往前数的所有奇数个）。
+:only-child	                   匹配没有兄弟元素的元素。
+:only-of-type	                 匹配兄弟元素中某类型仅有的元素。
+:optional	                     匹配不是必填的form元素。
+:out-of-range	                 按区间匹配元素，当值不在区间内的的时候匹配。
+:past (en-US)	                 匹配当前元素之前的元素。
+:placeholder-shown	           匹配显示占位文字的input元素。
+:playing (en-US)	             匹配代表音频、视频或者相似的能“播放”或者“暂停”的资源的，且正在“播放”的元素。
+:paused (en-US)	               匹配代表音频、视频或者相似的能“播放”或者“暂停”的资源的，且正在“暂停”的元素。
+:read-only	                   匹配用户不可更改的元素。
+:read-write	                   匹配用户可更改的元素。
+:required	                     匹配必填的form元素。
+:right	                       在分页媒体 (en-US)中，匹配右手边的页。
+:root	                         匹配文档的根元素。
+:scope	                       匹配任何为参考点元素的的元素。
+:valid	                       匹配诸如<input>元素的处于可用状态的元素。
+:target	                       匹配当前URL目标的元素（例如如果它有一个匹配当前URL分段的元素）。
+:visited	                     匹配已访问链接。
+ ----------------------------------------------------------------------------------------------------------------------------------    
+关系选择器类别[后代选择器(空格) 子代选择器( > )  邻接兄弟( +)  通用兄弟(~) 使用关系选择器( )] 
+
+*/
+p{
+  font-weight:bold;
+}
+.box::after{
+  content: " ➥"
+}
+
+/* 盒模型[标准盒 替代盒(IE)]
+ (标准盒)
+ .box {
+  width: 350px;
+  height: 150px;
+  margin: 25px;
+  padding: 25px;
+  border: 5px solid black;
+}
+如果使用标准模型宽度 = 410px (350 + 25 + 25 + 5 + 5)，高度 = 210px (150 + 25 + 25 + 5 + 5)，padding 加 border 再加 content box。
+*/
+/*(替代盒)*/
+.box {
+  box-sizing: border-box;
+} 
+
+.box {
+  border: 5px solid rebeccapurple;
+  background-color: lightgray;
+  padding: 40px;
+  margin: 40px;
+  width: 300px;
+  height: 150px;
+}
+
+.alternate {
+  box-sizing: border-box;
+  width:390px;
+  height:240px;
+}
+ /*  
+
+默认浏览器会使用标准模型。如果需要使用替代模型，您可以通过为其设置 box-sizing: border-box 来实现。
+ 这样就可以告诉浏览器使用 border-box 来定义区域，从而设定您想要的大小。
+ (示例)
+.box {
+  box-sizing: border-box;
+} 
+display: inline-block(块级盒子与内联盒子的综合体——即高宽符合内联盒子的特征但换行 内边距、外边距、边框符合块级盒子的特征但盒子大小无法设置)
+
+<div class="box">I use the standard box model.</div>
+<div class="box alternate">I use the alternate box model.</div>
+
+外边距折叠(既遵循最大框边原则)
+
+控制背景平铺
+background-repeat属性用于控制图像的平铺行为。可用的值是:
+
+no-repeat — 不重复。
+repeat-x —水平重复。
+repeat-y —垂直重复。
+repeat — 在两个方向重复。
+
+[示例-背景图片边框较高级形式] 多用<div>标签来使用盒子
+*/
+.box {
+  background: linear-gradient(105deg, rgba(255,255,255,.2) 39%, rgba(51,56,57,1) 96%) center center / 400px 200px no-repeat,
+  url(big-star.png) center no-repeat, rebeccapurple;
+} 
+/*
+(调整图像大小）
+cover —浏览器将使图像足够大，使它完全覆盖了盒子区，同时仍然保持其高宽比。在这种情况下，有些图像可能会跳出盒子外
+contain — 浏览器将使图像的大小适合盒子内。在这种情况下，如果图像的长宽比与盒子的长宽比不同，则可能在图像的任何一边或顶部和底部出现间隙。
+ 
+<gradient>渐变代码(linear-gradient radial-gradient)
+
+内容滚动(这是由background-attachment属性控制的)
+  [scroll: 使元素的背景在页面滚动时滚动。如果滚动了元素内容，则背景不会移动。实际上，背景被固定在页面的相同位置，所以它会随着页面的滚动而滚动。
+  fixed: 使元素的背景固定在视图端口上，这样当页面或元素内容滚动时，它就不会滚动。它将始终保持在屏幕上相同的位置。
+  local: 这个值是后来添加的(它只在Internet Explorer 9+中受支持，而其他的在IE4+中受支持)，因为滚动值相当混乱，在很多情况下并不能真正实现您想要的功能。局部值将背景固定在设置的元素上，因此当您滚动元素时，背景也随之滚动。]
+
+ (CSS-background属性的简写代码 size属性要用/符号来隔开即跟在方位属性的后面,颜色在逗号后面) 
+ */
+.box {
+  background:   
+    linear-gradient(105deg, rgba(255,255,255,.2) 39%, rgba(51,56,57,1) 96%) center 
+    center / 400px 200px no-repeat,
+url(big-star.png) center no-repeat, 
+    rebeccapurple;
+}  
+/*
+(渐变属性前面代码部分是方位，第二部分是实体颜色[后面百分比是占比部分比例]，第三部分是虚影颜色，a字母代表了透明度的大小，表示颜色的虚实与淡化程度)
+
+圆角属性
+通过使用border-radius属性和与方框的每个角相关的长边来实现方框的圆角。
+可以使用两个长度或百分比作为值，第一个值定义水平半径，第二个值定义垂直半径。在很多情况下，您将只传递一个值，这两个值都将使用。    
+  */
+  .box{
+    background-attachment: fixed;
+  }
+  /* <div class="box">
+  <h2>Borders</h2>
+  <p>Try changing the borders.</p>
+   </div>*/
+.box { /*  边框和文本代码*/
+  background-color: #567895;
+  border: 5px solid #0b385f;
+  border-bottom-style: dashed;
+  color: #fff;
+}
+h2 {
+  border-top: 2px dotted rebeccapurple;
+  border-bottom: 1em double rgb(16, 18, 17);
+}
+/*背景与渐变背景的区别代代码*/
+h2{
+  background-image: linear-gradient(105deg,rgba(25,255,255,1) 45%,rgba(25,25,25,2) 56%);
+  background-color: white;/* 文本的背景色*/
+  color:green;/*文本的颜色*/  
+}
+
+
+/*(logo等类的阴影过滤器CSS代码声明样例)
+filter:drop-shadow(2px 2px 1px black);}
+*/
+
+/*其它 background-*属性，该属性值用逗号分隔的方式设置。例如下列background-image：
+
+background-image: url(image1.png), url(image2.png), url(image3.png), url(image4.png);
+background-repeat: no-repeat, repeat-x, repeat;
+background-position: 10px 20px,  top right;
+
+不同属性的每个值，将与其他属性中相同位置的值匹配。例如，上面的 image1 的 background-repeat 值将是 no-repeat。
+但是，当不同的属性具有不同数量的值时，会发生什么情况呢？答案是较小数量的值会循环—在上面的例子中有四个背景图像，
+但是只有两个背景位置值。前两个位置值将应用于前两个图像，然后它们将再次循环—image3 将被赋予第一个位置值，image4 将被赋予第二个位置值。*/
+
+/* 书写文本模式
+writing-mode: vertical-rl(竖向书写)
+*/
+h1{
+ writing-mode:vertical-rl;
+}
+ /*
+ horizontal-tb: 块流向从上至下。对应的文本方向是横向的。
+ vertical-rl: 块流向从右向左。对应的文本方向是纵向的。
+ vertical-lr: 块流向从左向右。对应的文本方向是纵向的。
+
+ 用逻辑（logical）和相对变化（flow relative）代替了像宽width和高height一样的物理属性。
+ (top-block-start、bottom-block-end、right-inline-end、left-inline-start）。
+
+margin-top属性的映射是margin-block-start—,总是指向块级维度开始处的边距。
+padding-left属性映射到 padding-inline-start，这是应用到内联开始方向（这是该书写模式文本开始的地方）上的内边距。
+border-bottom属性映射到的是border-block-end，也就是块级维度结尾处的边框。
+
+ 这些值同样拥有逻辑值映射
+ 横向书写模式下，映射到width的属性被称作内联尺寸（inline-size）——内联维度的尺寸。而映射height的属性被称为块级尺寸（block-size）,其他书写模式类似
+ */
+
+ /* (块级内联映射与原本属性参照代码与HTML文本)
+ <div class="wrapper">
+  <div class="box physical">
+    <h2>Physical Properties</h2>
+    <p>A paragraph. Demonstrating Logical Properties in CSS.</p>
+  </div>
+  <div class="box logical">
+    <h2>Logical Properties</h2>
+    <p>A paragraph. Demonstrating Logical Properties in CSS.</p>
+  </div>
+</div>
+  */
+ .box {
+  inline-size: 200px;
+  writing-mode: vertical-rl;
+}
+
+.logical {
+  margin-block-start: 20px;
+  padding-inline-end: 2em;
+  padding-block-start: 2px;
+  border-block-start: 5px solid pink;
+  border-inline-end: 10px dotted rebeccapurple;
+  border-block-end: 1em double orange;
+  border-inline-start: 1px solid black;
+}
+
+.physical {
+  margin-top: 20px;
+  padding-right: 2em;
+  padding-top: 2px;
+  border-top: 5px solid pink;
+  border-right: 10px dotted rebeccapurple;
+  border-bottom: 1em double orange;
+  border-left: 1px solid black;
+}
+
+h2 {
+  border-block-end: 5px solid black;
+  color: rebeccapurple;
+  
+}
+  
+/*
+overflow属性是你控制一个元素溢出的方式，它告诉浏览器你想怎样处理溢出。overflow的默认值为visible(overflow-x,overflow-y)
+那么你可能要了解一下word-break或者overflow-wrap属性。
+overflow: auto(控制滚动条视具体情况展示或隐藏滚动条)
+
+数值类型	                     描述
+<integer>	         <integer>是一个整数，比如1024或-55。
+<number>	         <number>表示一个小数——它可能有小数点后面的部分，也可能没有，例如0.255、128或-1.2。
+<dimension>	       <dimension>是一个<number>，它有一个附加的单位，例如45deg、5s或10px。<dimension>是一个伞形类别，包括<length>、<angle>、<time>和<resolution>类型。
+<percentage>       <percentage>表示一些其他值的一部分，例如50%。百分比值总是相对于另一个量，例如，一个元素的长度相对于其父元素的长度。
+
+                  (绝对长度单位)
+[以下都是绝对长度单位——它们与其他任何东西都没有关系，通常被认为总是相同的大小。]
+单位	     名称	                  等价换算
+cm	       厘米	             1cm = 96px/2.54
+mm	       毫米	             1mm = 1/10th of 1cm
+Q	      四分之一毫米	       1Q = 1/40th of 1cm
+in	        英寸	           1in = 2.54cm = 96px
+pc	     十二点活字	         1pc = 1/6th of 1in
+pt	        点	               1pt = 1/72th of 1in
+px	       像素	             1px = 1/96th of 1in
+
+               (相对长度单位)
+[相对长度单位相对于其他一些东西，比如父元素的字体大小，或者视图端口的大小。
+使用相对单位的好处是，经过一些仔细的规划，您可以使文本或其他元素的大小与页面上的其他内容相对应。下表列出了web开发中一些最有用的单位。]
+
+单位	              相对于
+em	            在 font-size 中使用是相对于父元素的字体大小，在其他属性中使用是相对于自身的字体大小，如 width
+ex	            字符“x”的高度
+ch	            数字“0”的宽度
+rem        	    根元素的字体大小(remlh)
+lh	            元素的line-height
+vw	            视窗宽度的1%
+vh	            视窗高度的1%
+vmin	          视窗较小尺寸的1%
+vmax	          视图大尺寸的1%
+
+ em 单位的意思是“父元素的字体大小”
+ rem单位的意思是“根元素的字体大小”。(“根em”的rem标准。)
+
+例如，如果将元素的字体大小设置为百分比，那么它将是元素父元素字体大小的百分比。如果使用百分比作为宽度值，那么它将是父值宽度的百分比。
+
+有些值接受数字，不添加任何单位。接受无单位数字的属性的一个例子是不透明度属性（opacity ）
+它控制元素的不透明度(它的透明程度)。此属性接受0(完全透明)和1(完全不透明)之间的数字。
+
+您还可以使用RGBA颜色——它们的工作方式与RGB颜色完全相同，因此您可以使用任何RGB值，但是有第四个值表示颜色的alpha通道，(rgb,rgba)
+[在颜色上设置(alpha)通道与使用我们前面看到的opacity属性有一个关键区别。
+当你使用不透明度时，你让元素和它里面的所有东西都不透明，而使用RGBA颜色只让你指定的颜色不透明。]
+
+hsl() hsla()函数接受色调、饱和度和亮度值作为参数，这些值的不同方式组合，可以区分1670万种颜色：
+
+色调： 颜色的底色。这个值在0和360之间，表示色轮周围的角度。
+饱和度： 颜色有多饱和？ 它的值为0 - 100%，其中0为无颜色(它将显示为灰色阴影)，100%为全色饱和度
+亮度：颜色有多亮？ 它从0 - 100%中获取一个值，其中0表示没有光(它将完全显示为黑色)，100%表示完全亮(它将完全显示为白色)
+
+字符串和标识符
+在上面的示例中，我们看到关键字被用作值的地方(例如<color>关键字，如 red, black, rebeccapurple, and goldenrod)。
+这些关键字被更准确地描述为标识符，一个CSS可以理解的特殊值。
+因此它们没有使用引号括起来——它们不被当作字符串。
+
+ (函数) 
+函数通常与JavaScript、Python或c++等语言相关联，但它们也以属性值的形式存在于CSS中。
+我们已经在颜色部分看到了函数的作用——rgb()、hsl()等。用于从文件返回图像的值——url()——也是一个函数。
+
+使用百分比作为元素外边距（margin）或填充（padding）的单位时，值是以包含块的[内联尺寸]进行计算的，也就是元素的水平宽度.
+min-和 max-尺寸
+
+*/
+p{
+  writing-mode: horizontal-tb;
+  object-fit:scale-down;/* 图像填充盒子的属性 */
+  
+}
+/*
+图像和视频被描述为替换元素。这意味着 CSS 不能影响这些元素的内部布局 - 仅影响它们在页面上于其他元素中的位置。
+但是，正如我们将看到的，CSS 可以对图像执行多种操作。
+
+object-fit属性可以在这里帮助你。当使用object-fit时，替换元素可以以多种方式被调整到合乎盒子的大小。
+*/
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 200px 200px 200px;
+  gap: 20px;
+}
+
+.wrapper > div {
+  background-color: rebeccapurple;
+  border-radius: .5em;
+  display: grid;
+
+}/* 不同布局模式及其属性情况 */
+
+/* 
+form 元素(表单样式化代码)
+ <form>
+  <div><label for="name">Name</label>
+  <input type="text" id="name"></div>
+  <div><label for="email">Email</label>
+  <input type="email" id="email"></div>
+
+  <div class="buttons"><input type="submit" value="Submit"></div>
+ </form>(html编辑代码)
+    
+<form>元素许多表格的控制是通过<input>元素的方式实现的，这定义了简单的表格区域，例如文字输入，更进一步还有 HTML5 新加入的更加复杂的区域，例如颜色和日期撷取器。
+另外还有一些其他元素，例如用于多行文本输入的<textarea>，以及那些用来包含和标记表格的一些部分的元素，例如<fieldset>和<legend>。
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  box-sizing: border-box;
+  padding: 0; margin: 0;
+}
+textarea {
+  overflow: auto;
+} (通用表单基础样式化代码)
+*/
+
+/*
+<form method="post" action="" class="myform">
+  <div><label for="fldSearch">Keywords</label>
+  <input type="search" id="fldSearch" name="keywords">
+  <input type="submit" name="btnSubmit" value="Search"></div>
+</form>(表单代码练习)
+*/
+.myform {
+  border: 1px solid #000;
+  padding: 5px;
+}
+div input{
+ font-size:inherit;
+ padding:10px;
+}
+input[type="submit"]{
+background-color:rebeccapurple;
+color:white;
+border-style:none;
+border-radius:5px;
+}  
+
+/* || General styles */
+/* (||用来给代码注释进行定位定段) */
+
+/* || Typography */
+
+
+
+/* || Header and Main Navigation */
+
+/*
+OOCSS
+你会遇到的大多数方式都有一部分归功于面向对象的 CSS（OOCSS）的概念，这是一种因Nicole Sullivan 的努力而流行的方式。
+OOCSS 的基本理念是将你的 CSS 分解成可复用的对象，于是你可以在你的站点上任何需要的地方使用。OOCSS 的标准示例是在The Media Object中所描述的排布。
+这一排布一方面让图片、视频或者其他元素保持固定尺寸，而另一方面也让其他内容可伸缩。这是我们在用于评论、列表等网站随处可见的排布。
+
+BEM 即为块级元素修饰字符（Block Element Modifier）BEm是一个组织规定的CSS编写代码过程中的一个广泛被熟悉和应用的添加类选择器的统一标准.
+最为流行的预处理工具是Sass，这里不是 Sass 的教程，所以我只会简要地解释一些 Sass 能做的事情，在组织的时候真的会帮到你，
+即使你没有用到 Sass 的任何其他的独特功能。
+
+定义变量
+如果我们创建了在下面的第一行里面叫做$base-color的变量，我们之后可以在样式表的任何需要这一颜色的地方使用它。
+$base-color: #c6538c;
+.alert {
+  border: 1px solid $base-color;
+} [样例代码]
+编译组件样式表
+后处理以进行优化
+*/
