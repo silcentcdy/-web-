@@ -1,0 +1,358 @@
+<!-- 这是后面最终整合在添加的笔记 -->
+<!--
+【<head>标签里有什么？Metadata-HTML 中的元数据上一页】 
+[元数据:<meta> 元素]         
+元数据就是描述数据的数据,而 HTML 有一个“官方的”方式来为一个文档添加元数据——<meta> 元素。当然,
+其它的在这篇文章中提到的东西也可以被当作元数据。有很多不同种类的 <meta> 元素可以被包含进你的页面的 <head> 元素,
+但是现在我们还不会尝试去解释所有类型,这只会引起混乱。我们会解释一些你常会看到的类型,先让你有个概念。
+
+<meta charset="utf-8">
+这个元素简单的指定了文档的字符编码——在这个文档中被允许使用的字符集。    
+    
+[添加作者和描述]   
+1.name 指定了 meta 元素的类型；说明该元素包含了什么类型的信息。
+2.content 指定了实际的元数据内容。        
+    
+这两个 meta 元素对于定义你的页面的作者和提供页面的简要描述是很有用的。让我们看一个例子:
+-->
+<meta name="author" content="Chris Mills">
+<meta name="description" content="The MDN Web Docs Learning Area aims to provide
+complete beginners to the Web with all they need to know to get
+started with developing web sites and applications.">
+<!--
+指定作者在某些情况下是很有用的:如果你需要联系页面的作者,问一些关于页面内容的问题。一些内容管理系统能够自动获取页面作者的信息,然后用于某些用途。
+指定包含关于页面内容的关键字的页面内容的描述是很有用的,因为它可能或让你的页面在搜索引擎的相关的搜索出现得更多
+(这些行为在术语上被称为:搜索引擎优化,或 SEO。)
+PS:也就是在搜索引擎的搜索页面的标签词条的网址名称和网址地址下面显示那部分的描述性文本内容    
+
+[其他类型的元数据]
+当你在网站上查看源码时,你也会发现其它类型的元数据。你在网站上看到的许多功能都是专有创作,旨在向某些网站(如社交网站)提供可使用的特定信息。
+
+例如,Facebook 编写的元数据协议 Open Graph Data 为网站提供了更丰富的元数据。在 MDN Web 文档源代码中,你会发现:
+下面代码展现的一个效果就是,当你在 Facebook 上链接到 MDN 时,该链接将显示一个图像和描述:这为用户提供更丰富的体验
+-->
+
+<meta property="og:image" content="https://developer.mozilla.org/static/img/opengraph-logo.png">
+<meta property="og:description" content="The Mozilla Developer Network (MDN) provides
+information about Open Web technologies including HTML, CSS, and APIs for both Web sites
+and HTML5 Apps. It also documents Mozilla products, like Firefox OS.">
+<meta property="og:title" content="Mozilla Developer Network">
+
+<!--
+[在你的站点增加自定义图标]
+将其保存在与网站的索引页面相同的目录中,以 .ico 格式保存(大多数浏览器将支持更通用的格式,如 .gif 或 .png,
+但使用 ICO 格式将确保它能在如 Internet Explorer 6 那样古老的浏览器显示)
+将以下行添加到 HTML 的 <head> 中以引用它:
+ -->
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+<!-- 如今还有很多其他的图标类型可以考虑。例如,你可以在 MDN Web 文档的源代码中找到它: -->
+
+<!-- third-generation iPad with high-resolution Retina display: -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://developer.mozilla.org/static/img/favicon144.png">
+<!-- iPhone with high-resolution Retina display: -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://developer.mozilla.org/static/img/favicon114.png">
+<!-- first- and second-generation iPad: -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://developer.mozilla.org/static/img/favicon72.png">
+<!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+<link rel="apple-touch-icon-precomposed" href="https://developer.mozilla.org/static/img/favicon57.png">
+<!-- basic favicon -->
+<link rel="icon" href="https://developer.mozilla.org/static/img/favicon32.png">
+
+<!-- 
+这些注释解释了每个图标的用途——这些元素涵盖的东西提供一个高分辨率图标,这些高分辨率图标当网站保存到 iPad 的主屏幕时使用。
+
+不用担心现在实现所有这些类型的图标——这是一个相当先进的功能,你将不会被要求在这个课堂上学习这个知识点。
+这里的主要目的是让你提前了解有这一样东西以防当你浏览其他网站的源代码时不理解源代码的含义。 -->
+
+<!-- 
+【HTML 文字处理基础】 
+[强调]
+在 HTML 中我们用<em>(emphasis)元素来标记这样的情况。这样做既可以让文档读起来更有趣,也可以被屏幕阅读器识别出来,并以不同的语调发出
+。浏览器默认风格为斜体,但你不应该纯粹使用这个标签来获得斜体风格,为了获得斜体风格,你应该使用<span>元素和一些 CSS,或者是<i>元素(见下文)。
+ -->
+<p>I am <em>glad</em> you weren't <em>late</em>.</p>
+<!--
+[非常重要]
+在 HTML 中我们用<strong> (strong importance) 元素来标记这样的情况。这样做既可以让文档更加地有用,也可以被屏幕阅读器识别出来,
+并以不同的语调发出。浏览器默认风格为粗体,但你不应该纯粹使用这个标签来获得粗体风格,为了获得粗体风格,
+你应该使用<span>元素和一些 CSS,或者是 <b> 元素 (见下文)。 -->
+
+<p>This liquid is <strong>highly toxic</strong>.</p>
+    
+<p>I am counting on you. <strong>Do not</strong> be late!</p>
+
+<!-- 
+[斜体字、粗体字、下划线...]
+迄今为止我们已经讨论的元素都是意义清楚的语义元素。<b>, <i>, 和 <u> 的情况却有点复杂。它们出现于人们要在文本中使用粗体、斜体、
+下划线但 CSS 仍然不被完全支持的时期。像这样的元素,仅仅影响表象而且没有语义,被称为**表象元素(presentational elements)**并且不应该再被使用。
+因为正如我们在之前看到的,语义对无障碍,SEO(搜索引擎优化)等非常重要。
+
+HTML5 用新的语义规则重新定义了 <b>、<i> 和 <u>,使得它们的语言显得稍微有点混乱。
+
+这里是最好的经验法则:如果没有更合适的元素,那么使用 <b>、<i> 或 <u> 来表达传统上的粗体、斜体或下划线表达的意思是合适的。
+然而,始终拥有无障碍的思维模式是至关重要的。斜体的概念对人们使用屏幕阅读器是没有帮助的,对使用其他书写系统而不是拉丁文书写系统的人们也是没有帮助的。
+
+<i> 被用来传达传统上用斜体表达的意义:外国文字,分类名称,技术术语,一种思想……
+<b> 被用来传达传统上用粗体表达的意义:关键字,产品名称,引导句……
+<u> 被用来传达传统上用下划线表达的意义:专有名词,拼写错误……
+备注: 使用下划线的忠告:因为我们常常会认为网页中的下划线代表着一个超链接**,**所以最好只用下划线来代表超链接。
+而在语义适合的情况下不得不使用<u>元素时,可以使用 CSS 来改变<u>元素对应的下划线的默认样式,从而和超链接的下划线区分开来。
+ -->
+<!-- 
+【创建超链接】
+[统一资源定位符(URL)与路径(path)快速入门]
+要全面地了解链接目标,你需要了解统一资源定位符和文件路径。本小节将介绍相关的信息。
+
+统一资源定位符(英文:Uniform Resource Locator,简写:URL)是一个定义了在网络上的位置的一个文本字符串。
+例如 Mozilla 的中文主页定位在 https://www.mozilla.org/zh-CN/.
+
+URL 使用路径查找文件。路径指定文件系统中你感兴趣的文件所在的位置。
+
+[电子邮件链接]
+当点击一个链接或按钮时,打开一个新的电子邮件发送信息而不是连接到一个资源或页面,这种情况是可能做到的。这样做是使用 <a> 元素和 mailto:URL 的方案。
+
+其最基本和最常用的使用形式为一个 mailto: 链接,链接指明收件人的电子邮件地址。例如:
+-->
+<a href="mailto:nowhere@mozilla.org">向 nowhere 发邮件</a>
+<!--
+这会创建一个链接,看起来像这样:向 nowhere 发邮件。
+
+实际上,电子邮件地址是可选的。如果你忘记了(也就是说,你的 href 仅仅只是简单的“mailto”),一个新的发送电子邮件的窗口也会被用户的邮件客户端打开,
+只是没有收件人的地址信息,这通常在“分享”链接是很有用的,用户可以给他们选择的地址发送邮件。
+
+[指定详细信息]
+除了电子邮件地址,你还可以提供其他信息。事实上,任何标准的邮件头字段可以被添加到你提供的 mailto URL 中。其中最常用的是主题(subject)、
+抄送(cc)和主体(body)(这不是一个真正的标头字段,但允许你为新邮件指定一个简短的内容消息)。每个字段及其值被指定为查询项。
+
+下面是一个包含 cc、bcc、主题和主体的示例:
+-->
+<a href="mailto:nowhere@mozilla.org?cc=name2@rapidtables.com&bcc=name3@rapidtables.com
+&subject=The%20subject%20of%20the%20email&body=The%20body%20of%20the%20email">
+  Send mail with cc, bcc, subject and body
+</a>
+<!--
+备注:每个字段的值必须是使用 URL 编码的,即使用百分号转义的非打印字符(不可见字符比如制表符、换行符、分页符)和空格。
+同时注意使用问号(?)来分隔主 URL 与参数值,以及使用 & 符来分隔 mailto: URL 中的各个参数。这是标准的 URL 查询标记方法。
+阅读 GET 方法以了解哪种 URL 查询标记方法是更常用的。
+
+【高阶文字排版】
+[描述列表]
+在 HTML 基础部分,我们讨论了如何在 HTML 中标记基本的列表,但是我们没有提到你偶尔会遇到的第三种类型的列表—描述列表 (description list) **。
+**这种列表的目的是标记一组项目及其相关描述,例如术语和定义,或者是问题和答案等。
+
+描述列表使用与其他列表类型不同的闭合标签— <dl>; 
+此外,每一项都用 <dt> (description term) 元素闭合。
+每个描述都用 <dd> (description definition) 元素闭合。让我们来完成下面的标记例子:
+-->
+<dl>
+  <dt>内心独白</dt>
+    <dd>戏剧中,某个角色对自己的内心活动或感受进行念白表演,这些台词只面向观众,而其他角色不会听到。</dd>
+  <dt>语言独白</dt>
+    <dd>戏剧中,某个角色把自己的想法直接进行念白表演,观众和其他角色都可以听到。</dd>
+  <dt>旁白</dt>
+    <dd>戏剧中,为渲染幽默或戏剧性效果而进行的场景之外的补充注释念白,只面向观众,内容一般都是角色的感受、想法、以及一些背景信息等。</dd>
+</dl>
+<!--
+[引用]
+-->
+<p>The <strong>HTML <code>&lt;blockquote&gt;</code> Element</strong> (or <em>HTML Block
+Quotation Element</em>) indicates that the enclosed text is an extended quotation.</p>
+
+<!-- 要把这些转换为块引用,我们要这样做: -->
+
+<blockquote cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote">
+  <p>The <strong>HTML <code>&lt;blockquote&gt;</code> Element</strong> (or <em>HTML Block
+  Quotation Element</em>) indicates that the enclosed text is an extended quotation.</p>
+</blockquote>
+
+<!-- 浏览器在渲染块引用时默认会增加缩进,作为引用的一个指示符；MDN 是这样做的,但是也增加了额外的样式: -->
+
+<!-- [行内引用] -->
+
+<p>The quote element — <code>&lt;q&gt;</code> — is <q cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q">intended
+for short quotations that don't require paragraph breaks.</q></p>
+<!-- 浏览器默认将其作为普通文本放入引号内表示引用,行内引用添加双引号进行表示    
+The quote element — <q> — is "intended for short quotations that don't require paragraph breaks." -->
+
+<!--
+[引文]
+cite属性内容不会被浏览器显示、屏幕阅读器阅读,需使用 JavaScript 或 CSS,浏览器才会显示cite的内容。
+如果你想要确保引用的来源在页面上是可显示的,更好的方法是为<cite>元素附上链接: 
+-->
+<p>According to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote">
+<cite>MDN blockquote page</cite></a>:
+</p>
+
+<blockquote cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote">
+  <p>The <strong>HTML <code>&lt;blockquote&gt;</code> Element</strong> (or <em>HTML Block
+  Quotation Element</em>) indicates that the enclosed text is an extended quotation.</p>
+</blockquote>
+
+<p>The quote element — <code>&lt;q&gt;</code> — is <q cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q">intended
+for short quotations that don't require paragraph breaks.</q> -- <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q">
+<cite>MDN q page</cite></a>.</p>
+
+<!-- 引文默认的字体样式为斜体。 -->
+<!-- 
+[缩略语]
+另一个你在 web 上看到的相当常见的元素是<abbr>——它常被用来包裹一个缩略语或缩写,并且提供缩写的解释(包含在title属性中)。
+ -->
+<p>我们使用 <abbr title="超文本标记语言(Hyper text Markup Language)">HTML</abbr> 来组织网页文档。</p>
+<p>第 33 届 <abbr title="夏季奥林匹克运动会">奥运会</abbr> 将于 2024 年 8 月在法国巴黎举行。</p>
+
+<!-- 
+备注: 还有另一个元素<acronym>,它基本上与<abbr>相同,专门用于首字母缩略词而不是缩略语。然而,这已经被废弃了 - 
+它在浏览器的支持中不如<abbr>,并且具有类似的功能,所以没有意义。只需使用<abbr>。 -->
+
+<!-- [标记联系方式] -->
+<address>。它仅仅包含你的联系方式,例如:
+
+<address>
+  <p>Chris Mills, Manchester, The Grim North, UK</p>
+</address>
+
+<!-- 但要记住的一点是,<address>元素是为了标记编写 HTML 文档的人的联系方式,而不是任何其他的内容。因此,如果这是 Chris 写的文档,
+上面的内容将会很好。注意,下面的内容也是可以的: -->
+<address>
+  <p>Page written by <a href="../authors/chris-mills/">Chris Mills</a>.</p>
+</address>
+
+[上标和下标]
+<sup> 和<sub>元素可以解决这样的问题。例如:
+
+<p>咖啡因的化学方程式是 C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub>。</p>
+<p>如果 x<sup>2</sup> 的值为 9,那么 x 的值必为 3 或 -3。</p>
+
+<!-- 这些代码输出的结果是:(这里无法显示,要用网页显示)
+
+咖啡因的化学方程式是 C8H10N4O2。
+如果 x2 的值为 9,那么 x 的值必为 3 或 -3。
+ -->
+
+ <!--
+ [展示计算机代码]
+1.<code>: 用于标记计算机通用代码。
+2.<pre>: 用于保留空白字符(通常用于代码块)——如果您在文本中使用缩进或多余的空白,浏览器将忽略它,您将不会在呈现的页面上看到它。
+但是,如果您将文本包含在<pre></pre>标签中,那么空白将会以与你在文本编辑器中看到的相同的方式渲染出来。
+3.<var>: 用于标记具体变量名。
+4.<kbd>: 用于标记输入电脑的键盘(或其他类型)输入。
+5.<samp>: 用于标记计算机程序的输出。 -->
+
+<pre><code>const para = document.querySelector('p');
+para.onclick = function() {
+  alert('噢,噢,噢,别点我了。');
+}</code></pre>
+
+<p>请不要使用 <code>&lt;font&gt;</code> 、 <code>&lt;center&gt;</code> 等表象元素。</p>
+
+<p>在上述的 JavaScript 示例中,<var>para</var> 表示一个段落元素。</p>
+
+
+<p>按 <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>A</kbd> 选择全部内容。</p>
+
+<pre>$ <kbd>ping mozilla.org</kbd>
+<samp>PING mozilla.org (63.245.215.20): 56 data bytes
+64 bytes from 63.245.215.20: icmp_seq=0 ttl=40 time=158.233 ms</samp></pre>
+
+<!-- 
+[标记时间和日期]
+HTML 还支持将时间和日期标记为可供机器识别的格式的 <time> 元素。例如: -->
+<time datetime="2016-01-20">2016 年 1 月 20 日</time>
+
+<!-- 
+    但是这些不同的格式不容易被电脑识别 — 假如你想自动抓取页面上所有事件的日期并将它们插入到日历中,
+<time> 元素允许你附上清晰的、可被机器识别的 时间/日期来实现这种需求。 -->
+
+<!-- 标准简单日期 -->
+<time datetime="2016-01-20">20 January 2016</time>
+<!-- 只包含年份和月份-->
+<time datetime="2016-01">January 2016</time>
+<!-- 只包含月份和日期 -->
+<time datetime="01-20">20 January</time>
+<!-- 只包含时间,小时和分钟数 -->
+<time datetime="19:30">19:30</time>
+<!-- 还可包含秒和毫秒 -->
+<time datetime="19:30:01.856">19:30:01.856</time>
+<!-- 日期和时间 -->
+<time datetime="2016-01-20T19:30">7.30pm, 20 January 2016</time>
+<!-- 含有时区偏移值的日期时间 -->
+<time datetime="2016-01-20T19:30+01:00">7.30pm, 20 January 2016 is 8.30pm in France</time>
+<!-- 调用特定的周 -->
+<time datetime="2016-W04">The fourth week of 2016</time>
+
+<!-- 
+【文档与网站架构】
+[用于构建内容的 HTML]
+为了实现语义化标记,HTML 提供了明确这些区段的专用标签,例如: -->
+
+<header>:页眉。
+<nav>:导航栏。
+<main>:主内容。主内容中还可以有各种子内容区段,可用<article>、<section> 和 <div> 等元素表示。
+<aside>:侧边栏,经常嵌套在 <main> 中。
+<footer>:页脚。
+
+<!-- 
+[HTML 布局元素细节]
+理解所有 HTML 区段元素具体含义是很有益处的,这一点将随着个人 web 开发经验的逐渐丰富日趋显现。更多细节请查阅 HTML 元素参考。现在,
+你只需要理解以下主要元素的意义: -->
+
+1.<main> 存放每个页面独有的内容。每个页面上只能用一次 <main>,且直接位于 <body> 中。最好不要把它嵌套进其它元素。
+2.<article> 包围的内容即一篇文章,与页面其它部分无关(比如一篇博文)。
+3.<section> 与 <article> 类似,但 <section> 更适用于组织页面使其按功能(比如迷你地图、一组文章标题和摘要)分块。一般的最佳用法是:
+以 标题 作为开头；也可以把一篇 <article> 分成若干部分并分别置于不同的 <section> 中,也可以把一个区段 <section> 
+分成若干部分并分别置于不同的 <article> 中,取决于上下文。
+4.<aside> 包含一些间接信息(术语条目、作者简介、相关链接,等等)。
+5.<header> 是简介形式的内容。如果它是 <body> 的子元素,那么就是网站的全局页眉。如果它是 <article> 或<section> 的子元素,
+那么它是这些部分特有的页眉(此 <header> 非彼 标题)。
+6.<nav> 包含页面主导航功能。其中不应包含二级链接等内容。
+7.<footer> 包含了页面的页脚部分。
+
+[无语义元素]
+有时你会发现,对于一些要组织的项目或要包装的内容,现有的语义元素均不能很好对应。
+有时候你可能只想将一组元素作为一个单独的实体来修饰来响应单一的用 CSS 或 JavaScript。为了应对这种情况,HTML 
+提供了 <div> 和 <span> 元素。应配合使用 class 属性提供一些标签,使这些元素能易于查询。
+
+<span> 是一个内联的(inline)无语义元素,最好只用于无法找到更好的语义元素来包含内容时,或者不想增加特定的含义时。例如:
+<p>国王喝得酩酊大醉,在凌晨 1 点时才回到自己的房间,踉跄地走过门口。<span class="editor-note">[编辑批注:此刻舞台灯光应变暗]</span>.</p>
+
+<div> 是一个块级无语义元素，应仅用于找不到更好的块级元素时，或者不想增加特定的意义时。例如，一个电子商务网站页面上有一个一直显示的购物车组件。
+
+<div class="shopping-cart">
+  <h2>购物车</h2>
+  <ul>
+    <li>
+      <p><a href=""><strong>银耳环</strong></a>:$99.95.</p>
+      <img src="../products/3333-0985/" alt="Silver earrings">
+    </li>
+    <li>
+      ...
+    </li>
+  </ul>
+  <p>售价:$237.89</p>
+</div>
+
+警告：<div> 非常便利但容易被滥用。由于它们没有语义值，会使 HTML 代码变得混乱。要小心使用，只有在没有更好的语义方案时才选择它，
+而且要尽可能少用，否则文档的升级和维护工作会非常困难。
+
+[换行与水平分割线]
+有时会用到 <br> 和 <hr> 两个元素，需要介绍一下。
+
+<br> 可在段落中进行换行；<br> 是唯一能够生成多个短行结构（例如邮寄地址或诗歌）的元素。
+
+<hr> 元素在文档中生成一条水平分割线，表示文本中主题的变化（例如话题或场景的改变）。一般就是一条水平的直线。例如：
+
+<!-- 
+【HTML 调试】
+1.语法错误：由于拼写错误导致程序无法运行，就像上面的 Rust 示例。通常熟悉语法并理解错误信息后很容易修复。
+2.逻辑错误：不存在语法错误，但代码无法按预期运行。通常逻辑错误比语法错误更难修复，因为无法得到指向错误源头的信息。 -->
+
+[HTML 验证]
+阅读以上示例后，你发现保持良好 HTML 格式的重要性。那么应该如何做呢？以上示例规模较小，查找错误还不难，但是一个非常庞大、复杂的 HTML 文档呢？
+
+网址: <a href="https://validator.w3.org/">文档错误检查网站网址</a> 
+最好的方法就是让你的 HTML 页面通过 Markup Validation Service。由 W3C(制定 HTML、CSS 和其他网络技术标准的组织)创立并维护的标记验证服务。
+把一个 HTML 文档加载至本网页并运行，网页会返回一个错误报告。
+
+
+

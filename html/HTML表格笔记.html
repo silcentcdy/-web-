@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+   <head>
+    <meta charset="utf-8">
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+  
+      table {
+        border-collapse: collapse;
+        border: 2px solid rgb(200,200,200);
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+      }
+  
+      td, th {
+        border: 1px solid rgb(190,190,190);
+        padding: 10px 20px;
+      }
+  
+      td {
+        text-align: center;
+      }
+  
+      caption {
+        padding: 10px;
+      }
+      tbody{
+        font-size: 90%;
+        font-style: italic;
+      }
+      tfoot{
+        font-weight: bold;
+      }
+      </style>
+       <title>社交面</title>
+
+</head>
+ <body>
+    <ul>
+        <li>
+            <p> <a href="主页.html" >主页</a></p>
+        </li>
+        <li>
+            <p><a href="图片.html">图片</a></p>
+        </li>
+        <li>
+                     <p>社交</p>
+        </li>
+        <li>
+            <p><a href="工程.html">工程</a></p>
+        </li>
+         </ul>
+    <h1>社交</h1>
+    <p>欢迎来到我的社交页面</p>
+
+    <h1>表格测试</h1>
+<!--嵌套表格示例-->
+    <table>
+      <rowground>
+        <row style="background-color:firebrick">
+        
+      </rowground>
+      <colgroup>
+        <col>
+        <col style="background-color:pink">
+      </colgroup>
+       <tr>
+         <th>First</th>
+         <th>Second</th> 
+         <th>Third</th>
+         <th>Fourth</th>
+         
+       </tr>
+        <tr>
+          <td> id="nested">
+            <table id="嵌套表格">
+              <tr>
+                <th>one</th>
+                <th>two</th>
+                <th>three</th>
+                </tr>
+             </td>
+            </table>
+              <td>I'm your secondcell.</td>
+              <td>Happy Birstday</td>
+              <td>&nbsp;</td>
+        </tr>   
+        <tr>
+             <td>I'm your third cell.</td>
+             <td>&nbsp;</td>
+             <td>&nbsp;</td>
+             <td>&nbsp;</td>
+        </tr>
+        <tr>
+             <td>I'm your fourth cell.</td>
+             <td>&nbsp;</td>
+             <td>&nbsp;</td>
+             <td>&nbsp;</td>
+        </tr>
+     </table>
+ <!--colground,rowground插入属性-->
+    <h1>Dogs Table</h1>
+
+    <table>
+        <colgroup>
+            <col>
+            <col style="background-color:blue" span="2">
+        </colgroup>
+      <tr>
+        <td>&nbsp;</td>
+        <th>Knocky</th>
+        <th>Flor</th>
+        <th>Ella</th>
+        <th>Juan</th>
+      </tr>
+      <tr>
+        <th>Breed</th>
+        <td>Jack Russell</td>
+        <td>Poodle</td>
+        <td>Streetdog</td>
+        <td>Cocker Spaniel</td>
+      </tr>
+      <tr>
+        <th>Age</th>
+        <td>16</td>
+        <td>9</td>
+        <td>10</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <th>Owner</th>
+        <td>Mother-in-law</td>
+        <td>Me</td>
+        <td>Me</td>
+        <td>Sister-in-law</td>
+      </tr>
+      <tr>
+        <th>Eating Habits</th>
+        <td>Eats everyone's leftovers</td>
+        <td>Nibbles at food</td>
+        <td>Hearty eater</td>
+        <td>Will eat till he explodes</td>
+      </tr>
+    </table>
+
+
+    <table>
+       
+        <tr>
+          <th colspan="2">Animals</th>
+        </tr>
+        <tr>
+          <th colspan="2">Hippopotamus</th>
+        </tr>
+        <tr>
+          <th rowspan="2">Horse</th>
+          <td>Mare</td>
+        </tr>
+        <tr>
+          <td>Stallion</td>
+        </tr>
+        <tr>
+          <th colspan="2">Crocodile</th>
+        </tr>
+        <tr>
+          <th rowspan="2">Chicken</th>
+          <td>Hen</td>
+        </tr>
+        <tr>
+          <td>Rooster</td>
+        </tr>
+      </table>
+      
+ 
+ <!--表格加入了span元素(合并行和列) colground,rowground,&bnsp表示空表格-->
+    <h1>School timetable</h1>
+
+    <table>
+      <caption>上课安排表</caption>
+      <colgroup>
+        <col span="2" style="width: 42px;">
+        <col style="background-color:#97DB9A;">
+        <col width="width:42px;">
+        <col style="background-color:#97DB9A;">
+        <col style="background-color:#DCC48E; border: 4px soild #C1437A" >
+        <col  span="2"  style="width:42px;">
+      </colgroup>
+      <tr>
+        <td>&nbsp;</td>
+        <th>Mon</th>
+        <th>Tues</th>
+        <th>Wed</th>
+        <th>Thurs</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+      </tr>
+      <tr>
+        <th>1st period</th>
+        <td>English</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <th>2nd period</th>
+        <td>English</td>
+        <td>English</td>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <th>3rd period</th>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <th>4th period</th>
+        <td>&nbsp;</td>
+        <td>English</td>
+        <td>&nbsp;</td>
+        <td>English</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+<!--表格加入了标题(caption) thead,tfoot,tbody标签,元素（id<th>,headers<td>)-->
+      <h1>My spending record</h1>
+
+    <table>
+      <caption>How I chose to spend my money</caption>
+      <thead>
+        <tr>
+          <th id="purchase">Purchase</th>
+          <th id="Location">Location</th>
+          <th id="Date">Date</th>
+          <th id="Evaluation">Evaluation</th>
+          <th id="Cost">Cost (€)</th>
+        </tr>
+        </thead>
+      <tfoot>
+        <tr>
+          <td headers="SUM" colspan="4">SUM</td>
+          <td headers="118" >118</td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr>
+          <td headers="Haircut">Haircut</td>
+          <td headers="Hairdresser">Hairdresser</td>
+          <td headers="12/09">12/09</td>
+          <td headers="Great idea">Great idea</td>
+          <td headers="30">30</td>
+        </tr>
+        <tr>
+          <td headers="Lasagna">Lasagna</td>
+          <td headers="Restaurant">Restaurant</td>
+          <td headers="12/09">12/09</td>
+          <td headers="Regrets">Regrets</td>
+          <td>18</td>
+        </tr>
+        <tr>
+          <td headers="Shoes">Shoes</td>
+          <td headers="Shoeshop">Shoeshop</td>
+          <td headers="13/09">13/09</td>
+          <td headers="Big regrets">Big regrets</td>
+          <td headers="65">65</td>
+        </tr>
+        <tr>
+          <td headers="Toothpaste">Toothpaste</td>
+          <td headers="Supermarket">Supermarket</td>
+          <td headers="13/09">13/09</td>
+          <td headers="Good">Good</td>
+          <td headers="5">5</td>
+        </tr>
+      </tbody>
+  </table>
+
+  <!--表格加入了scope属性（含有col,row,colground,rowground-->
+  <h1>Items sold summary</h1>
+
+  <table>
+    <caption>Items Sold August 2016</caption>
+      <thead>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <th scope="colgroup" colspan="3">Clothes</th>
+          <th scope="colgroup" colspan="2">Accessories</th>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <th scope="col">Trousers</th>
+          <th scope="col">Skirts</th>
+          <th scope="col">Dresses</th>
+          <th scope="col">Bracelets</th>
+          <th scope="col">Rings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="rowgroup" rowspan="3">Belgium</th>
+          <th scope="row">Antwerp</th>
+          <td>56</td>
+          <td>22</td>
+          <td>43</td>
+          <td>72</td>
+          <td>23</td>
+        </tr>
+        <tr>
+          <th scope="row">Gent</th>
+          <td>46</td>
+          <td>18</td>
+          <td>50</td>
+          <td>61</td>
+          <td>15</td>
+       </tr>
+       <tr>
+         <th scope="row">Brussels</th>
+         <td>51</td>
+         <td>27</td>
+         <td>38</td>
+         <td>69</td>
+         <td>28</td>
+       </tr>
+       <tr>
+         <th scope="rowgroup" rowspan="2">The Netherlands</th>
+         <th scope="row">Amsterdam</th>
+         <td>89</td>
+         <td>34</td>
+         <td>69</td>
+         <td>85</td>
+         <td>38</td>
+       </tr>
+       <tr>
+         <th scope="row">Utrecht</th>
+         <td>80</td>
+         <td>12</td>
+         <td>43</td>
+         <td>36</td>
+         <td>19</td>
+       </tr>
+     </tbody>
+  </table>
+
+  </body>
+</html>

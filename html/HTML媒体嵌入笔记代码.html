@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    <head>
+ <title>主页面</title>   
+ <meta name="viewpoint" content="width=device-width"> <!--不同平台不同平面的图片自适应代码头-->
+  </head>
+
+  <body>
+    <ul>
+        <li>
+                     <p> 主页 </p>
+        </li>
+        <li>
+            <p><a href="图片.html">图片</a></p>
+        </li>
+        <li>
+            <p><a href="社交.html">社交</a></p>
+        </li>
+        <li>
+            <p><a href="工程.html">工程</a></p>
+        </li>
+         </ul>
+      <h1>主页</h1>
+      <p>欢迎来到我的主页</p>
+      <video controls>
+          <source src="../images/rabbit320.webm" type="video/webm">
+          <source src="../images/已经没了 .mp4"  type="video/mp4">
+          <track kind="subtitles"  src="../images/video-text.vtt"  srclang="zh-CN" >
+          <p>你的浏览器不支持HTML5的视频文件 &apos;请点击此<a href="../images/rabbit320.mp4">链接</a>来访问 </p>
+      </video>
+
+      <audio controls>
+         <source src="../images/audio.mp3" type="audio/mp3">
+         <source src="../images/audio.ogg" tyep="audio/ogg">
+          <p>如果你的浏览器不支持HTNl5格式&apos;请点击此<a href="../images/audio.mp3">链接</a>来观看</p>
+      </audio>
+      
+       <!-- typemustmatch保持嵌入文件不运行，除非type属性提供正确的媒体类型。(安全性) -->
+      <iframe src="https://player.bilibili.com/player.html?aid=811913746&bvid=BV1Y34y1j7nD&cid=731485204&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"   weith="400px" height="400px"> </iframe> <p>三十六贱笑-bilibili</p>
+
+      <iframe src="https://player.bilibili.com/player.html?aid=19390801&cid=31621681&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe> <p>改革春风吹满地</p>
+      <!--视频属性和标签详解 <autoplay>表示自动播放；<loop>表示循环播放；<muted>表示播放时自动关闭声音；<poster>表示播放前画面定住的链接预览图片 
+          <preload>(none:表示不缓冲；auto:页面加载后缓冲；metadata:表示仅缓冲文件的元数据）表示用来缓冲较大的文件
+              sandbox沙盒是用来进行安全保护的（对于<iframe>标签的嵌入）
+           音视频扩展知识---(.vtt)表示视频掺入的文本翻译、实时翻译、视频转化文本,分别是一下三要素（subtitles、captions、timed descriptions）
+           <kind>表示那种类型 <track>标签来链接.vtt后缀名的文件，<srclang>表示你使用那种语言来编辑翻译文本-->
+    <!-- 插件技术 <iframe>表示插入其他HTNL的网页内容 <object>(链接形式:data)表示插入SVG 图片 视频  <embed>(链接形式：src)表示插入PDF文件-->
+
+        <!--矢量图-->
+<svg version="1.1"
+             baseProfile="full"
+             width="300" height="200"
+             xmlns="http://www.w3.org/2000/svg">
+     <rect width="100%" height="100%" fill="black" />
+     <circle cx="150" cy="100" r="90" fill="blue" />
+</svg>
+<p>矢量图（矩形和圆）</p>
+
+<svg width="300" height="200">
+    <rect width="100%" height="100%" fill="green" />
+    <polygon points="200,10 300,300 10,200" fill="pink"/>
+</svg>
+
+<svg width="100%" height="100%">
+    <rect width="100%" height="100%" fill="yellow" />
+    <circle cx="100%" cy="100%" r="150" fill="red" stroke="black" />
+    <polygon points="120,0 240,225 0,225" fill="pink"/>
+    <text x="50" y="100" font-family="Verdana" font-size="55"
+          fill="white" stroke="black" stroke-width="2">
+            Hello!
+    </text>
+  </svg>
+
+  <img srcset="cdy-320w.jpg 320w,                    
+               cdy-480w.jpg 480w,
+               cdy-800w.jpg 800w"
+        size="(max-width 320px) 280px
+              (max-width 480px) 440px
+              800px"
+     src="../images/cdy-800w.jpg" alt="夜空">  
+     <!--相同分辨率 不同尺寸--> 
+
+     <img   src="../images/cdy-800w.jpg" alt="晚间朝霞">
+     <!--     srcset="cdy-320w.jpg,
+                  cdy-480w.jpg 1.5x,
+                  cdy-800w.jpg 2x" 相同尺寸不同分辨率-->    
+
+     <picture>
+      <source srcset="../images/黄昏晚霞.jpg"  type="image/jpg">
+      <source srcset="../images/山中电塔.png"  type="image/png">
+      <img src="../images/黄昏晚霞.jpg" alt="落日黄昏下的山中电塔山野的景象">      
+     </picture>
+     
+  </body>  
+</html>
